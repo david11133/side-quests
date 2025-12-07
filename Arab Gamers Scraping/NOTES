@@ -1,0 +1,410 @@
+I have a script that scrapes data from a gaming ecommerce website. you can check the attached 'scraper.py' file
+
+The script currently gather these data:
+'ID', 'Type', 'SKU', 'Name', 'Published', 'Is featured?', 
+'Visibility in catalog', 'Categories', 'Images', 
+'Meta: _wp_page_template', 'product-description', 
+'features', 'specification', 'reference URL', 'price', 'special price'
+
+I need to add more columns to our data but it's a bit tricky.
+
+there are some filters in the website like Brand, RAM Size, Processor, Generation, etc.
+
+Here is how it looks like in the incpect of the browser:
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.vendor">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Brand</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-1" value="Activision">
+                          <label for="filter-Brand-1">
+                            <span class="no-js-hidden">Activision (<span class="js-count">1</span>)</span>
+                            <noscript><a href="/collections/playstation?filter.p.vendor=Activision">Activision (1)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-2" value="Bandai Namco">
+                          <label for="filter-Brand-2">
+                            <span class="no-js-hidden">Bandai Namco (<span class="js-count">1</span>)</span>
+                            <noscript><a href="/collections/playstation?filter.p.vendor=Bandai+Namco">Bandai Namco (1)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-3" value="Naughty Dog">
+                          <label for="filter-Brand-3">
+                            <span class="no-js-hidden">Naughty Dog (<span class="js-count">1</span>)</span>
+                            <noscript><a href="/collections/playstation?filter.p.vendor=Naughty+Dog">Naughty Dog (1)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-4" value="Rockstar">
+                          <label for="filter-Brand-4">
+                            <span class="no-js-hidden">Rockstar (<span class="js-count">1</span>)</span>
+                            <noscript><a href="/collections/playstation?filter.p.vendor=Rockstar">Rockstar (1)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-5" value="Sony">
+                          <label for="filter-Brand-5">
+                            <span class="no-js-hidden">Sony (<span class="js-count">3</span>)</span>
+                            <noscript><a href="/collections/playstation?filter.p.vendor=Sony">Sony (3)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
+
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.m.custom.ram_size">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Ram size</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.ram_size" id="filter-Ram size-1" value="16GB">
+                          <label for="filter-Ram size-1">
+                            <span class="no-js-hidden">16GB (<span class="js-count">2</span>)</span>
+                            <noscript><a href="/collections/playstation?filter.p.m.custom.ram_size=16GB">16GB (2)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
+
+
+Those were filters for category called "Playstation". so we will need to add two more columns (Brand, RAM Size)
+
+So, now you will add the Brand name and ram size as columns and add data in the record of the this specific itme.
+
+And put it as empty for products without any of these.
+
+But here is the point, some categories have more or even different filters. 
+
+For example in the laptops category we have (Brand, Processor, Generation, Ram Size, Graphic size, operation system)
+So, you will need to check this first and create a column for each filter. 
+and as I told you if ther is no filters or categories just put it as empty cell.
+
+Please when you update the code note that it runs in parallel so consider that to not be effected.
+
+Also, try to keep the performance as effective as it is right now and not making it much slower.
+
+I don't know how you will approach this but I think we need to get the filters first to build our columns.
+like, Brand, Processor, Ram size, etc. and then collect all data for each of these filters marked.
+then may we merge data like same names, and other columns, etc. 
+I am not saying this is the best approach. you may have something better to do.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.vendor">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Brand</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-1" value="Acer">
+                          <label for="filter-Brand-1">
+                            <span class="no-js-hidden">Acer (<span class="js-count">4</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.vendor=Acer">Acer (4)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-2" value="Asus">
+                          <label for="filter-Brand-2">
+                            <span class="no-js-hidden">Asus (<span class="js-count">3</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.vendor=Asus">Asus (3)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-3" value="HP">
+                          <label for="filter-Brand-3">
+                            <span class="no-js-hidden">HP (<span class="js-count">4</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.vendor=HP">HP (4)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-4" value="Lenovo">
+                          <label for="filter-Brand-4">
+                            <span class="no-js-hidden">Lenovo (<span class="js-count">2</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.vendor=Lenovo">Lenovo (2)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.vendor" id="filter-Brand-5" value="MSI">
+                          <label for="filter-Brand-5">
+                            <span class="no-js-hidden">MSI (<span class="js-count">4</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.vendor=MSI">MSI (4)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
+
+
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.m.custom.processor">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Processor</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.processor" id="filter-Processor-1" value="AMD Ryzen 9">
+                          <label for="filter-Processor-1">
+                            <span class="no-js-hidden">AMD Ryzen 9 (<span class="js-count">2</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.processor=AMD+Ryzen+9">AMD Ryzen 9 (2)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.processor" id="filter-Processor-2" value="Intel core i5">
+                          <label for="filter-Processor-2">
+                            <span class="no-js-hidden">Intel core i5 (<span class="js-count">5</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.processor=Intel+core+i5">Intel core i5 (5)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.processor" id="filter-Processor-3" value="Intel core i7">
+                          <label for="filter-Processor-3">
+                            <span class="no-js-hidden">Intel core i7 (<span class="js-count">5</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.processor=Intel+core+i7">Intel core i7 (5)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.processor" id="filter-Processor-4" value="Intel core i9">
+                          <label for="filter-Processor-4">
+                            <span class="no-js-hidden">Intel core i9 (<span class="js-count">2</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.processor=Intel+core+i9">Intel core i9 (2)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.processor" id="filter-Processor-5" value="Intel core ultra 9">
+                          <label for="filter-Processor-5">
+                            <span class="no-js-hidden">Intel core ultra 9 (<span class="js-count">3</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.processor=Intel+core+ultra+9">Intel core ultra 9 (3)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
+
+
+
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.m.custom.generation_s_">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Generation(s)</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.generation_s_" id="filter-Generation(s)-1" value="13th Generation">
+                          <label for="filter-Generation(s)-1">
+                            <span class="no-js-hidden">13th Generation (<span class="js-count">5</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.generation_s_=13th+Generation">13th Generation (5)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.generation_s_" id="filter-Generation(s)-2" value="14th Generation">
+                          <label for="filter-Generation(s)-2">
+                            <span class="no-js-hidden">14th Generation (<span class="js-count">2</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.generation_s_=14th+Generation">14th Generation (2)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
+
+
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.m.custom.ram_size">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Ram size</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.ram_size" id="filter-Ram size-1" value="8GB">
+                          <label for="filter-Ram size-1">
+                            <span class="no-js-hidden">8GB (<span class="js-count">4</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.ram_size=8GB">8GB (4)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.ram_size" id="filter-Ram size-2" value="16GB">
+                          <label for="filter-Ram size-2">
+                            <span class="no-js-hidden">16GB (<span class="js-count">9</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.ram_size=16GB">16GB (9)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.ram_size" id="filter-Ram size-3" value="32GB">
+                          <label for="filter-Ram size-3">
+                            <span class="no-js-hidden">32GB (<span class="js-count">4</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.ram_size=32GB">32GB (4)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
+
+
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.m.custom.graphics_size">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Graphics size</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.graphics_size" id="filter-Graphics size-1" value="6GB">
+                          <label for="filter-Graphics size-1">
+                            <span class="no-js-hidden">6GB (<span class="js-count">3</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.graphics_size=6GB">6GB (3)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.graphics_size" id="filter-Graphics size-2" value="8GB">
+                          <label for="filter-Graphics size-2">
+                            <span class="no-js-hidden">8GB (<span class="js-count">8</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.graphics_size=8GB">8GB (8)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.graphics_size" id="filter-Graphics size-3" value="24GB">
+                          <label for="filter-Graphics size-3">
+                            <span class="no-js-hidden">24GB (<span class="js-count">1</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.graphics_size=24GB">24GB (1)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
+
+<details class="filter-group js-filter-group" open="" data-param-name="filter.p.m.custom.operating_system">
+                    <summary class="filter-group_title">
+                      <div class="filter-group_title_inner">
+                        <span>Operating system</span>
+                        <div class="filter-group_wrapper"><svg class="bold-angle-down" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 8L10 13L15 8H5Z" fill="currentColor"></path></svg><svg class="svg-loading" xmlns="http://www.w3.org/2000/svg" width="120" height="30" viewBox="0 0 120 30" fill="#000000">
+		    <circle cx="15" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+		        <animate attributeName="r" from="9" to="9" begin="0s" dur="0.8s" values="9;15;9" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="0.5" to="0.5" begin="0s" dur="0.8s" values=".5;1;.5" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		    <circle cx="105" cy="15" r="15">
+		        <animate attributeName="r" from="15" to="15" begin="0s" dur="0.8s" values="15;9;15" calcMode="linear" repeatCount="indefinite"></animate>
+		        <animate attributeName="fill-opacity" from="1" to="1" begin="0s" dur="0.8s" values="1;.5;1" calcMode="linear" repeatCount="indefinite"></animate>
+		    </circle>
+		</svg></div>
+                      </div>
+                    </summary>
+
+                    <div class="filter-group_inner"><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.operating_system" id="filter-Operating system-1" value="Windows 11">
+                          <label for="filter-Operating system-1">
+                            <span class="no-js-hidden">Windows 11 (<span class="js-count">6</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.operating_system=Windows+11">Windows 11 (6)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.operating_system" id="filter-Operating system-2" value="Windows 11 Home">
+                          <label for="filter-Operating system-2">
+                            <span class="no-js-hidden">Windows 11 Home (<span class="js-count">5</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.operating_system=Windows+11+Home">Windows 11 Home (5)</a></noscript>
+                          </label>
+                        </div><div class="filter-group_item input-group ">
+                          <input type="checkbox" class="filter filter-group-display__list-item_checkbox" name="filter.p.m.custom.operating_system" id="filter-Operating system-3" value="Windows 11 Pro">
+                          <label for="filter-Operating system-3">
+                            <span class="no-js-hidden">Windows 11 Pro (<span class="js-count">6</span>)</span>
+                            <noscript><a href="/collections/gaming-laptops?filter.p.m.custom.operating_system=Windows+11+Pro">Windows 11 Pro (6)</a></noscript>
+                          </label>
+                        </div></div>
+                  </details>
