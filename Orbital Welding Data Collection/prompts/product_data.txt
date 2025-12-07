@@ -1,0 +1,117 @@
+I want you to help me to collect some data about orbital weldings. 
+You required to do deep research for some products that I will provide for you.
+
+We will start our search with those products: 
+
+TUBE SQUARING BIT 1.160 TALL
+TUBE SQUARING SYSTEM PLANFIX 115 S WITHO
+TUBE SQUARING SYSTEM PLANFIX 115 S, 230V
+TUBE SQUARING SYSTEM PLANFIX 40 S 110V (
+TUBE SQUARING SYSTEM PLANFIX 40 S 230V (
+TUBE SQUARING SYSTEM PLANFIX 40 S CORDLE
+TUBE SQUARING SYSTEM PLANFIX 40 S WITHOU
+TUBE SUPPORT BENCH FOR FOR 421/521/721
+TUNGSTEN GRINDER S-TGS_C 230V
+TUNGSTEN GRINDER S-TGS_CL CORDLESS 230V
+WATER-COOLED MANUAL TORCH FOR SAXX
+WATER-COOLED TIG-TORCH "STANDARD"
+WELDHEAD BENCH MOUNT 4000 ONLY
+WELDHEAD BENCH MOUNT 4000-5001-3
+WELDHEAD BENCH MOUNT 5006
+WELDHEAD EXTENSION CABLE 25FT
+WELDHEAD EXTENSION CABLE 50FT
+WIRE CARD UPGRADE KIT
+WIRE FEEDER ASSY, REMOTE M95-WF
+X-500 AC WELD HEAD (0.250 - 0.500)
+X-500 WC WELD HEAD (0.250 - 0.500)
+X-750 CLOSED WELD HEAD (.025" - .750")
+
+here is what is the data I need, those are the columns
+
+1. Product name: just the name of the product. e.g., Arc Machines Model 2Y7-CW Water Circulator
+2. Key features: write at least 3 pullet points features from any website.
+3. Specifications: detailed technical specs about the product.
+4. Warranty Information: Details about the warranty or guarantee for the product.
+5. Section Header: A title or heading for this section.
+6. Body Content: A longer description of the product, ofte a more technical or detailed explanation of how it works.
+7. Left Header: A set of points or features listed in the left column of the section.
+8. Right Header: A set of points or features listed in the right column of the section.
+9. Header + Intro: A title for a section followed by a brief introduction to the topic of that section.
+10. Supporting Blocks: Short sections that highlight specific benefits or details.
+11. Questions and answers: A list of frequently asked questions and their answers related to the product.
+12. Header: A title for the inquiry form section.
+13. Intro Paragraph: A brief paragraph ecouraging the user to reach out for more details.
+14. Button Text: The text on the button that the user will click to submit their inquiry.
+
+
+Now here is an example of what each column should look like. I want you to write same things for each product.
+
+1. Product name: "C" BORE TOOL BIT (2.1"-7.2" ID)
+2. Key features: - Counterbore cutting tool with 14.5-degree angle designed for carbon steel pipe machining
+- Compatible with Tri Tool BEVELMASTER machines (208B and 212B series)
+- 1/2 inch (12.7 mm) cutting depth capability
+- 2.1" to 7.2" ID (Inner Diameter) pipe range with 4:1 lead out ratio
+- Durabit material for superior durability and extended tool lifea
+3. Specifications: - Counterbore Tool Bit Type: C Bore (14.5° angle)
+- Cutting Depth: 1/2 inch (12.7 mm)
+- Pipe ID Range: 2.1" - 7.2" (53.3 mm - 182.9 mm)
+- Lead Out Ratio: 4:1
+- Material Composition: Durabit (High-Speed Steel)
+- Compatible Machines: Tri Tool BEVELMASTER 208B, 212B
+- Machine Mount Type: ID Mount (Internal Diameter)
+- Tool Module: Form Tool Module
+- Cutting Applications: Carbon Steel Pipe, Orbital Welding Preparation
+- Surface Finish: Precision ground
+- Weight: Less than 1 lb (approximately 0.5 kg)
+- Part Number: 99-2909
+4. Warranty Information: 24‑month warranty per Orbitec general warranty policy; covers material/manufacturing defects, free repair/replacement (excluding consumables), customer pays transport.
+5. Section Header: Precision Counterbore Tool for Orbital Welding End Preparation
+6. Body Content: The C Bore Tool Bit is specifically engineered for orbital welding applications where precise inner diameter counterboring is essential. When used with Tri Tool's BEVELMASTER machines, this tool creates consistent, high-quality counterbores that meet exacting specifications for pipe end preparation. The 14.5-degree angle and 1/2 inch depth make it suitable for intermediate to large diameter pipes used in critical welding applications. The Durabit material ensures long tool life and reliable performance across numerous cutting cycles.
+7. Left Header: - 1:4 Lead Out Ratio ensures controlled, precise depth
+- Durabit material provides extended tool life
+- Compatible with proven Tri tool BEVELMASTER machines
+- Suitable for carbon steel and orbital welding applications
+8. Right Header: - 1/2 inch counterbore depth for intermediate applications
+- 14.5-degree cutting angle optimized for pipe beveling
+- Form tool design for rapid setup and tool changes
+- Precision ground cutting edges for consistent results
+9. Header + Intro: Why counterbore preparation matters: Precise counterboring removes surface imperfections, creates clean beveled edges, and ensures proper pipe alignment for orbital welding, reducing defects and improving overall weld quality and structural integrity.
+10. Supporting Blocks: - Block 1: Precision Counterboring
+Subheader: Accurate Inner Diameter Machining
+Description: The 14.5-degree counterbore angle and 1/2 inch depth capability provide precision edge preparation for orbital welding applications
+
+- Block 2: Tri Tool Integration
+Subheader: Compatible with BEVELMASTER Series
+Description: Seamless integration with Tri Tool 208B and 212B machines ensures reliable performance and consistent results
+
+- Block 3: Durabit Performance
+Subheader: Extended Tool Life and Durability
+Description: Durabit material composition delivers superior wear resistance and extended service life for high-production applications
+
+- Block 4: Orbital Welding Ready
+Subheader: Specialized for Pipe End Preparation
+Description: Engineered specifically for orbital welding end preparation with optimized geometry for carbon steel pipe applications
+11. Questions and answers: - Q1: What is the maximum pipe ID that this tool can accommodate?
+A1: The C Bore Tool Bit is designed for pipes with inner diameters ranging from 2.1 inches to 7.2 inches, with a 4:1 lead out ratio.
+
+- Q2: What is the cutting depth of this counterbore tool?
+A2: The tool provides a 1/2 inch (12.7 mm) counterbore depth, suitable for most orbital welding applications.
+
+- Q3: Which Tri Tool machines are compatible with this tool bit?
+A3: This tool is compatible with Tri Tool BEVELMASTER Model 208B and 212B machines that accept form tool modules.
+
+- Q4: What materials can this tool cut?
+A4: The C Bore Tool Bit is specifically rated for carbon steel pipe and similar materials used in orbital welding applications.
+
+- Q5: How durable is the Durabit material?
+A5: Durabit material provides extended tool life compared to standard high-speed steel, reducing replacement frequency and improving cost-effectiveness.
+12. Header: Order Your C Bore Tool Bit Today
+13. Intro Paragraph: Ensure precise pipe end preparation for your orbital welding projects with the C Bore Tool Bit. Available for purchase or rental from authorized Tri Tool distributors and equipment suppliers. Contact us for volume pricing and technical specifications tailored to your application requirements.
+14. Button Text: Request Quote
+
+
+Now, I want you to search all this info and get it in a table with with those 14 columns, so that I can copy them in my spreadsheet.
+If you can't find info about a specific product please try to make up your own info and write it. you can get that from the name of the product or any related other product, but for sure don't do that in the "warranty information" column because this must be true, but otherwise you can make up or create info if you didn't find it online. you can do that from the product name and other related products. just get the info don't leave it empty otherwise the warranty info that you can put it as not found if you didn't find it.
+
+Make sure the data is complete all columns and rows because sometimes you sent me the data and some columns I asked for are not exist
+Also  make sure you do what I asked for you exactly and follow same data style as the example I provided for you.

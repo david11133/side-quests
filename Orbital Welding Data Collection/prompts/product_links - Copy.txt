@@ -1,0 +1,21 @@
+I have a list of some niche products that I want to search about them in the internet.
+
+Here is what I need:
+
+Link to the product: A URL that has any kind of info about that product and maybe image of it. no matter what is the website.
+Link to rental: if it's available for rent just provide a link and if not just write "Not Found".
+Link to buy: Provide a link to buy the item from any website even if its used or pre owned but make the pre owned as first priority but if you can't find it as pre owned or used just provide a link.
+Link to Brochures or Literature: Mybe a link to a website or just a pdf. whatever you find.
+Link to manufacturer website: if available and if not just write "Not Found"
+Warranty info: provide a link where I can find the warranty info about the product.
+
+You required to give me this data in a CSV file.
+
+here are the products I want you to search about:
+
+
+SAFS-G01 PIPE GAS DISTRIBUTOR
+SAMX17 THIN SIDE PLATE (LEFT)
+SAMX17 THIN SIDE PLATE (RIGHT)
+SAMX17 WIDE SIDE PLATE (RIGHT/LEFT)
+SATF-40/65/115ND HEAD HOLDER

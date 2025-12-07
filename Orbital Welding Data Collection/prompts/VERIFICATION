@@ -1,0 +1,205 @@
+I want you to help me to collect some data about orbital weldings. 
+You required to do deep research for some products that I will provide for you.
+
+We will start our search with these ones: 
+- "C" BORE TOOL BIT (2.1"-7.2" ID)
+- 02-03" I-PURGE X EXPANDABLE BLADDER
+
+You will search each product individually to get better details for each one and don't get wrong data for wrong product or wrong resources. please be careful.
+
+here is what is the data I need and how to write it in a CSV file, 21 columns:
+NOTE that at the end bellow I will provide for you to an example code of how you should write the code.
+And also, the kind of data that shouls be in each column.
+
+1. Product ID: Just write P001, P002, etc.
+2. Product name: just the name of the product. [e.g., AKETEK LIFT-UP WELDING HELMET, BLACK]
+3. Intro paragraph: Get it from the website.
+4. Key features: write at least 3 pullet points that you find on the websites.
+5. Main Product Image: Get the product image link from the website. 
+6. Gallery Images: get a website that contains some pictures of the product.
+7. Available for Rent?: search sites like eBay, etc. to find out if it's available for rent.
+8. Available for Pre-Owned Sale?: also search some sites to get this info.
+9. Specifications: get some specifications from the website that I will provide you an example bellow about it.
+10. Brochures or Literature: Find any PDF or whatever online that is official or trusted.
+11. Warranty Information: Get it from any sites.
+12. Section Header
+13. Body Content
+14. Left Header: I want about three points at least, and if there is more add it.
+15. Right Header: Also I want about three points or more.
+16. Header + Intro
+17. Supporting Blocks
+18. Questions and answers
+19. Header
+20. Intro Paragraph
+21. Button Text
+
+NOTE: I want you to get the info from the sites and if there something that you can't find just write  "Not Found".
+But please search well and if you didn't find any infor just write "Not Found"
+
+here is an example of how the data format should look like:
+
+```python
+import csv
+
+# Product Data Table
+product_data = {
+    "Product ID": "P001",
+    "Product name": "Arc Machines Model 2Y7-CW Water Circulator / Cooling Unit",
+    "Intro Paragraph": "The M2Y7-CW is an economical water-cooling unit (coolant circulator + heat exchanger + pump) designed to cool AMI fusion/orbital weld heads and to interface directly with the AMI M217 power supply. It supports stackable operation with the M217, features coolant-flow sensing that triggers a fault if flow drops below safe levels, and is recommended to run with de-ionized water plus ethylene-glycol.",
+    "Key Features": """- Interfaces directly to AMI M217 power supply; stackable with M217 to save bench space. 
+
+- Coolant-flow sensing with fault output (stops weld sequence if flow is below preset minimum). 
+
+- Recommended coolant: de-ionized water + ethylene-glycol mixture. 
+
+- Independent/stand-alone operation possible; built-in circuit breaker protection; pump + heat exchanger included. """,
+    "Main Product Image": "https://d363suj4pdptk4.cloudfront.net/externalApps/c7efbbab-3f6a-497d-9dae-cbb24f5f4774/conversion/PIM/assets/146692",
+    "Gallery Images": "https://www.morganitech.com/industrial-tools/ami-217-217p-power-supply/",
+    "Available for Rent?": "Yes",
+    "Available for Pre-Owned Sale?": "Yes",
+    "Specifications": """- Cooling Capacity: 400 BTU/hr (119.7 Watts/hr)
+
+- Reservoir Capacity: 1.1 gallons (4.16 L)
+
+- Max. Coolant Flow Rate: 0.25 gpm (0.95 Lpm)
+
+- Pump Pressure: 60 psig (4.143 Bar)
+
+- Height: 14.00" H (355.6 mm)
+
+- Width: 22.75" W (577.9 mm)
+
+- Depth: 19.25" D (489.0 mm)
+
+- Weight (filled): Approximately 50-70 lbs (22.7-31.75 kg)
+
+- Maximum Vertical Lift: 30 ft (9.14 m)
+
+- Maximum Hose Length: 100 ft (30.4 m) using AMI's 1/4" tubing
+
+- Circulation Rate: 0.3 GPM (1.1 Lpm)
+
+- Input Power: 110/120 VAC, 50/60 Hz (supplied directly from M217 Power Supply)
+
+- Power Connection: Direct plug-in to M217/M217P power supply
+
+- Built-in Circuit Breaker: Yes
+
+- Enclosure: Aluminum construction, IP21 rated (indoor use)
+
+- Stackable design mounts beneath M217 power supply
+
+- Ambient Temperature: 32°F to 110°F (0°C to 45°C)
+
+- Recommended Coolant: De-ionized water with Ethylene Glycol mixture
+
+- Part Numbers: 13B170126-01 (AMI 217 Water Cooler), 13B170127-01 (AMI 217P Water Cooler)
+
+- Compatible Power Supplies: M217, M217P
+
+- Compatible Weld Heads: All AMI fusion weld heads (M-9 series, M-8 series)
+
+- Cable Distance: Standard 25 ft, Maximum 100 ft (up to 500 ft with special options)""",
+    "Brochures or Literature": "https://esab.com/us/nam_en/brands/esab-family-brands/ami/",
+    "Warranty Information": "Not Found",
+    "Section Header": "Compact, stackable water-cooling for M217 orbital welders",
+    "Body Content": """The M2Y7-CW provides a simple, stackable cooling solution for AMI's M217 power supply and fusion weld heads. It integrates pump, reservoir and heat exchanger and offers coolant-flow sensing that can halt the welding sequence if flow drops below safe thresholds, protecting the weld head. The cooler can operate independently or draw power from the M217 when stacked, helping keep cables tidy and conserving bench space. For hygienic or high-purity applications, AMI/ESAB recommends de-ionized water with ethylene-glycol.""",
+    "Left Header": """- Flow sensor triggers weld stop on low flow. 
+
+- Built-in circuit breaker protection. 
+
+- Stackable design saves bench space.""",
+    "Right Header": """- Plugs directly into M217 for power — quick stackable hookup. 
+
+- Can run as independent cooler if needed. 
+
+- Service cable & Ethernet extension options to place head further away.""",
+    "Header + Intro": "Why use a dedicated cooling unit? A dedicated water circulator keeps weld heads at stable operating temps during long cycles, extends head life, and prevents heat-related failures - especially for long duty cycles or thicker walls.",
+    "Supporting Blocks": """- Block 1: Compact Integration
+Subheader: Space-Saving Design
+Description: Stackable configuration with M217 power supply reduces footprint and keeps all cables organized and accessible
+
+- Block 2: Intelligent Monitoring
+Subheader: Flow Sensing & Fault Detection
+Description: Real-time coolant flow monitoring with automatic fault reporting prevents weld head damage and ensures quality
+
+- Block 3: Flexible Operation
+Subheader: Stand-Alone Capability
+Description: Can operate independently or integrated with power supply for maximum application flexibility
+
+- Block 4: Extended Reach
+Subheader: Long-Distance Capability
+Description: Supports up to 100 ft hose length allowing weld head operation far from power supply location""",
+    "Questions/Answers": """- Q1: What power supplies is the M2Y7-CW compatible with?
+A1: The M2Y7-CW is designed specifically to interface with the M217 and M217P power supplies. It plugs directly into the M217 for power and is stackable to save bench space.
+
+- Q2: What type of coolant should be used with the M2Y7-CW?
+A2: AMI recommends using de-ionized water with an ethylene glycol mixture for optimal performance and to prevent corrosion and mineral buildup.
+
+- Q3: How does the coolant fault detection work?
+A3: The cooling unit has a built-in flow sensor that monitors coolant flow rate. If flow drops below a preset minimum (0.25 gpm), a fault signal is sent to the power supply, which will stop the weld sequence to prevent potential damage to the weld head.
+
+- Q4: Can the M2Y7-CW operate independently without a power supply?
+A4: Yes, the unit has independent/stand-alone operation capability, though it is designed to work optimally when integrated with the M217 or M217P power supplies.
+
+- Q5: What is the maximum distance the weld head can be from the cooling unit?
+A5: The M2Y7-CW can support weld head operation up to 100 feet away when using AMI's 1/4" tubing, and can pump coolant up to 30 feet vertically.""",
+    "Header": "Request Quote for M2Y7-CW Cooling Unit",
+    "Intro Paragraph": "Interested in the Arc Machines Model 2Y7-CW Water Circulator for your orbital welding needs? Our team can provide detailed pricing, availability information, and technical support to help you select the right cooling solution for your application.",
+    "Button Text": "Request Quote"
+}
+
+# Write Product Data to CSV with a different structure
+with open('arc_machines_217_water_circulator_product_data.csv', 'w', newline='', encoding='utf-8') as f:
+    writer = csv.DictWriter(f, fieldnames=product_data.keys())
+    writer.writeheader()
+    writer.writerow(product_data)
+
+print("Product Data CSV created successfully!")
+```
+
+
+And after that I want you to create another CSV with the source URLs you've got the info from.
+this one csv will have those columns:
+1. Product ID	
+2. Description & Features	
+3. Specs	
+4. Technical Documentation	
+5. Rental	
+6. Pre-Owned	
+7. Brochure	
+8. Warranty Information	
+9. Manufacturer Site
+
+may you find another things that looks important, if so, please add it as a column too in the source URLs
+
+you might add one or more than one link in each cell. for example the data will be like:
+
+- P001	
+"- https://precisionweldingsupply.com/wp-content/uploads/M2Y7-CW.pdf
+- https://esab.com/us/nam_en/products-solutions/product/welding-automation/orbital-welding/fusion-systems/cooling-unit-model-2y7-cw/
+- https://www.morganitech.com/industrial-tools/ami-cooling-unit/"	
+
+"- https://precisionweldingsupply.com/wp-content/uploads/M2Y7-CW.pdf
+- https://www.morganitech.com/industrial-tools/ami-217-217p-power-supply/"	
+
+"- https://www.morganitech.com/wp-content/uploads/2022/01/AMI_Model_217_ProgrammableTIGPowerSupply_Factsheet_NA_EN-1.pdf
+- https://www.morganitech.com/wp-content/uploads/2022/01/AMI_Model_217P_OrbitalTIGPowerSupply_Factsheet_NA_EN.pdf"	
+
+"- https://www.ebay.com/itm/285114755630
+- https://www.techsouthinc.com/orbital-welding/
+- https://precisionweldingsupply.com/rentals-consumables/orbital-welding-systems/"	
+
+"- https://www.ebay.com/itm/285114755630
+- https://www.westermans.com/ami-equipment"	
+
+"- https://precisionweldingsupply.com/wp-content/uploads/M2Y7-CW.pdf
+- https://esab.com/us/nam_en/brands/esab-family-brands/ami/
+- https://www.morganitech.com/industrial-tools/ami-217-217p-power-supply/"	
+
+- "https://esab.com/us/nam_en/support/warranty/warranty-coverage/"
+
+- Not found
+
+
+NOTE: I don't want the output as a code. just tell me the data without writing it in a code or whatever

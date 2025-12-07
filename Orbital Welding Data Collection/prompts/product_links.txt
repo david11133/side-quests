@@ -1,0 +1,46 @@
+I have this csv file that has links to product images and also to a page that contains this product.
+
+You required to use those two links to check each product individually and search for it to get:
+
+1. Brochures or Literature URL: Link to or attachhments of technical brochures or user manuals in pdf or just any normal website has info.
+2. Description & Feature URL: A link to a website or source that has info about this product.
+3. Manufacturer website: Link to manufacturer website or any related website that most closely to this product.
+4. Warranty link: A link to warranty info (just a link)
+
+
+You have to organize these data in table in columns so I can copy them to my spreadsheet.
+
+Here are the data (two columns, first is image link second is link to a website that has the product):
+
+https://www.orbitec-group.com/assets/images/c/Draufsicht_OSK_53_SW-a8x51czft31kn49.jpg	https://www.orbitec-group.com/en/products/water-cooled-welding-heads-osk
+https://www.orbitec-group.com/assets/images/6/Draufsicht_OSK_76_SW-9zb5y282qw22s0y.jpg	https://www.orbitec-group.com/en/products/water-cooled-welding-heads-osk
+https://img.directindustry.com/images_di/photo-g/165773-20665344.jpg	https://www.directindustry.com/prod/orbitec-gmbh/product-165773-1829758.html
+https://www.orbitec-group.com/assets/images/h/Draufsicht_OSK_76_SW_produktvorschau-g5btxszmppktxfm.jpg	https://www.orbitec-group.com/en/products/gas-cooled-welding-heads-osk
+https://www.orbitecuk.com/wp-content/uploads/2024/11/OSK-CW-HANDLE-AND-CABLE-ASSEMBLY-8-m.jpg	https://www.orbitecuk.com/water-cooled-osk-sw/
+https://sasvetsteknik.se/wp-content/uploads/2021/11/sa-Antriebseinheit-1.jpg	https://sasvetsteknik.se/produkt/osk-c-handle-and-cable-assembly-8m/
+https://www.orbitec-group.com/assets/images/g/Halter_OSK_C-akgqbhenh6mbyde.jpg	https://www.orbitec-group.com/en/products/mobile-workplaces
+https://www.orbitec-group.com/assets/images/6/Draufsicht_OSK_76_SW-9zb5y282qw22s0y.jpg	https://www.orbitec-group.com/en/products/water-cooled-welding-heads-osk
+https://www.orbitec-group.com/assets/images/6/OSK_CW_NEU-s230ah4e4qfqd7j.jpg	https://www.orbitec-group.com/en/products/water-cooled-welding-heads-osk
+https://sasvetsteknik.se/wp-content/uploads/2021/09/sa-Antriebseinheit-OSK-CW.jpg	https://sasvetsteknik.se/produkt/osk-cw-handtag-och-kabelmontering-8m/
+https://www.orbitecuk.com/wp-content/uploads/2023/12/osk-s-handle-assembly-1024x562-1.png	https://www.orbitecuk.com/product/osk-s-handle-assembly/
+https://sasvetsteknik.se/wp-content/uploads/2021/11/sa-Antriebseinheit-1.jpg	https://sasvetsteknik.se/produkt/osk-s-handtag-och-kabelmontering-8m/
+https://www.orbitec-group.com/assets/images/4/Halter_OSK-agny934v7zye674.jpg	https://www.orbitec-group.com/en/products/water-cooled-welding-heads-osk
+https://www.orbitec-group.com/assets/images/b/OSK_115_S___Gasgekuehlter_Schweisskopf_03-ckyt2314a5fghwt.jpg	https://www.orbitec-group.com/en/products/water-cooled-welding-heads-osk
+https://www.orbitecuk.com/wp-content/uploads/2024/11/OSK-CW-HANDLE-AND-CABLE-ASSEMBLY-8-m.jpg	https://www.orbitecuk.com/water-cooled-osk-sw/
+https://www.orbitecuk.com/wp-content/uploads/2024/11/OSK-CW-HANDLE-AND-CABLE-ASSEMBLY-8-m.jpg	https://www.orbitecuk.com/water-cooled-osk-sw/
+https://www.orbitec-group.com/assets/images/r/Halter_13S-1ejdntw00p262dr.jpg	https://www.orbitec-group.com/en/products/mobile-workplaces
+https://www.orbitec-group.com/assets/images/r/Halter_13S-1ejdntw00p262dr.jpg	https://www.orbitec-group.com/en/products/mobile-workplaces
+https://www.orbitec-group.com/assets/images/k/OSW_115-x7t5gvvax6wa02t.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/k/OSW_115-x7t5gvvax6wa02t.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/2/OSW_170-1an1ad95yh6w524.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/2/OSW_170-1an1ad95yh6w524.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/9/OSW_275-vm1cn588kr9svsb.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/g/OSW_40-b9mhy5erm8wm10v.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/g/OSW_40-b9mhy5erm8wm10v.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/8/OSW_80-zenrgeanv9w8bpz.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/8/OSW_80-zenrgeanv9w8bpz.jpg	https://www.orbitec-group.com/en/products/osw-welding-heads
+https://www.orbitec-group.com/assets/images/n/Restsauerstoffmessgeraet_Oxy_Evo_Autorange-pwak97f4cymj1px.jpg	https://www.orbitec-group.com/en/products/oxy-evo-oxygen-analyser-ppa
+https://www.orbitec-group.com/assets/images/6/Orbitec___Oxy_Evo_04-xpgmv182x59mzba.jpg	https://www.orbitec-group.com/en/products/oxy-evo-oxygen-analyser-ppa
+https://cdn.prod.website-files.com/6424d0470944342265b6eaae/64b02bc5f40afcddc9a666d5_oxy_smart_350.jpg	https://www.topac.com/products/oxy-smart
+
+Please make sure you get all the columns I told you about also rows. because sometime you send data with a lot of missing things like columns or rows.
