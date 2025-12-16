@@ -31,6 +31,22 @@ PAGE_CACHE = {}
 CACHE_HITS = 0
 CACHE_MISSES = 0
 
+# UPDATED: Valid product categories based on your store
+VALID_CATEGORIES = {
+    'servers', 'workstations', 'networking', 'desktops', 'cisco products',
+    'server hard drives', 'processors', 'graphic cards', 'ip phones',
+    'server parts & accessories', 'accessories', 'printers', 'storage',
+    "led's monitor", 'lighting', 'apple products', 'sfp modules',
+    'all in one pc', 'routers', 'cisco switches', 'avaya ip phones',
+    'cisco ip phones', 'adapters', 'memory', 'motherboard', 'power supply',
+    'sas hard drive', 'sas ssd', 'sata hard drive', 'dell', 'hp', 'ibm',
+    'lenovo', 'used servers', 'used workstations', 'dell servers',
+    'hp servers', 'dell workstation', 'hp workstations', 'ibm workstations'
+}
+
+# UPDATED: Brand extraction mapping
+BRANDS = ['HP', 'Dell', 'IBM', 'Lenovo', 'Apple', 'Cisco', 'Avaya', 'Intel', 'AMD']
+
 #-----------------------------------------------------------------------------------------------
 def generate_unique_id(prefix="SMS"):
     """Generate a unique SKU/ID like SMS251215X9P."""
@@ -140,6 +156,19 @@ def fetch_page(url, session, retries=4, base_delay=5, use_cache=True):
     return None
 
 #-----------------------------------------------------------------------------------------------
+def is_valid_category(category_name):
+    """Check if a category name is a valid product category."""
+    cat_lower = category_name.lower().strip()
+    
+    # Exclude language/country selectors
+    excluded = ['language', 'country', 'currency', 'english', 'arabic', 'united arab emirates', 'aed']
+    if any(exc in cat_lower for exc in excluded):
+        return False
+    
+    # Check if it's in our valid categories
+    return cat_lower in VALID_CATEGORIES
+
+#-----------------------------------------------------------------------------------------------
 def get_categories(session):
     """Fetches categories and subcategories from the menu structure."""
     soup = fetch_page(BASE_URL, session, use_cache=False)
@@ -148,8 +177,13 @@ def get_categories(session):
 
     categories = []
     
-    # Find all top-level menu items with subcategories
+    # Find all top-level menu items with subcategories (ORIGINAL WORKING CODE)
     menu_items = soup.find_all('li', class_='menu-item-has-children')
+    
+    print(f"[DEBUG] Found {len(menu_items)} menu items with children")
+    
+    # Exclude only Language/Country at top level
+    excluded_top_level = ['language', 'country', 'currency']
     
     for item in menu_items:
         # Get the main category
@@ -162,6 +196,13 @@ def get_categories(session):
             cat_name = cat_name.text.strip()
         else:
             cat_name = main_link.text.strip()
+        
+        print(f"[DEBUG] Processing main category: '{cat_name}'")
+        
+        # Skip Language/Country/Currency at top level
+        if any(exc in cat_name.lower() for exc in excluded_top_level):
+            print(f"[INFO] Skipping non-product category: {cat_name}")
+            continue
         
         cat_url = main_link.get('href', '')
         if cat_url and not cat_url.startswith('http'):
@@ -179,6 +220,11 @@ def get_categories(session):
                     continue
                 
                 sub_name = sub_link.text.strip()
+                
+                # FIXED: Skip only language/country selectors, not valid categories
+                if any(exc in sub_name.lower() for exc in excluded_top_level):
+                    continue
+                
                 sub_url = sub_link.get('href', '')
                 if sub_url and not sub_url.startswith('http'):
                     sub_url = BASE_URL + sub_url
@@ -191,6 +237,11 @@ def get_categories(session):
                         nested_link = nested_item.find('a', class_='woodmart-nav-link')
                         if nested_link:
                             nested_name = nested_link.text.strip()
+                            
+                            # FIXED: Skip only language/country selectors
+                            if any(exc in nested_name.lower() for exc in excluded_top_level):
+                                continue
+                            
                             nested_url = nested_link.get('href', '')
                             if nested_url and not nested_url.startswith('http'):
                                 nested_url = BASE_URL + nested_url
@@ -256,14 +307,12 @@ def get_products_from_category(category_url, session):
                 all_products.append(prod_url)
         
         # Check if there's a next page
-        # Look for pagination or "Load More" indicators
         pagination = soup.find('nav', class_='woocommerce-pagination')
         if pagination:
             next_link = pagination.find('a', class_='next')
             if not next_link:
                 break
         else:
-            # No pagination found, assume single page
             break
         
         page += 1
@@ -287,6 +336,80 @@ def download_image(img_url, img_path, session):
         return img_path
     except Exception as e:
         return None
+
+#-----------------------------------------------------------------------------------------------
+def extract_brand(product_name, category_path):
+    """Extract brand from product name or category."""
+    name_lower = product_name.lower()
+    cat_lower = category_path.lower()
+    
+    # UPDATED: Check against expanded brand list
+    for brand in BRANDS:
+        if brand.lower() in name_lower or brand.lower() in cat_lower:
+            return brand
+    
+    # Try to extract first word as brand if it looks like a brand name
+    first_word = product_name.split()[0] if product_name.split() else ''
+    if first_word and len(first_word) > 2 and first_word[0].isupper():
+        return first_word
+    
+    return ''
+
+#-----------------------------------------------------------------------------------------------
+def extract_ram(text):
+    """Extract RAM size from text."""
+    # Pattern: 8GB, 16 GB, 32GB RAM, etc.
+    ram_match = re.search(r'(\d+)\s*GB\s*(DDR\d*\s*)?(RAM)?', text, re.IGNORECASE)
+    if ram_match:
+        return f"{ram_match.group(1)}GB"
+    return ''
+
+#-----------------------------------------------------------------------------------------------
+def extract_processor(text):
+    """Extract processor from text."""
+    # UPDATED: More comprehensive processor patterns
+    proc_patterns = [
+        r'(Intel\s*®?\s*Core\s*i\d+[\s\-]\d+\w*)',  # Intel Core i5-12400
+        r'(Intel\s*®?\s*Xeon\s*®?\s*[EW][\-\s]\d+\w*)',  # Xeon E-2236, Xeon W-2245
+        r'(Intel\s*®?\s*Core\s*i\d+)',  # Intel Core i5
+        r'(Xeon\s*[EW][\-\s]?\d+\w*)',  # Xeon E5-2690
+        r'(AMD\s*Ryzen\s*\d+\s*\d+\w*)',  # AMD Ryzen 5 5600X
+        r'(AMD\s*EPYC\s*\d+\w*)',  # AMD EPYC 7543
+        r'(Core\s*i\d+)',  # Core i7
+    ]
+    for pattern in proc_patterns:
+        proc_match = re.search(pattern, text, re.IGNORECASE)
+        if proc_match:
+            return proc_match.group(1)
+    return ''
+
+#-----------------------------------------------------------------------------------------------
+def extract_generation(text):
+    """Extract generation from text."""
+    gen_match = re.search(r'(\d+)(?:th|st|nd|rd)?\s*Gen(?:eration)?', text, re.IGNORECASE)
+    if gen_match:
+        return f"{gen_match.group(1)}th Gen"
+    return ''
+
+#-----------------------------------------------------------------------------------------------
+def extract_os(text):
+    """Extract operating system from text."""
+    text_lower = text.lower()
+    if 'windows 11' in text_lower:
+        return 'Windows 11'
+    elif 'windows 10' in text_lower:
+        return 'Windows 10'
+    elif 'windows server' in text_lower:
+        # Extract version if present
+        ws_match = re.search(r'Windows\s*Server\s*(\d+)', text, re.IGNORECASE)
+        if ws_match:
+            return f"Windows Server {ws_match.group(1)}"
+        return 'Windows Server'
+    elif 'linux' in text_lower:
+        return 'Linux'
+    elif 'macos' in text_lower or 'mac os' in text_lower:
+        return 'macOS'
+    return ''
 
 #-----------------------------------------------------------------------------------------------
 def scrape_product_details(url, session, today_folder, category_path):
@@ -419,12 +542,7 @@ def scrape_product_details(url, session, today_folder, category_path):
             # Clean up the text
             text = re.sub(r'\s+', ' ', text)
             if text and len(text) > 3:
-                # Check if it has key:value format
-                if ':' in text:
-                    features_list.append(text)
-                else:
-                    # Add as a feature point
-                    features_list.append(text)
+                features_list.append(text)
         
         if features_list:
             features = '<br/>'.join([f"✅ {line}" for line in features_list])
@@ -433,12 +551,13 @@ def scrape_product_details(url, session, today_folder, category_path):
     
     # Build specification from features
     specification = '<ul>\n'
-    if data['features']:
-        # Extract brand from product name
-        brand_match = re.search(r'^(\w+)', data['Name'])
-        brand = brand_match.group(1) if brand_match else 'Unknown'
+    
+    # UPDATED: Extract brand using improved function
+    brand = extract_brand(data['Name'], category_path)
+    if brand:
         specification += f'<li>Brand : {brand}</li>\n'
-        
+    
+    if data['features']:
         for line in data['features'].split('<br/>'):
             clean_line = line.replace('✅', '').strip()
             if ':' in clean_line and clean_line:
@@ -448,84 +567,55 @@ def scrape_product_details(url, session, today_folder, category_path):
     
     data['specification'] = specification
     
-    # Extract categories and tags for attributes
+    # UPDATED: Extract attributes using improved functions
+    combined_text = f"{data['Name']} {product_desc_text} {category_path}"
+    
+    data['Brand'] = brand
+    data['Processor'] = extract_processor(combined_text)
+    data['Ram size'] = extract_ram(combined_text)
+    data['Generation(s)'] = extract_generation(combined_text)
+    data['Operating system'] = extract_os(combined_text)
+    
+    # Initialize remaining fields
+    data['Graphics size'] = ''
+    data['Output Wattage'] = ''
+    data['Size'] = ''
     data['Availability'] = '1'
     
-    # Try to extract brand, processor, RAM, etc. from categories or tags
-    categories_section = soup.find('span', class_='posted_in')
-    tags_section = soup.find('span', class_='tagged_as')
-    
-    # Initialize attribute fields
-    data['Brand'] = ''
-    data['Generation(s)'] = ''
-    data['Graphics size'] = ''
-    data['Operating system'] = ''
-    data['Output Wattage'] = ''
-    data['Processor'] = ''
-    data['Ram size'] = ''
-    data['Size'] = ''
-    
-    # Try to extract from product name or description
-    name_lower = data['Name'].lower()
-    desc_lower = product_desc_text.lower()
-    
-    # Extract brand
-    for brand in ['HP', 'Dell', 'IBM', 'Lenovo', 'Apple']:
-        if brand.lower() in name_lower:
-            data['Brand'] = brand
-            break
-    
-    # Extract RAM
-    ram_match = re.search(r'(\d+)\s*GB\s*(DDR\d*\s*)?RAM', data['Name'], re.IGNORECASE)
-    if ram_match:
-        data['Ram size'] = f"{ram_match.group(1)}GB"
-    
-    # Extract processor
-    proc_patterns = [
-        r'(Intel\s*®?\s*Core\s*i\d+)', r'(Intel\s*®?\s*Xeon\s*®?\s*E-Series)',
-        r'(Xeon\s*E\d+)', r'(Core\s*i\d+)', r'(AMD\s*Ryzen\s*\d+)'
+    # Extract graphics card if mentioned
+    gpu_patterns = [
+        r'(NVIDIA\s*(?:GeForce\s*)?(?:RTX|GTX)\s*\d+\w*)',
+        r'(AMD\s*Radeon\s*(?:RX|Pro)?\s*\d+\w*)',
+        r'(Intel\s*(?:UHD|Iris)\s*Graphics\s*\d*)',
     ]
-    for pattern in proc_patterns:
-        proc_match = re.search(pattern, data['Name'], re.IGNORECASE)
-        if proc_match:
-            data['Processor'] = proc_match.group(1)
+    for pattern in gpu_patterns:
+        gpu_match = re.search(pattern, combined_text, re.IGNORECASE)
+        if gpu_match:
+            data['Graphics size'] = gpu_match.group(1)
             break
     
-    # Extract generation
-    gen_match = re.search(r'(\d+)th\s*Gen', data['Name'], re.IGNORECASE)
-    if gen_match:
-        data['Generation(s)'] = f"{gen_match.group(1)}th Gen"
+    # Extract power supply wattage for relevant categories
+    if 'power supply' in category_path.lower():
+        watt_match = re.search(r'(\d+)\s*W(?:att)?', combined_text, re.IGNORECASE)
+        if watt_match:
+            data['Output Wattage'] = f"{watt_match.group(1)}W"
     
-    # Extract OS
-    if 'windows 10' in name_lower or 'windows 10' in desc_lower:
-        data['Operating system'] = 'Windows 10'
-    elif 'windows 11' in name_lower or 'windows 11' in desc_lower:
-        data['Operating system'] = 'Windows 11'
-    
-    # Initialize 6 attributes with extracted data
+    # UPDATED: Initialize 6 attributes with extracted data
     attributes = {}
-    attr_names = {
-        1: 'Brand',
-        2: 'Processor',
-        3: 'RAM',
-        4: 'Graphics',
-        5: 'Generation',
-        6: 'Operating System'
-    }
+    attr_config = [
+        ('Brand', data['Brand']),
+        ('Processor', data['Processor']),
+        ('RAM', data['Ram size']),
+        ('Graphics', data['Graphics size']),
+        ('Generation', data['Generation(s)']),
+        ('Operating System', data['Operating system'])
+    ]
     
-    for i in range(1, 7):
-        attributes[f'Attribute {i} name'] = attr_names.get(i, '')
-        attributes[f'Attribute {i} value(s)'] = ''
+    for i, (attr_name, attr_value) in enumerate(attr_config, 1):
+        attributes[f'Attribute {i} name'] = attr_name
+        attributes[f'Attribute {i} value(s)'] = attr_value
         attributes[f'Attribute {i} visible'] = '1'
         attributes[f'Attribute {i} global'] = '1'
-    
-    # Map extracted data to attributes
-    attributes['Attribute 1 value(s)'] = data['Brand']
-    attributes['Attribute 2 value(s)'] = data['Processor']
-    attributes['Attribute 3 value(s)'] = data['Ram size']
-    attributes['Attribute 4 value(s)'] = data['Graphics size']
-    attributes['Attribute 5 value(s)'] = data['Generation(s)']
-    attributes['Attribute 6 value(s)'] = data['Operating system']
     
     data.update(attributes)
     
@@ -557,8 +647,8 @@ def main():
     total_subcats = sum(len(cat['subcategories']) for cat in categories)
     print(f"[INFO] Total subcategories to scrape: {total_subcats}")
 
-    # Collect all products
-    all_products = []
+    # Collect all unique products with their first category
+    products_dict = {}  # url -> category_path mapping
     cat_index = 0
     
     for cat in categories:
@@ -579,10 +669,12 @@ def main():
             print(f"  └─ Found {len(products)} products")
             
             for prod_url in products:
-                all_products.append({
-                    'url': prod_url,
-                    'category': category_path
-                })
+                # Only add product if not already seen (keeps first category)
+                if prod_url not in products_dict:
+                    products_dict[prod_url] = category_path
+    
+    # Convert to list
+    all_products = [{'url': url, 'category': cat} for url, cat in products_dict.items()]
     
     print(f"\n[INFO] Total unique products to scrape: {len(all_products)}")
     print(f"[INFO] Cache stats: {CACHE_HITS} hits, {CACHE_MISSES} misses")
