@@ -4,12 +4,12 @@ from urllib3.util.retry import Retry
 import csv
 import sys
 import json
-from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
-from typing import Dict, List, Optional, Tuple
-import time
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+from typing import Dict, List, Optional, Tuple, Set
+import time
+import signal
 
-# Constants
 METRICS_URL = "https://api2.suhail.ai/api/mapMetrics/landMetrics/list"
 TRANSACTIONS_URL = "https://api2.suhail.ai/transactions/neighbourhood"
 TX_DETAILS_URL = "https://api2.suhail.ai/api/transactions/search"
@@ -23,12 +23,56 @@ OUTPUT_FILE = "neighborhood_transactions.csv"
 TEST = False  # set False for full run
 
 # Performance settings
-MAX_WORKERS = 8   # Reduced to avoid overwhelming the API
-BATCH_SIZE = 30   # Smaller batches
-REQUEST_TIMEOUT = 15  # Timeout per request
-BATCH_TIMEOUT = 60    # Timeout for entire batch
+MAX_WORKERS = 8
+BATCH_SIZE = 30
+REQUEST_TIMEOUT = 15
+BATCH_TIMEOUT = 60
 
-SCRAPED_REGIONS_FILE = "scraped_regions.json"
+# ---------------------------------------
+# Check which regions are already scraped
+# ---------------------------------------
+
+def check_region_completion(region_id: int) -> bool:
+    """
+    Check if a region is fully scraped by verifying it has data.
+    Returns True if region should be skipped (already complete).
+    Returns False if region needs to be scraped.
+    """
+    if not os.path.exists(OUTPUT_FILE):
+        return False
+    
+    try:
+        # Count rows for this region
+        row_count = 0
+        with open(OUTPUT_FILE, 'r', encoding='utf-8-sig') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if 'regionId' in row and row['regionId']:
+                    try:
+                        if int(row['regionId']) == region_id:
+                            row_count += 1
+                            # If we find at least some data, assume region is done
+                            # You can adjust this threshold if needed
+                            if row_count >= 10:
+                                return True
+                    except (ValueError, TypeError):
+                        continue
+        
+        # If we found some rows but less than threshold, region might be incomplete
+        # Return False to re-scrape it
+        return False
+        
+    except Exception as e:
+        print(f"⚠️  Error checking region {region_id}: {e}")
+        return False
+
+
+def get_all_regions_status() -> Dict[int, bool]:
+    """Get completion status for all regions"""
+    status = {}
+    for region_id in REGION_IDS:
+        status[region_id] = check_region_completion(region_id)
+    return status
 
 # ---------------------------------------
 # Session with connection pooling & retries
@@ -62,22 +106,8 @@ seen_transactions = set()
 rows = []
 
 # ---------------------------------------
-# Helpers for scraping and checking regions
+# Helpers with better error handling
 # ---------------------------------------
-
-def load_scraped_regions():
-    """Load the list of already scraped regions from a JSON file"""
-    if os.path.exists(SCRAPED_REGIONS_FILE):
-        with open(SCRAPED_REGIONS_FILE, "r") as f:
-            return set(json.load(f))
-    return set()
-
-def save_scraped_region(region_id):
-    """Add the region ID to the list of scraped regions"""
-    scraped_regions = load_scraped_regions()
-    scraped_regions.add(region_id)
-    with open(SCRAPED_REGIONS_FILE, "w") as f:
-        json.dump(list(scraped_regions), f)
 
 def is_valid_subdivision(subdivision_no):
     """Parcel API only accepts numeric subdivision numbers"""
@@ -278,15 +308,207 @@ def append_to_csv(new_rows):
 
 start_time = time.time()
 
-# Load already scraped regions
-scraped_regions = load_scraped_regions()
+# Check which regions have already been scraped
+print("🔍 Checking existing data...")
+regions_status = get_all_regions_status()
+completed_regions = [r for r, done in regions_status.items() if done]
+regions_to_process = [r for r, done in regions_status.items() if not done]
 
-for region_id in REGION_IDS:
-    # Skip region if already scraped
-    if region_id in scraped_regions:
-        print(f"\n✔ Region {region_id} already scraped, skipping.")
-        continue
+if completed_regions:
+    print(f"✅ Found complete data for regions: {completed_regions}")
+    print(f"⏭️  Skipping {len(completed_regions)} completed regions")
+else:
+    print(f"📝 No completed regions found - starting fresh")
 
+print(f"🎯 Will process {len(regions_to_process)} regions: {regions_to_process}\n")
+
+for region_id in regions_to_process:
     region_start = time.time()
     print(f"\n▶ Region {region_id}")
-    region_rows
+    region_rows = []
+    offset = 0
+    neighborhoods_processed = 0
+
+    while True:
+        try:
+            metrics_resp = session.get(
+                METRICS_URL,
+                params={"regionId": region_id, "offset": offset, "limit": METRICS_LIMIT},
+                timeout=30
+            )
+            metrics_resp.raise_for_status()
+        except Exception as e:
+            print(f"\n⚠️  Failed to fetch metrics: {e}")
+            break
+
+        items = metrics_resp.json().get("data", {}).get("items", [])
+        if not items:
+            break
+
+        if TEST:
+            items = items[:5]
+
+        for item in items:
+            neighborhoods_processed += 1
+            neighborhood_id = item["neighborhoodId"]
+            neighborhood_name = item["neighborhoodName"]
+            province_name = item["provinceName"]
+
+            # Collect all transactions first
+            all_transactions = []
+            page = 0
+            
+            sys.stdout.write(f"\n  Neighborhood {neighborhoods_processed}: {neighborhood_name[:30]}")
+            sys.stdout.flush()
+            
+            while True:
+                try:
+                    tx_resp = session.get(
+                        TRANSACTIONS_URL,
+                        params={
+                            "regionId": region_id,
+                            "neighbourhoodId": neighborhood_id,
+                            "page": page,
+                            "pageSize": PAGE_SIZE
+                        },
+                        timeout=30
+                    )
+                    tx_resp.raise_for_status()
+                except Exception as e:
+                    print(f"\n⚠️  Failed to fetch transactions: {e}")
+                    break
+
+                transactions = tx_resp.json().get("data", [])
+                if not transactions:
+                    break
+
+                all_transactions.extend(transactions)
+                page += 1
+                
+                # Show progress
+                sys.stdout.write(f" [{len(all_transactions)} txs]")
+                sys.stdout.flush()
+                
+                if TEST:
+                    break
+            
+            # Filter out already-seen transactions
+            new_transactions = []
+            for tx in all_transactions:
+                tx_number = tx.get("transactionNumber")
+                unique_key = (region_id, neighborhood_id, tx_number)
+                if unique_key not in seen_transactions:
+                    seen_transactions.add(unique_key)
+                    new_transactions.append(tx)
+            
+            if not new_transactions:
+                sys.stdout.write(" (all seen)")
+                sys.stdout.flush()
+                continue
+            
+            sys.stdout.write(f" → {len(new_transactions)} new")
+            sys.stdout.flush()
+            
+            # Batch fetch transaction details
+            tx_numbers = [tx.get("transactionNumber") for tx in new_transactions]
+            details_map = get_transaction_details_batch(region_id, tx_numbers)
+            
+            # Prepare parcel geometry requests
+            geometry_requests = []
+            for tx in new_transactions:
+                tx_number = tx.get("transactionNumber")
+                details = details_map.get(tx_number, {})
+                
+                parcel_no = tx.get("parcelNo")
+                subdivision_no = tx.get("subdivisionNo")
+                province_id = details.get("provinceId")
+                
+                if not details.get("geometry") and parcel_no and subdivision_no and province_id:
+                    geometry_requests.append((region_id, province_id, subdivision_no, parcel_no))
+            
+            # Batch fetch geometries
+            geometry_map = {}
+            if geometry_requests:
+                geometry_map = get_parcel_geometry_batch(geometry_requests)
+            
+            # Build rows
+            for tx in new_transactions:
+                tx_number = tx.get("transactionNumber")
+                details = details_map.get(tx_number, {})
+                
+                parcel_no = tx.get("parcelNo")
+                subdivision_no = tx.get("subdivisionNo")
+                province_id = details.get("provinceId")
+                
+                # Extract coordinates
+                centroid_x = details.get("centroidX")
+                centroid_y = details.get("centroidY")
+                
+                # Try to get centroid from nested structure if not at level
+                if not centroid_x and details.get("centroid"):
+                    centroid_x = details["centroid"].get("x")
+                    centroid_y = details["centroid"].get("y")
+                
+                # Try to get from parcels array
+                if not centroid_x and details.get("parcels") and len(details["parcels"]) > 0:
+                    first_parcel = details["parcels"][0]
+                    centroid_x = first_parcel.get("centroidX")
+                    centroid_y = first_parcel.get("centroidY")
+                
+                # Get polygon data if available
+                polygon_data = details.get("polygonData")
+                
+                # Fallback to geometry lookup if no coordinates
+                geometry = details.get("geometry")
+                if not geometry and not centroid_x and parcel_no and subdivision_no and province_id:
+                    key = (region_id, province_id, subdivision_no, parcel_no)
+                    geometry = geometry_map.get(key)
+                
+                row = {
+                    "regionId": region_id,
+                    "provinceName": province_name,
+                    "neighborhoodId": neighborhood_id,
+                    "neighborhoodName": neighborhood_name,
+                    "رقم الصفقة": tx_number,
+                    "رقم المخطط": subdivision_no,
+                    "رقم البلوك": tx.get("blockNo") or "---",
+                    "رقم القطعة": parcel_no,
+                    "قيمة الصفقة (﷼)": tx.get("transactionPrice"),
+                    "سعر المتر (﷼)": tx.get("priceOfMeter"),
+                    "تاريخ الصفقة": tx.get("transactionDate"),
+                    "نوع الأرض": details.get("type"),
+                    "نوع الاستخدام": details.get("metricsType"),
+                    "المساحة الإجمالية": details.get("totalArea"),
+                    "المصدر": details.get("transactionSource"),
+                    "sellingType": details.get("sellingType"),
+                    "landUseGroup": details.get("landUseGroup"),
+                    "propertyType": details.get("propertyType"),
+                    "centroidX": centroid_x,
+                    "centroidY": centroid_y,
+                    "polygonData": polygon_data,
+                    "geometry": json.dumps(geometry, ensure_ascii=False) if geometry else None
+                }
+                
+                rows.append(row)
+                region_rows.append(row)
+
+        offset += METRICS_LIMIT
+        if TEST:
+            break
+    
+    # Write region data to CSV immediately
+    if region_rows:
+        append_to_csv(region_rows)
+        region_elapsed = time.time() - region_start
+        print(f"\n  ✓ Region {region_id} done: {len(region_rows)} rows in {region_elapsed:.1f}s")
+    else:
+        print(f"\n  ✓ Region {region_id} done: no new data")
+
+elapsed = time.time() - start_time
+print(f"\n{'='*60}")
+print(f"✅ All regions finished in {elapsed:.1f}s")
+print(f"📊 Total unique transactions: {len(rows)}")
+print(f"📄 Data saved to {OUTPUT_FILE}")
+
+if completed_regions:
+    print(f"⏭️  Skipped {len(completed_regions)} previously completed regions")
