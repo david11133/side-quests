@@ -4,43 +4,45 @@ from urllib3.util.retry import Retry
 import csv
 import sys
 import json
-from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
-from typing import Dict, List, Optional, Tuple
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Dict, List, Optional, Set, Tuple
 import time
-import signal
+from collections import deque
 
+# API Endpoints
 METRICS_URL = "https://api2.suhail.ai/api/mapMetrics/landMetrics/list"
 TRANSACTIONS_URL = "https://api2.suhail.ai/transactions/neighbourhood"
 TX_DETAILS_URL = "https://api2.suhail.ai/api/transactions/search"
 PARCEL_URL = "https://api2.suhail.ai/api/parcel/search"
 
-REGION_IDS = range(1, 31)
+# Configuration
+REGION_IDS = range(1, 16)
 METRICS_LIMIT = 600
 PAGE_SIZE = 1000
 OUTPUT_FILE = "neighborhood_transactions.csv"
-
-TEST = False  # set False for full run
+TEST = False  # Set to True for testing with limited data
 
 # Performance settings
-MAX_WORKERS = 8   # Reduced to avoid overwhelming the API
-BATCH_SIZE = 30   # Smaller batches
-REQUEST_TIMEOUT = 15  # Timeout per request
-BATCH_TIMEOUT = 60    # Timeout for entire batch
+MAX_WORKERS = 6
+BATCH_SIZE = 25
+REQUEST_TIMEOUT = 15
+CACHE_SIZE_LIMIT = 10000  # Limit cache size to prevent memory issues
 
 # ---------------------------------------
-# Session with connection pooling & retries
+# Session with connection pooling
 # ---------------------------------------
 
 def create_session():
+    """Create a requests session with retry logic and connection pooling"""
     session = requests.Session()
     
     adapter = HTTPAdapter(
-        pool_connections=15,
-        pool_maxsize=15,
+        pool_connections=10,
+        pool_maxsize=10,
         max_retries=Retry(
-            total=2,
-            backoff_factor=0.3,
-            status_forcelist=[500, 502, 503, 504],
+            total=3,
+            backoff_factor=0.5,
+            status_forcelist=[500, 502, 503, 504, 429],
             raise_on_status=False
         )
     )
@@ -52,202 +54,263 @@ def create_session():
 
 session = create_session()
 
+# Limited-size caches with LRU-like behavior
+class LimitedCache:
+    """Simple LRU-like cache with size limit"""
+    def __init__(self, max_size=1000):
+        self.cache = {}
+        self.access_order = deque()
+        self.max_size = max_size
+    
+    def get(self, key, default=None):
+        return self.cache.get(key, default)
+    
+    def set(self, key, value):
+        if key not in self.cache and len(self.cache) >= self.max_size:
+            # Remove oldest entry
+            if self.access_order:
+                old_key = self.access_order.popleft()
+                self.cache.pop(old_key, None)
+        
+        self.cache[key] = value
+        if key in self.access_order:
+            self.access_order.remove(key)
+        self.access_order.append(key)
+    
+    def __contains__(self, key):
+        return key in self.cache
+
 # Caches
-transaction_details_cache = {}
-parcel_geometry_cache = {}
-seen_transactions = set()
-rows = []
+transaction_details_cache = LimitedCache(max_size=CACHE_SIZE_LIMIT)
+parcel_geometry_cache = LimitedCache(max_size=CACHE_SIZE_LIMIT)
+seen_transactions: Set[Tuple] = set()
 
 # ---------------------------------------
-# Helpers with better error handling
+# Helper Functions
 # ---------------------------------------
 
 def is_valid_subdivision(subdivision_no):
-    """Parcel API only accepts numeric subdivision numbers"""
-    return subdivision_no and subdivision_no.strip().isdigit()
+    """Check if subdivision number is valid for API call"""
+    return subdivision_no and str(subdivision_no).strip().isdigit()
 
+def needs_details_fetch(tx):
+    """Determine if we need to fetch transaction details"""
+    # Check if transaction is missing critical detail fields
+    # If the transaction endpoint already provides these, skip the details fetch
+    
+    # Fields that typically come from details endpoint:
+    # type, metricsType, totalArea, transactionSource, sellingType, landUseGroup, propertyType
+    
+    # If transaction already has most of these fields, we don't need details
+    has_type = tx.get("type") is not None
+    has_metrics_type = tx.get("metricsType") is not None
+    has_total_area = tx.get("totalArea") is not None
+    
+    # If we have these key fields, skip details fetch
+    if has_type and has_metrics_type:
+        return False
+    
+    # Otherwise, fetch details
+    return True
 
-def get_transaction_details_batch(region_id: int, tx_numbers: List[str]) -> Dict[str, dict]:
-    """Fetch multiple transaction details in parallel with timeout protection"""
-    results = {}
-    uncached = [tx for tx in tx_numbers if tx not in transaction_details_cache]
+def extract_coordinates(tx, details):
+    """Extract coordinates from transaction or details"""
+    # Try transaction first
+    centroid_x = tx.get("centroidX")
+    centroid_y = tx.get("centroidY")
     
-    if not uncached:
-        return {tx: transaction_details_cache[tx] for tx in tx_numbers}
+    if centroid_x:
+        return centroid_x, centroid_y
     
-    def fetch_one(tx_number):
-        try:
-            resp = session.get(
-                TX_DETAILS_URL,
-                params={"transactionNo": tx_number, "regionId": region_id},
-                timeout=REQUEST_TIMEOUT
-            )
-            resp.raise_for_status()
-            data = resp.json().get("data", [])
-            return tx_number, data[0] if data else {}, None
-        except requests.exceptions.Timeout:
-            return tx_number, {}, "timeout"
-        except Exception as e:
-            return tx_number, {}, str(e)
+    # Try details at top level
+    centroid_x = details.get("centroidX")
+    centroid_y = details.get("centroidY")
     
-    # Process in smaller batches to avoid overwhelming
-    for i in range(0, len(uncached), BATCH_SIZE):
-        batch = uncached[i:i + BATCH_SIZE]
-        sys.stdout.write(f"[D:{len(batch)}]")
+    if centroid_x:
+        return centroid_x, centroid_y
+    
+    # Try nested centroid
+    if details.get("centroid"):
+        centroid_x = details["centroid"].get("x")
+        centroid_y = details["centroid"].get("y")
+        if centroid_x:
+            return centroid_x, centroid_y
+    
+    # Try parcels array
+    if details.get("parcels") and len(details["parcels"]) > 0:
+        first_parcel = details["parcels"][0]
+        centroid_x = first_parcel.get("centroidX")
+        centroid_y = first_parcel.get("centroidY")
+        if centroid_x:
+            return centroid_x, centroid_y
+    
+    return None, None
+
+def needs_geometry_fetch(tx, details, centroid_x):
+    """Determine if we need to fetch parcel geometry"""
+    # If we already have coordinates or geometry, skip
+    if centroid_x:
+        return False
+    
+    if details.get("geometry") or details.get("polygonData"):
+        return False
+    
+    # If we don't have the required fields for geometry lookup, skip
+    if not (tx.get("parcelNo") and tx.get("subdivisionNo")):
+        return False
+    
+    return True
+
+def fetch_transaction_details(region_id: int, tx_number: str) -> dict:
+    """Fetch details for a single transaction"""
+    try:
+        resp = session.get(
+            TX_DETAILS_URL,
+            params={"transactionNo": tx_number, "regionId": region_id},
+            timeout=REQUEST_TIMEOUT
+        )
+        resp.raise_for_status()
+        data = resp.json().get("data", [])
+        return data[0] if data else {}
+    except Exception as e:
+        sys.stdout.write(f"!")
         sys.stdout.flush()
+        return {}
+
+def fetch_parcel_geometry(region_id: int, province_id: int, subdivision_no: str, parcel_no: str) -> Optional[dict]:
+    """Fetch geometry for a single parcel"""
+    if not is_valid_subdivision(subdivision_no):
+        return None
+    
+    try:
+        resp = session.get(
+            PARCEL_URL,
+            params={
+                "regionId": region_id,
+                "provinceId": province_id,
+                "subdivisionNo": subdivision_no,
+                "parcelNo": parcel_no,
+                "offset": 0,
+                "limit": 10
+            },
+            timeout=REQUEST_TIMEOUT
+        )
         
-        try:
-            with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-                futures = {executor.submit(fetch_one, tx): tx for tx in batch}
-                
-                for future in as_completed(futures, timeout=BATCH_TIMEOUT):
-                    try:
-                        tx_number, details, error = future.result(timeout=5)
-                        
-                        if error:
-                            print(f"\n⚠️  TX {tx_number}: {error}")
-                            transaction_details_cache[tx_number] = {}
-                        else:
-                            transaction_details_cache[tx_number] = details
-                        
-                        results[tx_number] = transaction_details_cache[tx_number]
-                        
-                    except TimeoutError:
-                        tx_number = futures[future]
-                        print(f"\n⚠️  TX {tx_number}: future timeout")
-                        transaction_details_cache[tx_number] = {}
-                        results[tx_number] = {}
-                    except Exception as e:
-                        tx_number = futures[future]
-                        print(f"\n⚠️  TX {tx_number}: {e}")
-                        transaction_details_cache[tx_number] = {}
-                        results[tx_number] = {}
-                        
-        except TimeoutError:
-            print(f"\n⚠️  Batch timeout, skipping remaining in batch")
-            for tx in batch:
-                if tx not in results:
-                    transaction_details_cache[tx] = {}
-                    results[tx] = {}
-        except Exception as e:
-            print(f"\n⚠️  Batch error: {e}")
-            for tx in batch:
-                if tx not in results:
-                    transaction_details_cache[tx] = {}
-                    results[tx] = {}
-    
-    # Add cached results
-    for tx in tx_numbers:
-        if tx not in results:
-            results[tx] = transaction_details_cache.get(tx, {})
-    
-    return results
+        if resp.status_code in (404, 410):
+            return None
+        
+        resp.raise_for_status()
+        details = resp.json().get("data", {}).get("parcelDetails", [])
+        return details[0].get("geometry") if details else None
+        
+    except Exception:
+        return None
 
-
-def get_parcel_geometry_batch(requests_list: List[Tuple]) -> Dict[Tuple, Optional[dict]]:
-    """Fetch multiple parcel geometries in parallel with timeout protection"""
+def batch_fetch_details(region_id: int, tx_list: List[dict]) -> Dict[str, dict]:
+    """Fetch details for transactions in batch"""
     results = {}
-    uncached = [r for r in requests_list if r not in parcel_geometry_cache]
+    to_fetch = []
     
-    if not uncached:
-        return {r: parcel_geometry_cache[r] for r in requests_list}
+    # Check cache first
+    for tx in tx_list:
+        tx_number = tx.get("transactionNumber")
+        if tx_number in transaction_details_cache:
+            results[tx_number] = transaction_details_cache.get(tx_number)
+        else:
+            to_fetch.append(tx_number)
     
-    def fetch_one(params):
-        region_id, province_id, subdivision_no, parcel_no = params
-        
-        if not is_valid_subdivision(subdivision_no):
-            return params, None, None
-        
-        try:
-            resp = session.get(
-                PARCEL_URL,
-                params={
-                    "regionId": region_id,
-                    "provinceId": province_id,
-                    "subdivisionNo": subdivision_no,
-                    "parcelNo": parcel_no,
-                    "offset": 0,
-                    "limit": 10
-                },
-                timeout=REQUEST_TIMEOUT
-            )
-            
-            if resp.status_code in (404, 410):
-                return params, None, None
-            
-            resp.raise_for_status()
-            details = resp.json().get("data", {}).get("parcelDetails", [])
-            geometry = details[0].get("geometry") if details else None
-            return params, geometry, None
-            
-        except requests.exceptions.Timeout:
-            return params, None, "timeout"
-        except Exception as e:
-            return params, None, str(e)
+    if not to_fetch:
+        return results
     
-    # Process in smaller batches
-    for i in range(0, len(uncached), BATCH_SIZE):
-        batch = uncached[i:i + BATCH_SIZE]
-        sys.stdout.write(f"[G:{len(batch)}]")
-        sys.stdout.flush()
+    sys.stdout.write(f"[D:{len(to_fetch)}]")
+    sys.stdout.flush()
+    
+    # Process in smaller batches to avoid timeout issues
+    for i in range(0, len(to_fetch), BATCH_SIZE):
+        batch = to_fetch[i:i + BATCH_SIZE]
         
-        try:
-            with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-                futures = {executor.submit(fetch_one, r): r for r in batch}
-                
-                for future in as_completed(futures, timeout=BATCH_TIMEOUT):
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            future_to_tx = {
+                executor.submit(fetch_transaction_details, region_id, tx_num): tx_num 
+                for tx_num in batch
+            }
+            
+            try:
+                for future in as_completed(future_to_tx, timeout=45):
+                    tx_number = future_to_tx[future]
                     try:
-                        params, geometry, error = future.result(timeout=5)
-                        
-                        if error and error != "timeout":
-                            pass  # Silent for geometry errors
-                        
-                        parcel_geometry_cache[params] = geometry
-                        results[params] = geometry
-                        
-                    except TimeoutError:
-                        params = futures[future]
-                        parcel_geometry_cache[params] = None
-                        results[params] = None
+                        details = future.result(timeout=5)
+                        transaction_details_cache.set(tx_number, details)
+                        results[tx_number] = details
                     except Exception:
-                        params = futures[future]
-                        parcel_geometry_cache[params] = None
-                        results[params] = None
-                        
-        except TimeoutError:
-            for r in batch:
-                if r not in results:
-                    parcel_geometry_cache[r] = None
-                    results[r] = None
-        except Exception:
-            for r in batch:
-                if r not in results:
-                    parcel_geometry_cache[r] = None
-                    results[r] = None
-    
-    # Add cached results
-    for r in requests_list:
-        if r not in results:
-            results[r] = parcel_geometry_cache.get(r)
+                        transaction_details_cache.set(tx_number, {})
+                        results[tx_number] = {}
+            except Exception as e:
+                # If batch times out, mark remaining as empty
+                for tx_num in batch:
+                    if tx_num not in results:
+                        transaction_details_cache.set(tx_num, {})
+                        results[tx_num] = {}
     
     return results
 
-
-# ---------------------------------------
-# CSV Writing Helper
-# ---------------------------------------
+def batch_fetch_geometries(requests_list: List[Tuple]) -> Dict[Tuple, Optional[dict]]:
+    """Fetch geometries only for parcels that need them"""
+    results = {}
+    to_fetch = []
+    
+    # Filter cached
+    for req in requests_list:
+        if req in parcel_geometry_cache:
+            results[req] = parcel_geometry_cache.get(req)
+        else:
+            to_fetch.append(req)
+    
+    if not to_fetch:
+        return results
+    
+    sys.stdout.write(f"[G:{len(to_fetch)}]")
+    sys.stdout.flush()
+    
+    # Process in smaller batches to avoid timeout issues
+    for i in range(0, len(to_fetch), BATCH_SIZE):
+        batch = to_fetch[i:i + BATCH_SIZE]
+        
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            future_to_req = {
+                executor.submit(fetch_parcel_geometry, *req): req 
+                for req in batch
+            }
+            
+            try:
+                for future in as_completed(future_to_req, timeout=45):
+                    req = future_to_req[future]
+                    try:
+                        geometry = future.result(timeout=5)
+                        parcel_geometry_cache.set(req, geometry)
+                        results[req] = geometry
+                    except Exception:
+                        parcel_geometry_cache.set(req, None)
+                        results[req] = None
+            except Exception:
+                # If batch times out, mark remaining as None
+                for req in batch:
+                    if req not in results:
+                        parcel_geometry_cache.set(req, None)
+                        results[req] = None
+    
+    return results
 
 def append_to_csv(new_rows):
-    """Append rows to CSV incrementally"""
+    """Append rows to CSV file"""
     if not new_rows:
         return
     
-    file_exists = False
     try:
         with open(OUTPUT_FILE, 'r'):
             file_exists = True
     except FileNotFoundError:
-        pass
+        file_exists = False
     
     with open(OUTPUT_FILE, "a", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=new_rows[0].keys())
@@ -255,13 +318,52 @@ def append_to_csv(new_rows):
             writer.writeheader()
         writer.writerows(new_rows)
 
+def build_row(region_id, province_name, neighborhood_id, neighborhood_name, tx, details, geometry=None):
+    """Build a CSV row from transaction data - ENSURES ALL FIELDS ARE PRESENT"""
+    tx_number = tx.get("transactionNumber")
+    subdivision_no = tx.get("subdivisionNo")
+    parcel_no = tx.get("parcelNo")
+    
+    # Extract coordinates
+    centroid_x, centroid_y = extract_coordinates(tx, details)
+    
+    # Get polygon and geometry data
+    polygon_data = details.get("polygonData") if details else None
+    geom = (details.get("geometry") if details else None) or geometry
+    
+    # CRITICAL: Always provide all fields with proper defaults
+    # This ensures CSV columns are never misaligned
+    return {
+        "regionId": region_id,
+        "provinceName": province_name,
+        "neighborhoodId": neighborhood_id,
+        "neighborhoodName": neighborhood_name,
+        "رقم الصفقة": tx_number or "",
+        "رقم المخطط": subdivision_no or "",
+        "رقم البلوك": tx.get("blockNo") or "---",
+        "رقم القطعة": parcel_no or "",
+        "قيمة الصفقة (ï·¼)": tx.get("transactionPrice") or "",
+        "سعر المتر (ï·¼)": tx.get("priceOfMeter") or "",
+        "تاريخ الصفقة": tx.get("transactionDate") or "",
+        "نوع الأرض": details.get("type") if details else "",
+        "نوع الاستخدام": details.get("metricsType") if details else "",
+        "المساحة الإجمالية": details.get("totalArea") if details else "",
+        "المصدر": details.get("transactionSource") if details else "",
+        "sellingType": details.get("sellingType") if details else "",
+        "landUseGroup": details.get("landUseGroup") if details else "",
+        "propertyType": details.get("propertyType") if details else "",
+        "centroidX": centroid_x or "",
+        "centroidY": centroid_y or "",
+        "polygonData": polygon_data or "",
+        "geometry": json.dumps(geom, ensure_ascii=False) if geom else ""
+    }
+
 # ---------------------------------------
-# Main loop
+# Main Processing Loop
 # ---------------------------------------
 
-start_time = time.time()
-
-for region_id in REGION_IDS:
+def process_region(region_id):
+    """Process all neighborhoods in a region"""
     region_start = time.time()
     print(f"\n▶ Region {region_id}")
     region_rows = []
@@ -269,6 +371,7 @@ for region_id in REGION_IDS:
     neighborhoods_processed = 0
 
     while True:
+        # Fetch metrics (neighborhoods)
         try:
             metrics_resp = session.get(
                 METRICS_URL,
@@ -285,20 +388,21 @@ for region_id in REGION_IDS:
             break
 
         if TEST:
-            items = items[:5]
+            items = items[:3]
 
         for item in items:
             neighborhoods_processed += 1
             neighborhood_id = item["neighborhoodId"]
             neighborhood_name = item["neighborhoodName"]
             province_name = item["provinceName"]
+            province_id = item.get("provinceId")
 
-            # Collect all transactions first
+            sys.stdout.write(f"\n  {neighborhoods_processed}. {neighborhood_name[:40]}")
+            sys.stdout.flush()
+
+            # Fetch all transaction pages
             all_transactions = []
             page = 0
-            
-            sys.stdout.write(f"\n  Neighborhood {neighborhoods_processed}: {neighborhood_name[:30]}")
-            sys.stdout.flush()
             
             while True:
                 try:
@@ -324,14 +428,15 @@ for region_id in REGION_IDS:
                 all_transactions.extend(transactions)
                 page += 1
                 
-                # Show progress
-                sys.stdout.write(f" [{len(all_transactions)} txs]")
-                sys.stdout.flush()
-                
-                if TEST:
+                if TEST and page >= 1:
                     break
             
-            # Filter out already-seen transactions
+            if not all_transactions:
+                sys.stdout.write(" (no txs)")
+                sys.stdout.flush()
+                continue
+            
+            # Filter out duplicates BEFORE fetching details
             new_transactions = []
             for tx in all_transactions:
                 tx_number = tx.get("transactionNumber")
@@ -341,110 +446,123 @@ for region_id in REGION_IDS:
                     new_transactions.append(tx)
             
             if not new_transactions:
-                sys.stdout.write(" (all seen)")
+                sys.stdout.write(f" ({len(all_transactions)} txs, all seen)")
                 sys.stdout.flush()
                 continue
             
-            sys.stdout.write(f" → {len(new_transactions)} new")
+            sys.stdout.write(f" ({len(new_transactions)}/{len(all_transactions)} new)")
             sys.stdout.flush()
             
-            # Batch fetch transaction details
-            tx_numbers = [tx.get("transactionNumber") for tx in new_transactions]
-            details_map = get_transaction_details_batch(region_id, tx_numbers)
+            # Filter transactions that actually need details fetch
+            tx_needing_details = [tx for tx in new_transactions if needs_details_fetch(tx)]
             
-            # Prepare parcel geometry requests
+            # Fetch details only for transactions that need them
+            details_map = {}
+            if tx_needing_details:
+                details_map = batch_fetch_details(region_id, tx_needing_details)
+            
+            # For transactions that didn't need fetch, use the transaction data itself
+            for tx in new_transactions:
+                tx_number = tx.get("transactionNumber")
+                if tx_number not in details_map:
+                    # Use transaction data as "details"
+                    details_map[tx_number] = {
+                        "type": tx.get("type"),
+                        "metricsType": tx.get("metricsType"),
+                        "totalArea": tx.get("totalArea"),
+                        "transactionSource": tx.get("transactionSource"),
+                        "sellingType": tx.get("sellingType"),
+                        "landUseGroup": tx.get("landUseGroup"),
+                        "propertyType": tx.get("propertyType"),
+                        "centroidX": tx.get("centroidX"),
+                        "centroidY": tx.get("centroidY"),
+                        "geometry": tx.get("geometry"),
+                        "polygonData": tx.get("polygonData"),
+                        "provinceId": tx.get("provinceId")
+                    }
+            
+            # Determine which transactions need geometry lookups
             geometry_requests = []
             for tx in new_transactions:
                 tx_number = tx.get("transactionNumber")
                 details = details_map.get(tx_number, {})
                 
-                parcel_no = tx.get("parcelNo")
-                subdivision_no = tx.get("subdivisionNo")
-                province_id = details.get("provinceId")
+                # Extract coordinates to check if we need geometry
+                centroid_x, _ = extract_coordinates(tx, details)
                 
-                if not details.get("geometry") and parcel_no and subdivision_no and province_id:
-                    geometry_requests.append((region_id, province_id, subdivision_no, parcel_no))
+                # Only fetch geometry if needed
+                if needs_geometry_fetch(tx, details, centroid_x):
+                    parcel_no = tx.get("parcelNo")
+                    subdivision_no = tx.get("subdivisionNo")
+                    detail_province_id = details.get("provinceId") if details else None
+                    final_province_id = detail_province_id or province_id
+                    
+                    if parcel_no and subdivision_no and final_province_id:
+                        req = (region_id, final_province_id, subdivision_no, parcel_no)
+                        geometry_requests.append((req, tx_number))
             
-            # Batch fetch geometries
+            # Fetch geometries if needed
             geometry_map = {}
             if geometry_requests:
-                geometry_map = get_parcel_geometry_batch(geometry_requests)
+                unique_requests = list(set([req for req, _ in geometry_requests]))
+                geometry_results = batch_fetch_geometries(unique_requests)
+                
+                # Map back to transaction numbers
+                for req, tx_number in geometry_requests:
+                    geometry_map[tx_number] = geometry_results.get(req)
             
             # Build rows
             for tx in new_transactions:
                 tx_number = tx.get("transactionNumber")
                 details = details_map.get(tx_number, {})
+                geometry = geometry_map.get(tx_number)
                 
-                parcel_no = tx.get("parcelNo")
-                subdivision_no = tx.get("subdivisionNo")
-                province_id = details.get("provinceId")
+                row = build_row(
+                    region_id, province_name, neighborhood_id, 
+                    neighborhood_name, tx, details, geometry
+                )
                 
-                # Extract coordinates
-                centroid_x = details.get("centroidX")
-                centroid_y = details.get("centroidY")
-                
-                # Try to get centroid from nested structure if not at top level
-                if not centroid_x and details.get("centroid"):
-                    centroid_x = details["centroid"].get("x")
-                    centroid_y = details["centroid"].get("y")
-                
-                # Try to get from parcels array
-                if not centroid_x and details.get("parcels") and len(details["parcels"]) > 0:
-                    first_parcel = details["parcels"][0]
-                    centroid_x = first_parcel.get("centroidX")
-                    centroid_y = first_parcel.get("centroidY")
-                
-                # Get polygon data if available
-                polygon_data = details.get("polygonData")
-                
-                # Fallback to geometry lookup if no coordinates
-                geometry = details.get("geometry")
-                if not geometry and not centroid_x and parcel_no and subdivision_no and province_id:
-                    key = (region_id, province_id, subdivision_no, parcel_no)
-                    geometry = geometry_map.get(key)
-                
-                row = {
-                    "regionId": region_id,
-                    "provinceName": province_name,
-                    "neighborhoodId": neighborhood_id,
-                    "neighborhoodName": neighborhood_name,
-                    "رقم الصفقة": tx_number,
-                    "رقم المخطط": subdivision_no,
-                    "رقم البلوك": tx.get("blockNo") or "---",
-                    "رقم القطعة": parcel_no,
-                    "قيمة الصفقة (﷼)": tx.get("transactionPrice"),
-                    "سعر المتر (﷼)": tx.get("priceOfMeter"),
-                    "تاريخ الصفقة": tx.get("transactionDate"),
-                    "نوع الأرض": details.get("type"),
-                    "نوع الاستخدام": details.get("metricsType"),
-                    "المساحة الإجمالية": details.get("totalArea"),
-                    "المصدر": details.get("transactionSource"),
-                    "sellingType": details.get("sellingType"),
-                    "landUseGroup": details.get("landUseGroup"),
-                    "propertyType": details.get("propertyType"),
-                    "centroidX": centroid_x,
-                    "centroidY": centroid_y,
-                    "polygonData": polygon_data,
-                    "geometry": json.dumps(geometry, ensure_ascii=False) if geometry else None
-                }
-                
-                rows.append(row)
                 region_rows.append(row)
 
         offset += METRICS_LIMIT
         if TEST:
             break
     
-    # Write region data to CSV immediately
+    # Write region data
     if region_rows:
         append_to_csv(region_rows)
         region_elapsed = time.time() - region_start
-        print(f"\n  ✓ Region {region_id} done: {len(region_rows)} rows in {region_elapsed:.1f}s")
+        print(f"\n  ✓ Region {region_id}: {len(region_rows)} rows in {region_elapsed:.1f}s")
     else:
-        print(f"\n  ✓ Region {region_id} done: no new data")
+        print(f"\n  ✓ Region {region_id}: no new data")
+    
+    return len(region_rows)
 
-elapsed = time.time() - start_time
-print(f"\n{'='*60}")
-print(f"✅ All regions finished in {elapsed:.1f}s")
-print(f"📊 Total unique transactions: {len(rows)}")
-print(f"📄 Data saved to {OUTPUT_FILE}")
+# ---------------------------------------
+# Main Execution
+# ---------------------------------------
+
+if __name__ == "__main__":
+    start_time = time.time()
+    total_rows = 0
+    
+    print(f"Starting scraper (TEST mode: {TEST})")
+    print(f"Output file: {OUTPUT_FILE}")
+    print("="*60)
+    
+    for region_id in REGION_IDS:
+        try:
+            rows_added = process_region(region_id)
+            total_rows += rows_added
+        except KeyboardInterrupt:
+            print("\n\n⚠️  Interrupted by user")
+            break
+        except Exception as e:
+            print(f"\n⚠️  Error processing region {region_id}: {e}")
+            continue
+    
+    elapsed = time.time() - start_time
+    print(f"\n{'='*60}")
+    print(f"✅ Completed in {elapsed:.1f}s ({elapsed/60:.1f} minutes)")
+    print(f"📊 Total transactions: {total_rows}")
+    print(f"📄 Data saved to {OUTPUT_FILE}")
