@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة عقارات سهيل - عارض البيانات الضخمة</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        :root { --primary: #4f46e5; --secondary: #818cf8; --bg: #f8fafc; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background: var(--bg); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        
+        /* Header */
+        header { background: white; padding: 1rem 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        h1 { font-size: 1.2rem; color: #1e293b; display: flex; align-items: center; gap: 10px; }
+        
+        /* Controls */
+        .controls { display: flex; gap: 15px; align-items: center; }
+        .file-upload { position: relative; overflow: hidden; display: inline-block; }
+        .btn { background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; border: none; font-weight: 600; font-size: 0.9rem; transition: 0.2s; display: flex; align-items: center; gap: 8px; }
+        .btn:hover { background: #4338ca; }
+        input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
+        
+        /* Stats */
+        .stats-bar { background: #1e293b; color: white; padding: 5px 20px; font-size: 0.85rem; display: flex; gap: 20px; justify-content: center; }
+        .stat-val { color: #4ade80; font-weight: bold; margin-right: 5px; }
+
+        /* Map */
+        #map { flex: 1; width: 100%; z-index: 1; }
+
+        /* Loading Overlay */
+        .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.3s; pointer-events: none; opacity: 0; }
+        .loader.active { opacity: 1; pointer-events: all; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        .progress-text { font-weight: 600; color: #334155; }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Custom Popup */
+        .leaflet-popup-content { font-size: 14px; line-height: 1.6; min-width: 200px; }
+        .pop-price { color: var(--primary); font-size: 1.2rem; font-weight: bold; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 5px; }
+        .pop-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
+        .pop-label { color: #64748b; }
+        
+        /* Message Box */
+        .info-box { position: absolute; bottom: 20px; right: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000; max-width: 300px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <div class="progress-text" id="loaderText">جاري تهيئة النظام...</div>
+    </div>
+
+    <header>
+        <h1>
+            <span>🗺️</span>
+            <span>عارض البيانات الجيومكانية</span>
+        </h1>
+        <div class="controls">
+            <div class="file-upload">
+                <button class="btn">
+                    <span>📂 رفع ملف (CSV/Excel)</span>
+                    <input type="file" id="csvFile" accept=".csv,.txt">
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="stats-bar">
+        <span>إجمالي السجلات: <span id="totalCount" class="stat-val">0</span></span>
+        <span>المعروض حالياً: <span id="viewCount" class="stat-val">0</span></span>
+        <span>حالة الرسم: <span id="renderStatus" class="stat-val" style="color:#fbbf24">بانتظار الملف</span></span>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="info-box" id="zoomMsg">
+        ⚠️ <b>تنبيه الأداء</b>
+        <br>
+        يتم عرض النقاط فقط للحفاظ على السرعة.
+        <br>
+        <span style="color:var(--primary)">قم بالتكبير (Zoom In)</span> لعرض حدود العقارات (المضلعات).
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const CONFIG = {
+            chunkSize: 5000,      // Process data in chunks to keep UI alive
+            polygonZoomLevel: 16, // Zoom level to start showing polygons (Street level)
+            maxPolygonsInView: 500 // Max polygons to draw at once to prevent crash
+        };
+
+        // --- Global Variables ---
+        let map;
+        let markersGroup;
+        let polygonLayer;
+        let allData = []; // Store simplified data here
+        let columnMapping = null;
+
+        // --- Initialization ---
+        function initMap() {
+            // 1. Initialize Map with preferCanvas: true for performance
+            map = L.map('map', {
+                preferCanvas: true, // Crucial for 94k points
+                worldCopyJump: true
+            }).setView([24.7136, 46.6753], 5);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap & CartoDB',
+                maxZoom: 20
+            }).addTo(map);
+
+            // 2. Initialize Cluster Group with chunked loading
+            markersGroup = L.markerClusterGroup({
+                chunkedLoading: true,
+                chunkInterval: 100,
+                maxClusterRadius: 60,
+                spiderfyOnMaxZoom: true,
+                // Custom small icon for performance
+                iconCreateFunction: function (cluster) {
+                    var childCount = cluster.getChildCount();
+                    var c = ' marker-cluster-';
+                    if (childCount < 10) c += 'small';
+                    else if (childCount < 100) c += 'medium';
+                    else c += 'large';
+
+                    return new L.DivIcon({ 
+                        html: '<div><span>' + childCount + '</span></div>', 
+                        className: 'marker-cluster' + c, 
+                        iconSize: new L.Point(40, 40) 
+                    });
+                }
+            });
+            map.addLayer(markersGroup);
+
+            // 3. Layer for Polygons (Initially empty)
+            polygonLayer = L.layerGroup().addTo(map);
+
+            // 4. Event Listeners for Polygon Loading
+            map.on('moveend zoomend', updatePolygonsOnView);
+        }
+
+        // --- File Processing ---
+        document.getElementById('csvFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            showLoader('جاري قراءة الملف الضخم...');
+            
+            // Clear previous data
+            allData = [];
+            markersGroup.clearLayers();
+            polygonLayer.clearLayers();
+            columnMapping = null;
+
+            Papa.parse(file, {
+                header: false, // We assume no header or we detect it
+                skipEmptyLines: true,
+                worker: true, // Run in background thread
+                step: function(results) {
+                    // Process row-by-row
+                    if (!columnMapping) {
+                        columnMapping = detectColumns(results.data);
+                    }
+                    if (columnMapping) {
+                        const processed = processRow(results.data, columnMapping);
+                        if (processed) allData.push(processed);
+                    }
+                },
+                complete: function() {
+                    showLoader('جاري بناء الخريطة (قد يستغرق لحظات)...');
+                    setTimeout(() => {
+                        renderPoints();
+                        hideLoader();
+                        document.getElementById('totalCount').innerText = allData.length.toLocaleString();
+                        
+                        // Fit bounds to data
+                        if (allData.length > 0) {
+                            const group = new L.featureGroup(markersGroup.getLayers());
+                            if(group.getBounds().isValid()) map.fitBounds(group.getBounds());
+                        }
+                        
+                        document.getElementById('renderStatus').innerText = "تم التحميل";
+                        document.getElementById('renderStatus').style.color = "#4ade80";
+                        document.getElementById('zoomMsg').style.display = 'block';
+                    }, 500);
+                }
+            });
+        });
+
+        // --- Intelligent Column Detection ---
+        function detectColumns(row) {
+            // We need to find: Lat, Lng, Price, and JSON Geometry
+            let map = { lat: -1, lng: -1, price: -1, geo: -1, type: -1 };
+            
+            row.forEach((cell, index) => {
+                const str = String(cell).trim();
+                
+                // Detect Geometry (starts with { "type": "Polygon" ...)
+                if (str.startsWith('{') && str.includes('Polygon')) {
+                    map.geo = index;
+                }
+                // Detect Coordinates (Saudi Arabia is roughly Lat 16-32, Lng 34-56)
+                else if (!isNaN(str) && str.includes('.')) {
+                    const val = parseFloat(str);
+                    if (val >= 16 && val <= 32) map.lat = index;
+                    else if (val >= 34 && val <= 56) map.lng = index;
+                }
+                // Detect Price (usually big integer)
+                else if (!isNaN(str) && parseFloat(str) > 50000 && map.price === -1) {
+                    map.price = index;
+                }
+                // Detect Type (text like "شقة", "فيلا")
+                else if (['شقة', 'فيلا', 'أرض', 'عمارة'].some(t => str.includes(t))) {
+                    map.type = index;
+                }
+            });
+
+            if (map.lat === -1 || map.lng === -1 || map.geo === -1) return null;
+            return map;
+        }
+
+        function processRow(row, map) {
+            try {
+                const lat = parseFloat(row[map.lat]);
+                const lng = parseFloat(row[map.lng]);
+                
+                if (isNaN(lat) || isNaN(lng)) return null;
+
+                return {
+                    lat: lat,
+                    lng: lng,
+                    price: map.price !== -1 ? row[map.price] : '---',
+                    type: map.type !== -1 ? row[map.type] : 'عقار',
+                    geo: row[map.geo] // Store raw JSON string to parse later (saves memory)
+                };
+            } catch (e) { return null; }
+        }
+
+        // --- Rendering Logic ---
+
+        // 1. Render Points (CircleMarkers are faster than Images)
+        function renderPoints() {
+            const markers = [];
+            
+            allData.forEach(item => {
+                // Use CircleMarker for high performance
+                const marker = L.circleMarker([item.lat, item.lng], {
+                    radius: 6,
+                    fillColor: getPriceColor(parseFloat(item.price)),
+                    color: "#fff",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+
+                // Attach simplified data for popup
+                marker.bindPopup(`
+                    <div class="pop-price">${formatMoney(item.price)}</div>
+                    <div class="pop-row"><span class="pop-label">النوع:</span> <b>${item.type}</b></div>
+                    <div class="pop-row"><span class="pop-label">الإحداثيات:</span> ${item.lat.toFixed(4)}, ${item.lng.toFixed(4)}</div>
+                `);
+
+                markers.push(marker);
+            });
+
+            markersGroup.addLayers(markers);
+        }
+
+        // 2. Dynamic Polygon Rendering (The Optimization Magic)
+        function updatePolygonsOnView() {
+            const zoom = map.getZoom();
+            const bounds = map.getBounds();
+            
+            // Update UI Counters
+            let visibleCount = 0; // Simplified calculation
+            
+            // LOGIC: Only draw polygons if zoomed in enough
+            if (zoom < CONFIG.polygonZoomLevel) {
+                polygonLayer.clearLayers();
+                document.getElementById('renderStatus').innerText = "وضع التجميع (قرب أكثر لرؤية الحدود)";
+                document.getElementById('renderStatus').style.color = "#fbbf24";
+                return;
+            }
+
+            document.getElementById('renderStatus').innerText = "جاري رسم الحدود...";
+            document.getElementById('renderStatus').style.color = "#60a5fa";
+
+            // Find data inside current view
+            const visibleData = allData.filter(d => 
+                bounds.contains([d.lat, d.lng])
+            );
+            
+            document.getElementById('viewCount').innerText = visibleData.length.toLocaleString();
+
+            // Safety Check: Don't draw if too many in view (browser crash prevention)
+            if (visibleData.length > CONFIG.maxPolygonsInView) {
+                polygonLayer.clearLayers();
+                document.getElementById('renderStatus').innerText = `العدد كبير (${visibleData.length}) - قرب أكثر`;
+                document.getElementById('renderStatus').style.color = "#f87171";
+                return;
+            }
+
+            // Draw Polygons
+            polygonLayer.clearLayers();
+            
+            visibleData.forEach(item => {
+                try {
+                    const geoJson = JSON.parse(item.geo);
+                    const color = getPriceColor(parseFloat(item.price));
+                    
+                    const poly = L.geoJSON(geoJson, {
+                        style: {
+                            color: color,
+                            weight: 2,
+                            fillColor: color,
+                            fillOpacity: 0.2
+                        }
+                    });
+                    
+                    poly.bindPopup(`
+                        <div class="pop-price">${formatMoney(item.price)}</div>
+                        <div class="pop-row">مساحة العقار المحدد</div>
+                    `);
+                    
+                    polygonLayer.addLayer(poly);
+                } catch(e) {
+                    console.error("Invalid Geometry", e);
+                }
+            });
+
+            document.getElementById('renderStatus').innerText = "تم رسم الحدود";
+            document.getElementById('renderStatus').style.color = "#4ade80";
+        }
+
+        // --- Helpers ---
+        function getPriceColor(price) {
+            if (!price || isNaN(price)) return '#94a3b8';
+            if (price < 500000) return '#22c55e'; // Green
+            if (price < 1000000) return '#eab308'; // Yellow
+            if (price < 2500000) return '#f97316'; // Orange
+            return '#ef4444'; // Red
+        }
+
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('ar-SA', { style: 'currency', currency: 'SAR', maximumFractionDigits: 0 }).format(amount);
+        }
+
+        function showLoader(msg) {
+            document.getElementById('loaderText').innerText = msg;
+            document.getElementById('loader').classList.add('active');
+        }
+
+        function hideLoader() {
+            document.getElementById('loader').classList.remove('active');
+        }
+
+        // Start
+        initMap();
+
+    </script>
+</body>
+</html>
