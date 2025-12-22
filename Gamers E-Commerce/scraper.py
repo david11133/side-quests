@@ -17,6 +17,7 @@ from datetime import datetime
 from requests.exceptions import HTTPError
 from collections import defaultdict
 import hashlib
+import threading
 ######################################################################
 
 def slug(text):
@@ -41,32 +42,37 @@ def generate_unique_id(prefix="AG"):
 #-----------------------------------------------------------------------------------------------
 class RateLimiter:
     """Adaptive rate limiter that adjusts delay based on 429 errors."""
-    def __init__(self, base_delay=1.0, max_delay=10.0):
+    def __init__(self, base_delay=2.0, max_delay=60.0):
         self.base_delay = base_delay
         self.max_delay = max_delay
         self.current_delay = base_delay
         self.last_429_time = 0
         self.success_count = 0
+        self.lock = threading.Lock()
         
     def wait(self):
         """Wait before making a request."""
-        time.sleep(random.uniform(self.current_delay * 0.8, self.current_delay * 1.2))
+        with self.lock:
+            delay = self.current_delay
+        time.sleep(random.uniform(delay * 0.8, delay * 1.2))
     
     def report_success(self):
         """Report successful request - gradually reduce delay."""
-        self.success_count += 1
-        if self.success_count >= 10 and self.current_delay > self.base_delay:
-            self.current_delay = max(self.base_delay, self.current_delay * 0.9)
-            self.success_count = 0
+        with self.lock:
+            self.success_count += 1
+            if self.success_count >= 10 and self.current_delay > self.base_delay:
+                self.current_delay = max(self.base_delay, self.current_delay * 0.9)
+                self.success_count = 0
     
     def report_429(self, retry_after=None):
         """Report 429 error - increase delay."""
-        self.last_429_time = time.time()
-        if retry_after:
-            self.current_delay = min(self.max_delay, retry_after + 1)
-        else:
-            self.current_delay = min(self.max_delay, self.current_delay * 2)
-        self.success_count = 0
+        with self.lock:
+            self.last_429_time = time.time()
+            if retry_after:
+                self.current_delay = min(self.max_delay, retry_after + 1)
+            else:
+                self.current_delay = min(self.max_delay, self.current_delay * 2)
+            self.success_count = 0
 
 # Global rate limiter
 rate_limiter = RateLimiter()
@@ -77,7 +83,7 @@ def get_cache_key(url):
     return hashlib.md5(url.encode()).hexdigest()
 
 #-----------------------------------------------------------------------------------------------
-def fetch_page(url, session, retries=4, base_delay=5, use_cache=True):
+def fetch_page(url, session, retries=8, base_delay=5, use_cache=True):
     """
     Fetches a single page with caching and adaptive rate limiting.
     """
@@ -294,7 +300,7 @@ def get_all_products_from_category(base_url, session):
         
         fetch_with_session = partial(fetch_page, session=session)
         
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
             soups = list(executor.map(fetch_with_session, page_urls))
             
             for soup in soups:
@@ -352,7 +358,7 @@ def get_products_with_filter_batch(base_url, filter_items, session):
         return filter_value, unique_urls
     
     # Process filters in parallel with controlled concurrency
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         futures = [executor.submit(fetch_filter_products, item) for item in filter_items]
         
         for future in concurrent.futures.as_completed(futures):
@@ -446,7 +452,7 @@ def build_filter_mapping_for_category(category_url, session):
 def download_image(img_url, img_path, session):
     """Helper function to download a single image using the session."""
     try:
-        time.sleep(random.uniform(0.3, 0.8))  # Reduced delay
+        time.sleep(random.uniform(1.0, 2.0))  # Increased delay
         with session.get(img_url, stream=True, timeout=15) as r:
             r.raise_for_status()
             with open(img_path, 'wb') as f:
@@ -519,7 +525,7 @@ def scrape_product_details(url, session, today_folder, fallback_name, category_p
                 images_to_download.append(img_src)
 
     downloaded_paths = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as img_executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as img_executor:
         futures = []
         for img_url in images_to_download:
             clean_url = re.sub(r'[\?&].*$', '', img_url)
@@ -918,7 +924,7 @@ def main():
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         
-        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
             future_to_prod = {
                 executor.submit(
                     scrape_product_details, 
