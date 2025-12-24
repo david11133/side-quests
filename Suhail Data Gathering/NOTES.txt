@@ -1,517 +1,135 @@
-D:\Freelance\Suhail Data Gathering>python temp.py
+Ok I will send to you the details when I click on each part in the page and what it give as a response. you required to explain it to me and finally give me a prompt that I should send it to claude code with the code attached to make him write a new code or whatever update the existing one to do the required update to get the rest of the data. I don't want you yourself to write any code.
 
-▶ Region 10
-  • الشميسي
-  • الورود
-    page 0 → 99 rows
-    page 1 → 0 rows
-  • العليا
-    page 0 → 196 rows
-    page 1 → 0 rows
-  • الفرسان
-    page 0 → 70 rows
-    page 1 → 0 rows
-  • فرزان
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • أم الحمام الغربي
-    page 0 → 59 rows
-    page 1 → 0 rows
-  • القيروان
-    page 0 → 7 rows
-    page 1 → 0 rows
-  • الصفراء
-    page 0 → 7 rows
-    page 1 → 0 rows
-  • معكال
-  • مشرف
-    page 0 → 62 rows
-    page 1 → 0 rows
-  • النزهة
-  • السلمية
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • غرناطة
-  • الواحة
-  • الورود
-    page 0 → 108 rows
-    page 1 → 0 rows
-  • الملز
-    page 0 → 79 rows
-    page 1 → 0 rows
-  • الغدير
-    page 0 → 31 rows
-    page 1 → 0 rows
-  • قرطبة
-    page 0 → 244 rows
-    page 1 → 0 rows
-  • جامعة الملك سعود
-  • مشيرفة
-  • الصناعية
-    page 0 → 8 rows
-    page 1 → 0 rows
-  • المصانع
-    page 0 → 59 rows
-    page 1 → 0 rows
-  • ج4
-  • ظهرة لبن
-    page 0 → 410 rows
-    page 1 → 0 rows
-  • ثليم
-  • المحمدية
-    page 0 → 2 rows
-    page 1 → 0 rows
-  • السلام
-  • الحزم
-    page 0 → 5 rows
-    page 1 → 0 rows
-  • الملك عبدالله
-  • الرفيعة
-    page 0 → 19 rows
-    page 1 → 0 rows
-  • الخالدية
-    page 0 → 2 rows
-    page 1 → 0 rows
-  • الهداء
-    page 0 → 9 rows
-    page 1 → 0 rows
-  • المنار
-  • الملك عبدالعزيز
-    page 0 → 6 rows
-    page 1 → 0 rows
-  • الخير
-    page 0 → 500 rows
-    page 1 → 0 rows
-    page 2 → 500 rows
-    page 3 → 140 rows
-  • نجد
-    page 0 → 12 rows
-    page 1 → 0 rows
-  • الياسمين
-    page 0 → 3 rows
-    page 1 → 0 rows
-  • الفيصلية
-    page 0 → 2 rows
-    page 1 → 0 rows
-  • الغطغط
-  • نجد
-  • الصفا
-    page 0 → 476 rows
-    page 1 → 0 rows
-  • الفاخرية
-  • المنتزة
-  • الفيصلية
-    page 0 → 6 rows
-    page 1 → 0 rows
-  • مشرفة
-  • الراشدية
-  • الروضة
-    page 0 → 57 rows
-    page 1 → 0 rows
-  • البديع الغربي
-    page 0 → 3 rows
-    page 1 → 0 rows
-  • الريان
-    page 0 → 17 rows
-    page 1 → 0 rows
-  • رميثان
-    page 0 → 13 rows
-    page 1 → 0 rows
-  • التعاون
-  • الحزم
-  • 1077 مخطط رقم
-    page 0 → 71 rows
-    page 1 → 0 rows
-  • الصناعية
-  • الخالدية
-  • الهدا
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • وسيلة
-  • الضبيعة
-  • التضامن
-  • المروة
-    page 0 → 87 rows
-    page 1 → 0 rows
-  • المفيجر
-  • الرسالة
-    page 0 → 60 rows
-    page 1 → 0 rows
-  • الفيحاء
-    page 0 → 170 rows
-    page 1 → 0 rows
-  • زياد
-  • المعذر
-    page 0 → 13 rows
-    page 1 → 0 rows
-  • الملقا
-    page 0 → 57 rows
-    page 1 → 0 rows
-  • الفيصلية
-  • البديعة
-    page 0 → 43 rows
-    page 1 → 0 rows
-  • عريض
-    page 0 → 500 rows
-    page 1 → 0 rows
-    page 2 → 500 rows
-    page 3 → 495 rows
-  • الربوة
-    page 0 → 11 rows
-    page 1 → 0 rows
-  • مخطط رقم 928
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • الصحن
-  • العزيزية
-    page 0 → 493 rows
-    page 1 → 0 rows
-    page 2 → 88 rows
-  • النسيم الشرقي
-    page 0 → 66 rows
-    page 1 → 0 rows
-  • المناخ
-    page 0 → 49 rows
-    page 1 → 0 rows
-  • المدينة الصناعية الجديدة
-    page 0 → 12 rows
-    page 1 → 0 rows
-  • عقرباء
-    page 0 → 46 rows
-    page 1 → 0 rows
-  • الخزيمي
-  • الخالدية
-  • الحرمين
-    page 0 → 9 rows
-    page 1 → 0 rows
-  • طيبة
-  • ج3
-  • طويق
-    page 0 → 25 rows
-    page 1 → 0 rows
-  • عليشة
-  • النور
-    page 0 → 21 rows
-    page 1 → 0 rows
-  • القدس
-  • النخيل
-  • الاذاعة
-  • سمنان
-    page 0 → 4 rows
-    page 1 → 0 rows
-  • الحزم
-  • السحاب
-    page 0 → 168 rows
-    page 1 → 0 rows
-  • الملك عبدالله
-  • النهضة
-    page 0 → 9 rows
-    page 1 → 0 rows
-  • العليا
-    page 0 → 2 rows
-    page 1 → 0 rows
-  • المحمدية
-  • الحزم
-    page 0 → 8 rows
-    page 1 → 0 rows
-  • المحمدية
-  • الزهراء
-    page 0 → 17 rows
-    page 1 → 0 rows
-  • النهضة
-  • العماجية
-  • العريجاء
-    page 0 → 5 rows
-    page 1 → 0 rows
-  • الورود
-  • الخزامى
-  • الزهرة
-    page 0 → 128 rows
-    page 1 → 0 rows
-  • حطين
-  • الشفاء
-  • عتيقة
-    page 0 → 9 rows
-    page 1 → 0 rows
-  • الخماسين الجنوبي
-    page 0 → 7 rows
-    page 1 → 0 rows
-  • الرابية
-  • الصالحية
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • المروج
-    page 0 → 2 rows
-    page 1 → 0 rows
-  • السنبلة
-  • الفلاح
-  • العمار
-  • الصقورية
-    page 0 → 2 rows
-    page 1 → 0 rows
-  • طويق
-    page 0 → 493 rows
-    page 1 → 0 rows
-    page 2 → 483 rows
-    page 3 → 79 rows
-  • عرقة
-    page 0 → 114 rows
-    page 1 → 0 rows
-  • المروج
-    page 0 → 49 rows
-    page 1 → 0 rows
-  • 638 مخطط رقم
-  • صياح
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • المنار
-  • نعام
-  • المرسلات
-    page 0 → 23 rows
-    page 1 → 0 rows
-  • 517 مخطط رقم
-  • البرية
-    page 0 → 34 rows
-    page 1 → 0 rows
-  • السويدي
-    page 0 → 172 rows
-    page 1 → 0 rows
-  • الملك سلمان
-    page 0 → 16 rows
-    page 1 → 0 rows
-  • النسيم الغربي
-    page 0 → 220 rows
-    page 1 → 0 rows
-  • المقابل
-  • المبرز
-  • الغدير
-    page 0 → 9 rows
-    page 1 → 0 rows
-  • قبيبان
-    page 0 → 9 rows
-    page 1 → 0 rows
-  • غياضة
-    page 0 → 15 rows
-    page 1 → 0 rows
-  • القادسية
-    page 0 → 22 rows
-    page 1 → 0 rows
-  • الجامعة
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • الصناعية
-  • العليا
-  • الحائر
-    page 0 → 56 rows
-    page 1 → 0 rows
-  • الوزارات
-    page 0 → 24 rows
-    page 1 → 0 rows
-  • العوالي
-    page 0 → 295 rows
-    page 1 → 0 rows
-  • العزيزية
-    page 0 → 16 rows
-    page 1 → 0 rows
-  • الفيصلية
-    page 0 → 18 rows
-    page 1 → 0 rows
-  • الرحبة
-  • العزيزية
-  • غرناطة
-    page 0 → 43 rows
-    page 1 → 0 rows
-  • الروضة
-  • السويدي الغربي
-    page 0 → 76 rows
-    page 1 → 0 rows
-  • المهدية
-    page 0 → 499 rows
-    page 1 → 0 rows
-    page 2 → 14 rows
-  • سلطانة
-    page 0 → 45 rows
-    page 1 → 0 rows
-  • الحزم
-    page 0 → 328 rows
-    page 1 → 0 rows
-  • الطريف
-  • العريجاء الغربي
-    page 0 → 107 rows
-    page 1 → 0 rows
-  • العاصمه
-  • المنار
-    page 0 → 100 rows
-    page 1 → 0 rows
-  • المستقبل
-    page 0 → 71 rows
-    page 1 → 0 rows
-  • الإزدهار
-    page 0 → 4 rows
-    page 1 → 0 rows
-  • الملك فهد
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • ديراب
-    page 0 → 500 rows
-    page 1 → 0 rows
-    page 2 → 500 rows
-    page 3 → 127 rows
-  • النخيل
-    page 0 → 7 rows
-    page 1 → 0 rows
-  • الجزيرة
-  • المروج
-    page 0 → 3 rows
-    page 1 → 0 rows
-  • مشرفة
-  • الريان
-  • العقيق
-    page 0 → 183 rows
-    page 1 → 0 rows
-  • الحزم
-    page 0 → 9 rows
-    page 1 → 0 rows
-  • الربوة
-  • الأندلس
-    page 0 → 46 rows
-    page 1 → 0 rows
-  • القادسية
-    page 0 → 332 rows
-    page 1 → 0 rows
-  • الواحة
-    page 0 → 7 rows
-    page 1 → 0 rows
-  • الروابي
-    page 0 → 72 rows
-    page 1 → 0 rows
-  • الواحة
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • القبالي
-  • ج16
-  • الملك فهد
-  • المصفاة
-    page 0 → 426 rows
-    page 1 → 0 rows
-  • الروضة
-  • الياسمين
-  • الجامعيين
-  • الربيع
-  • الربوة
-    page 0 → 150 rows
-    page 1 → 0 rows
-  • شبرا
-    page 0 → 108 rows
-    page 1 → 0 rows
-  • الياسمين
-  • الملك عبدالله
-    page 0 → 38 rows
-    page 1 → 0 rows
-  • النهضة
-    page 0 → 246 rows
-    page 1 → 0 rows
-  • الريان
-    page 0 → 3 rows
-    page 1 → 0 rows
-  • النزهة
-    page 0 → 39 rows
-    page 1 → 0 rows
-  • الوصيل
-  • الخالدية
-  • الشفا
-    page 0 → 192 rows
-    page 1 → 0 rows
-  • النفل
-  • لبب
-  • غصيبة
-  • الياسمين
-  • النخيل
-  • النفل
-  • ج6
-  • البستان
-  • الصحنة
-    page 0 → 8 rows
-    page 1 → 0 rows
-  • الحزيمية
-    page 0 → 2 rows
-    page 1 → 0 rows
-  • الدرعية
-    page 0 → 4 rows
-    page 1 → 0 rows
-  • الصديق
-  • النهضة
-  • الريان
-  • الجنادرية
-    page 0 → 500 rows
-    page 1 → 0 rows
-    page 2 → 500 rows
-    page 3 → 500 rows
-    page 4 → 500 rows
-    page 5 → 500 rows
-    page 6 → 500 rows
-    page 7 → 500 rows
-    page 8 → 500 rows
-    page 9 → 433 rows
-  • الملك فيصل
-    page 0 → 48 rows
-    page 1 → 0 rows
-  • الفوطة
-    page 0 → 3 rows
-    page 1 → 0 rows
-  • الرائد
-    page 0 → 20 rows
-    page 1 → 0 rows
-  • العليا
-    page 0 → 63 rows
-    page 1 → 0 rows
-  • اليمامة
-  • الندوة
-    page 0 → 500 rows
-    page 1 → 0 rows
-    page 2 → 281 rows
-  • الثليما
-  • مزعل
-  • العود
-    page 0 → 16 rows
-    page 1 → 0 rows
-  • المؤتمرات
-    page 0 → 3 rows
-    page 1 → 0 rows
-  • النخيل
-  • المصيف
-  • السعودية
-  • الرحاب
-  • الورود
-  • الصدر
-  • الروضة
-  • الياسمين
-    page 0 → 446 rows
-    page 1 → 0 rows
-    page 2 → 65 rows
-  • القرينة الجديدة
-    page 0 → 12 rows
-    page 1 → 0 rows
-  • الخالدية
-    page 0 → 1 rows
-    page 1 → 0 rows
-  • الزهور
-  • الوادي
-    page 0 → 139 rows
-    page 1 → 0 rows
-  • العيون
-    page 0 → 69 rows
-    page 1 → 0 rows
-  • المنصورية
-    page 0 → 20 rows
-    page 1 → 0 rows
-  • الثليماء
-  • الملك سلمان
-    page 0 → 3 rows
-    page 1 → 0 rows
-  • السلام
-  • الرمال
-    page 0 → 470 rows
-    page 1 → 0 rows
-    page 2 → 454 rows
-    page 3 → 482 rows
+however when I click on an area that is transactional, I get this api: 
+https://api2.suhail.ai/consolidatedTransactions?ParcelObjectId=1010002915203&RegionId=10&LookbackValue=1&LookbackType=months&FromPrice=0&ToPrice=10000&Type=%D8%A7%D9%84%D9%83%D9%84
+
+and responses like:
+{
+    "data": {
+        "lastExecutionDate": "2025-12-21T00:00:00",
+        "lastExecutionPrice": 7250.0,
+        "transactions": [
+            {
+                "_priceOfMeter": 7250.0,
+                "parcels": [
+                    {
+                        "parcelId": "1873765",
+                        "parcelObjectId": 1010002915203,
+                        "parcelNo": "305/أ",
+                        "blockNo": null,
+                        "area": 200.0,
+                        "propertyType": "قطعة أرض",
+                        "centroidX": 46.711025545616444,
+                        "centroidY": 24.679847754058162,
+                        "metricsType": "أرض تجاري سكني",
+                        "provinceId": 101000,
+                        "regionId": 10,
+                        "parcelImageURL": ""
+                    }
+                ],
+                "isProjectParcel": false,
+                "projectId": null,
+                "projectBatchUnitId": null,
+                "unitType": null,
+                "transactionNotes": [],
+                "buyerName": null,
+                "transactionYear": 0,
+                "transactionSource": "MOJ",
+                "transactionPrice": 1450000.0,
+                "priceOfMeter": 7250.0,
+                "transactionNumber": 33978052,
+                "transactionDate": "2025-12-21T00:00:00",
+                "type": "قطعة أرض",
+                "subdivisionNo": "1029",
+                "subdivisionId": null,
+                "polygonData": "{\"type\":\"Polygon\",\"coordinates\":[[[46.711077,24.679758],[46.710978,24.679757],[46.710974,24.679937],[46.711073,24.679939],[46.711077,24.679758]]]}",
+                "noOfProperties": 1,
+                "zoningId": 2,
+                "neighborhood": "الوزارات",
+                "neighborhoodId": 101000147,
+                "region": "منطقة الرياض",
+                "parcelId": "1873765",
+                "parcelObjectId": 1010002915203,
+                "parcelNo": "305/أ",
+                "blockNo": null,
+                "area": 200.0,
+                "centroidX": 46.711025545616444,
+                "centroidY": 24.679847754058162,
+                "metricsType": "أرض تجاري سكني",
+                "provinceId": 101000,
+                "provinceName": null,
+                "regionId": 10,
+                "geometry": null,
+                "parcelImageURL": "",
+                "projectName": "",
+                "landUsageGroup": "سكني",
+                "sellingType": "فردي",
+                "landUseaDetailed": null,
+                "centroid": {
+                    "x": 46.711025545616444,
+                    "y": 24.679847754058162
+                },
+                "propertyType": "قطعة أرض",
+                "totalArea": 200.0,
+                "details": null,
+                "landUseGroup": "سكني",
+                "orignalTransactionNum": 33978052,
+                "propertyNumber": "305/أ",
+                "isLowValueTransaction": false
+            }
+        ]
+    },
+    "message": null,
+    "status": true,
+    "meta": null
+}
+
+also give some kind of statistics like: 
+https://api2.suhail.ai/api/parcel/metrics/priceOfMeter?parcelObjsIds=1010002915203&groupingType=Monthly
+
+and response like:
+{
+    "data": [
+        {
+            "parcelObjId": 1010002915203,
+            "neighborhoodId": 101000147,
+            "neighborhoodMetrics": [
+                {
+                    "neighborhoodId": 101000147,
+                    "month": 6,
+                    "year": 2025,
+                    "metricsType": "أرض تجاري",
+                    "avaragePriceOfMeter": 7710.0
+                },
+                {
+                    "neighborhoodId": 101000147,
+                    "month": 6,
+                    "year": 2025,
+                    "metricsType": "أرض تجاري سكني",
+                    "avaragePriceOfMeter": 7734.0
+                }, etc...
+
+and also give this weird api: 
+https://tiles.suhail.ai/maps/riyadh/15/20635/14064.vector.pbf? 
+tha when I past in browser it ask for downloading something and not giving a text response and also another one like: https://tiles.suhail.ai/maps/eastern_region/15/20635/14064.vector.pbf?
+
+On the other side, when I click on an area that is not trasactianal on the map, I get this: https://api2.suhail.ai/consolidatedTransactions?ParcelObjectId=1010002803959&RegionId=10&LookbackValue=1&LookbackType=months&FromPrice=0&ToPrice=10000&Type=%D8%A7%D9%84%D9%83%D9%84
+
+and the response is like:
+{
+    "data": {
+        "lastExecutionDate": null,
+        "lastExecutionPrice": null,
+        "transactions": []
+    },
+    "message": null,
+    "status": true,
+    "meta": null
+}
+
+also give statistics and also the same weird apis: 
+https://tiles.suhail.ai/maps/riyadh/15/20635/14064.vector.pbf?
+and 
+https://tiles.suhail.ai/maps/eastern_region/15/20635/14064.vector.pbf?
+
+Honestly I don't have any other info.
