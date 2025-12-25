@@ -11,6 +11,7 @@ import time
 from collections import deque
 #############################################################################################
 
+###### Configurations ######
 
 # API Endpoints
 REGIONS_URL = "https://api2.suhail.ai/regions"
@@ -21,17 +22,17 @@ PARCEL_URL = "https://api2.suhail.ai/api/parcel/search"
 PRICE_METRICS_URL = "https://api2.suhail.ai/api/parcel/metrics/priceOfMeter"
 
 # Settings
-REGION_IDS = range(1, 17)
+REGION_IDS = range(14, 17)
 METRICS_LIMIT = 600
 PAGE_SIZE = 1000
 OUTPUT_FILE = "merged_neighborhood_transactions.csv"
 HISTORY_FILE = "parcel_price_history.csv"
-TEST = False  # Set to True for testing with small sample of data
+TEST = False  # Set to True to test with small sample of data
 
 # Performance settings
 MAX_WORKERS = 6
 BATCH_SIZE = 25
-METRICS_BATCH_SIZE = 20  # Batch size for price metrics API
+METRICS_BATCH_SIZE = 20
 REQUEST_TIMEOUT = 15
 CACHE_SIZE_LIMIT = 10000
 
@@ -270,13 +271,13 @@ def batch_fetch_geometries(requests_list: List[Tuple]) -> Dict[Tuple, Optional[d
 #############################################################################################
 def batch_process_metrics(transactions: List[dict]):
     """Process price metrics for a list of transactions"""
-    # Extract IDs (using 'id' field from transaction object as parcelObjId)
+    # Extract IDs (using 'parcelObjectId' field from transaction object)
     # We only care about transactions that have an ID
     id_map = {} # map parcelObjId -> transactionNumber (for reference)
     ids_to_fetch = []
     
     for tx in transactions:
-        t_id = tx.get("id")
+        t_id = tx.get("parcelObjectId")
         t_num = tx.get("transactionNumber")
         if t_id:
             ids_to_fetch.append(t_id)
@@ -312,18 +313,17 @@ def batch_process_metrics(transactions: List[dict]):
                 })
                 
             # 2. Neighborhood Metrics (General area averages)
-            # Uncomment below if you want general neighborhood data duplicated per parcel
-            # for nm in item.get("neighborhoodMetrics", []):
-            #     all_metrics_rows.append({
-            #         "parcelObjId": parcel_obj_id,
-            #         "transactionNumber": id_map.get(parcel_obj_id, ""),
-            #         "neighborhoodId": nm.get("neighborhoodId"),
-            #         "type": "Neighborhood Average",
-            #         "month": nm.get("month"),
-            #         "year": nm.get("year"),
-            #         "metricsType": nm.get("metricsType"),
-            #         "averagePriceOfMeter": nm.get("avaragePriceOfMeter")
-            #     })
+            for nm in item.get("neighborhoodMetrics", []):
+                all_metrics_rows.append({
+                    "parcelObjId": parcel_obj_id,
+                    "transactionNumber": id_map.get(parcel_obj_id, ""),
+                    "neighborhoodId": nm.get("neighborhoodId"),
+                    "type": "Neighborhood Average",
+                    "month": nm.get("month"),
+                    "year": nm.get("year"),
+                    "metricsType": nm.get("metricsType"),
+                    "averagePriceOfMeter": nm.get("avaragePriceOfMeter")
+                })
 
     append_history_to_csv(all_metrics_rows)
 
@@ -395,7 +395,7 @@ def build_row(region_id, province_id, province_name, neighborhood_id, neighborho
         "propertyType": details.get("propertyType") if details else "",
         "centroidX": centroid_x or "",
         "centroidY": centroid_y or "",
-        "parcelObjId": tx.get("id", ""), # Added this to link with history file
+        "parcelObjId": tx.get("parcelObjectId", ""), # Added this to link with history file
         "polygonData": json.dumps(details.get("polygonData"), ensure_ascii=False) if details and details.get("polygonData") else "",
         "geometry": json.dumps((details.get("geometry") if details else None) or geometry, ensure_ascii=False) if (details and details.get("geometry")) or geometry else ""
     }
@@ -425,7 +425,7 @@ def process_region(region_id, region_dict, province_dict):
             metrics_resp = session.get(METRICS_URL, params={"regionId": region_id, "offset": offset, "limit": METRICS_LIMIT}, timeout=30)
             metrics_resp.raise_for_status()
         except Exception as e:
-            log_info(f"⚠️  Error fetching metrics list: {e}")
+            log_info(f"Error fetching metrics list: {e}")
             break
 
         items = metrics_resp.json().get("data", {}).get("items", [])
