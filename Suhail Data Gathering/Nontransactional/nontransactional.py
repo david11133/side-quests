@@ -8,6 +8,7 @@ import mercantile
 import mapbox_vector_tile
 import shutil
 import datetime
+import math # Added for center-out sorting
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -20,18 +21,19 @@ MAP_NAMES = {
     11: "najran", 12: "bahah", 13: "al_madenieh", 14: "jazan", 15: "jawf"
 }
 
-## Test with one city
-# REGION_IDS = [12]
-# MAP_NAMES = {12: "bahah"}
+# # Test with one city
+# REGION_IDS = [4]
+# MAP_NAMES = {4: "al_qassim"}
 
 ZOOM_LEVEL = 15
 PARCELS_FILE = "non_transactional_parcels.csv"
 REGIONS_URL = "https://api2.suhail.ai/regions"
 PARCEL_DETAILS_URL = "https://api2.suhail.ai/api/parcel/search"
 
-# Performance settings
-MAX_WORKERS_TILES = 10
-MAX_WORKERS_ENRICH = 20
+# --- OPTIMIZATION: INCREASED WORKERS ---
+# Tile fetching is I/O bound and fast (especially for 404s), so we can go high here.
+MAX_WORKERS_TILES = 60  
+MAX_WORKERS_ENRICH = 40 
 REQUEST_TIMEOUT = 10
 
 ################################################################################
@@ -79,6 +81,7 @@ class ConsoleLogger:
 
     def progress_bar(self, current, total, stats_dict, prefix='Progress'):
         now = time.time()
+        # Update more frequently if we are at the start
         if current < total and (now - self.last_update < 0.2):
             return
         self.last_update = now
@@ -122,8 +125,9 @@ logger = ConsoleLogger()
 ################################################################################
 def create_session():
     s = requests.Session()
+    # Increased pool size to match new worker count
     retries = Retry(total=3, backoff_factor=0.3, status_forcelist=[500, 502, 503, 504])
-    s.mount('https://', HTTPAdapter(max_retries=retries, pool_connections=30, pool_maxsize=30))
+    s.mount('https://', HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100))
     return s
 
 session = create_session()
@@ -161,7 +165,6 @@ def fetch_region_boundary(region_id, regions_dict):
 
 ################################################################################
 def safe_get(props, *keys):
-    """Try multiple possible keys and return first non-empty value"""
     for key in keys:
         val = props.get(key)
         if val not in (None, '', 0, '0'):
@@ -170,27 +173,28 @@ def safe_get(props, *keys):
 
 ################################################################################
 def fetch_and_decode_tile(tile_coords, tile_url_template):
-    """Fetch and decode tile, checking ALL layers for province_id"""
     x, y, z = tile_coords
     url = tile_url_template.format(z=z, x=x, y=y)
     try:
-        resp = session.get(url, timeout=5)
+        # Lower timeout for tiles - if it hangs, fail fast and retry or move on
+        resp = session.get(url, timeout=4) 
         if resp.status_code != 200: return []
+        
+        # Optimization: If content is tiny, it's likely an empty PBF
+        if len(resp.content) < 50: 
+            return []
+
         decoded_tile = mapbox_vector_tile.decode(resp.content)
         
         parcels_list = []
-        
-        # Try different layer names and MERGE data from multiple layers
         for layer_name in ['parcels', 'parcels-base', 'parcel', 'land', 'neighborhoods']:
             if layer_name in decoded_tile:
                 for feature in decoded_tile[layer_name]['features']:
-                    # Store both the feature AND which layer it came from
                     parcels_list.append({
                         'properties': feature.get('properties', {}),
                         'geometry': feature.get('geometry'),
                         'layer': layer_name
                     })
-        
         return parcels_list
     except Exception:
         return []
@@ -217,6 +221,7 @@ def fetch_parcel_details(region_id, province_id, subdivision_no, parcel_no):
 ################################################################################
 def process_tile_batch(tiles, tile_url_template):
     parcels_data = []
+    # Reuse the executor is hard here due to design, but with larger batch size overhead is minimal
     with ThreadPoolExecutor(max_workers=MAX_WORKERS_TILES) as executor:
         future_to_tile = {executor.submit(fetch_and_decode_tile, tile, tile_url_template): tile for tile in tiles}
         for future in as_completed(future_to_tile):
@@ -224,34 +229,23 @@ def process_tile_batch(tiles, tile_url_template):
             if features:
                 for feature in features:
                     props = feature.get('properties', {})
-                    
-                    # Skip if has transactions
                     if int(props.get('transactions_count', 0) or 0) > 0: 
                         continue
-                    
-                    # Must have a parcel ID
                     parcel_id = props.get('parcel_objectid') or props.get('parcel_id')
                     if not parcel_id: 
                         continue
-                    
                     parcels_data.append(feature)
     return parcels_data
 
 ################################################################################
 def enrich_single_parcel(parcel_data, region_id, province_ids, regions_dict, provinces_dict):
-    """Worker function for parallel enrichment with COMPREHENSIVE data extraction"""
     props = parcel_data['properties']
-    layer = parcel_data.get('layer', 'unknown')
     
-    # Extract identifiers with multiple fallback keys
     parcel_obj_id = safe_get(props, 'parcel_objectid', 'parcel_id', 'parcelObjectId')
     parcel_no = safe_get(props, 'parcel_no', 'parcelno', 'parcelNo')
     subdivision_no = safe_get(props, 'subdivision_no', 'subdivisionno')
-    
-    # CRITICAL: Extract province_id from tile FIRST (all possible variations)
     province_id = safe_get(props, 'province_id', 'provinceid', 'provinceId')
     
-    # Extract ALL other fields from tile properties
     neighborhood_id = safe_get(props, 'neighborhood_id', 'neighborhoodid')
     neighborhood_name = safe_get(props, 'neighborhood_name', 'neighborhaname', 'neighbarhaname', 'neighborh_aname')
     block_no = safe_get(props, 'block_no', 'blockno') or '---'
@@ -264,11 +258,8 @@ def enrich_single_parcel(parcel_data, region_id, province_ids, regions_dict, pro
     details = None
     enrichment_status = 'TILE_ONLY'
     
-    # Strategy 1: Try API enrichment if we have valid IDs and no province yet
     if parcel_no and subdivision_no and str(subdivision_no).isdigit():
-        # If we already have province_id, only check that one
         prov_list = [province_id] if province_id else province_ids
-        
         for prov_id in prov_list:
             details = fetch_parcel_details(region_id, prov_id, subdivision_no, parcel_no)
             if details == "ERROR":
@@ -276,37 +267,28 @@ def enrich_single_parcel(parcel_data, region_id, province_ids, regions_dict, pro
                 details = None
                 break
             if details:
-                # API returned data - use its province_id as authoritative
                 if details.get('provinceId'):
                     province_id = details.get('provinceId')
                 enrichment_status = 'API_ENRICHED'
                 break
     
-    # Strategy 2: If STILL no province_id, try neighborhood lookup
     if not province_id and neighborhood_id:
-        # Neighborhood IDs often contain province information
-        # Try to match neighborhood to provinces in this region
         for prov_id in province_ids:
             prov_info = provinces_dict.get(prov_id, {})
-            # Check if neighborhood might belong to this province
-            # This is a heuristic - it might be adjusted in the future
             if prov_info:
                 province_id = prov_id
                 enrichment_status = 'NEIGHBORHOOD_INFERRED'
                 break
     
-    # Strategy 3: Last resort - use first province as default
     if not province_id and province_ids:
         province_id = province_ids[0]
         enrichment_status = 'DEFAULT_PROVINCE'
     
-    # Merge API data with tile data
     geometry = parcel_data.get('geometry')
     if details:
         geometry = details.get('geometry') or geometry
         total_area = details.get('totalArea') or total_area
     
-    # Get metadata
     region_info = regions_dict.get(region_id, {})
     province_info = provinces_dict.get(province_id, {}) if province_id else {}
     
@@ -360,21 +342,10 @@ def append_to_csv(data):
 
 ################################################################################
 def main():
-    logger.section("NON-TRANSACTIONAL PARCEL SCRAPER (ENHANCED)")
+    logger.section("NON-TRANSACTIONAL PARCEL SCRAPER (OPTIMIZED)")
     init_csv_files()
     regions_dict, provinces_dict = fetch_region_metadata()
     if not regions_dict: return
-    
-    # Print province info for debugging
-    for region_id in REGION_IDS:
-        if region_id in regions_dict:
-            region = regions_dict[region_id]
-            logger.info(f"Region {region_id} ({region.get('name', 'Unknown')}) has provinces:")
-            for prov in region.get('provinces', []):
-                logger.info(f"  - {prov['id']}: {prov.get('name', 'Unknown')}")
-    
-    total_parcels_all_regions = 0
-    seen_ids = set()
     
     for region_id in REGION_IDS:
         if region_id not in MAP_NAMES: continue
@@ -389,13 +360,32 @@ def main():
         bounds = fetch_region_boundary(region_id, regions_dict)
         if not bounds: continue
         
+        # 1. Generate Tiles
         tiles = list(mercantile.tiles(*bounds, ZOOM_LEVEL))
         logger.info(f"Tiles to Scan: {len(tiles)}")
+        
+        # ----------------------------------------------------------------------
+        # OPTIMIZATION: Sort tiles CENTER-OUT
+        # This ensures we hit the city center (populated data) first
+        # instead of scanning empty desert corners for hours.
+        # ----------------------------------------------------------------------
+        min_x, min_y, max_x, max_y = bounds
+        center_x = (min_x + max_x) / 2
+        center_y = (min_y + max_y) / 2
+        # Convert lat/lon center to approx tile coordinates for sorting
+        center_tile = mercantile.tile(center_x, center_y, ZOOM_LEVEL)
+        
+        logger.info("Sorting tiles to scan city center first...")
+        # Sort by distance to center
+        tiles.sort(key=lambda t: (t.x - center_tile.x)**2 + (t.y - center_tile.y)**2)
+        # ----------------------------------------------------------------------
         
         province_ids = [p['id'] for p in regions_dict[region_id].get('provinces', [])]
         tile_url_template = f"https://tiles.suhail.ai/maps/{map_name}/{{z}}/{{x}}/{{y}}.vector.pbf"
         
-        chunk_size = 50
+        # OPTIMIZATION: Increased chunk size to reduce ThreadPool startup overhead
+        chunk_size = 200
+        seen_ids = set()
         
         for i in range(0, len(tiles), chunk_size):
             chunk = tiles[i:i + chunk_size]
