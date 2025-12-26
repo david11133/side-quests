@@ -8,30 +8,29 @@ import mercantile
 import mapbox_vector_tile
 import shutil
 import datetime
-import math # Added for center-out sorting
+import re # Added for data cleaning
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 ################################################################################
 
-REGION_IDS = [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-MAP_NAMES = {
-    2: "makkah_region", 4: "al_qassim", 5: "eastern_region", 6: "asir_region",
-    7: "tabuk", 8: "hail", 9: "northern_borders", 10: "riyadh",
-    11: "najran", 12: "bahah", 13: "al_madenieh", 14: "jazan", 15: "jawf"
-}
+# REGION_IDS = [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+# MAP_NAMES = {
+#     2: "makkah_region", 4: "al_qassim", 5: "eastern_region", 6: "asir_region",
+#     7: "tabuk", 8: "hail", 9: "northern_borders", 10: "riyadh",
+#     11: "najran", 12: "bahah", 13: "al_madenieh", 14: "jazan", 15: "jawf"
+# }
 
-# # Test with one city
-# REGION_IDS = [4]
-# MAP_NAMES = {4: "al_qassim"}
+# Test with one city
+REGION_IDS = [12]
+MAP_NAMES = {12: "bahah"}
 
 ZOOM_LEVEL = 15
 PARCELS_FILE = "non_transactional_parcels.csv"
 REGIONS_URL = "https://api2.suhail.ai/regions"
 PARCEL_DETAILS_URL = "https://api2.suhail.ai/api/parcel/search"
 
-# --- OPTIMIZATION: INCREASED WORKERS ---
-# Tile fetching is I/O bound and fast (especially for 404s), so we can go high here.
+# Performance settings
 MAX_WORKERS_TILES = 60  
 MAX_WORKERS_ENRICH = 40 
 REQUEST_TIMEOUT = 10
@@ -81,7 +80,6 @@ class ConsoleLogger:
 
     def progress_bar(self, current, total, stats_dict, prefix='Progress'):
         now = time.time()
-        # Update more frequently if we are at the start
         if current < total and (now - self.last_update < 0.2):
             return
         self.last_update = now
@@ -125,7 +123,6 @@ logger = ConsoleLogger()
 ################################################################################
 def create_session():
     s = requests.Session()
-    # Increased pool size to match new worker count
     retries = Retry(total=3, backoff_factor=0.3, status_forcelist=[500, 502, 503, 504])
     s.mount('https://', HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100))
     return s
@@ -165,24 +162,62 @@ def fetch_region_boundary(region_id, regions_dict):
 
 ################################################################################
 def safe_get(props, *keys):
+    """Basic getter: returns first non-empty value"""
     for key in keys:
         val = props.get(key)
         if val not in (None, '', 0, '0'):
             return val
     return ''
 
+def smart_get_text(props, *keys):
+    """
+    Enhanced getter: Checks multiple keys and PRIORITIZES text over numbers.
+    Used for land_use to avoid getting codes like '5555'.
+    """
+    candidates = []
+    for key in keys:
+        val = props.get(key)
+        if val not in (None, '', 0, '0'):
+            s_val = str(val)
+            # If it's a pure number, store it as a backup
+            if s_val.isdigit():
+                candidates.append((0, s_val)) # Priority 0 (Low)
+            else:
+                candidates.append((1, s_val)) # Priority 1 (High - Text)
+    
+    if not candidates: return ''
+    # Sort by priority (descending), so text comes first
+    candidates.sort(key=lambda x: x[0], reverse=True)
+    return candidates[0][1]
+
+def clean_parcel_no(val):
+    """
+    Cleans parcel numbers.
+    - Rejects long names (e.g., 'Mohammed...')
+    - Rejects strings with no digits
+    """
+    if not val: return ''
+    s_val = str(val).strip()
+    
+    # Rule 1: Parcel numbers are usually short (< 15 chars)
+    # If it's very long, it's likely a description or name
+    if len(s_val) > 15:
+        return ''
+        
+    # Rule 2: Must contain at least one digit
+    if not any(char.isdigit() for char in s_val):
+        return ''
+        
+    return s_val
+
 ################################################################################
 def fetch_and_decode_tile(tile_coords, tile_url_template):
     x, y, z = tile_coords
     url = tile_url_template.format(z=z, x=x, y=y)
     try:
-        # Lower timeout for tiles - if it hangs, fail fast and retry or move on
-        resp = session.get(url, timeout=4) 
+        resp = session.get(url, timeout=4)
         if resp.status_code != 200: return []
-        
-        # Optimization: If content is tiny, it's likely an empty PBF
-        if len(resp.content) < 50: 
-            return []
+        if len(resp.content) < 50: return []
 
         decoded_tile = mapbox_vector_tile.decode(resp.content)
         
@@ -221,7 +256,6 @@ def fetch_parcel_details(region_id, province_id, subdivision_no, parcel_no):
 ################################################################################
 def process_tile_batch(tiles, tile_url_template):
     parcels_data = []
-    # Reuse the executor is hard here due to design, but with larger batch size overhead is minimal
     with ThreadPoolExecutor(max_workers=MAX_WORKERS_TILES) as executor:
         future_to_tile = {executor.submit(fetch_and_decode_tile, tile, tile_url_template): tile for tile in tiles}
         for future in as_completed(future_to_tile):
@@ -242,15 +276,22 @@ def enrich_single_parcel(parcel_data, region_id, province_ids, regions_dict, pro
     props = parcel_data['properties']
     
     parcel_obj_id = safe_get(props, 'parcel_objectid', 'parcel_id', 'parcelObjectId')
-    parcel_no = safe_get(props, 'parcel_no', 'parcelno', 'parcelNo')
+    
+    # --- DATA CLEANING START ---
+    raw_parcel_no = safe_get(props, 'parcel_no', 'parcelno', 'parcelNo')
+    parcel_no = clean_parcel_no(raw_parcel_no)
+    
+    # Use smart_get_text to avoid "5555" if a text alternative exists
+    land_use_detailed = smart_get_text(props, 'landuseadetailed', 'land_use_detailed_ar', 'landuse_detailed', 'land_use_detailed')
+    land_use_group = smart_get_text(props, 'landuseagroup', 'land_use_group_ar', 'land_use_group')
+    # --- DATA CLEANING END ---
+
     subdivision_no = safe_get(props, 'subdivision_no', 'subdivisionno')
     province_id = safe_get(props, 'province_id', 'provinceid', 'provinceId')
     
     neighborhood_id = safe_get(props, 'neighborhood_id', 'neighborhoodid')
     neighborhood_name = safe_get(props, 'neighborhood_name', 'neighborhaname', 'neighbarhaname', 'neighborh_aname')
     block_no = safe_get(props, 'block_no', 'blockno') or '---'
-    land_use_detailed = safe_get(props, 'landuseadetailed', 'land_use_detailed', 'landuse_detailed')
-    land_use_group = safe_get(props, 'landuseagroup', 'land_use_group', 'landuse_group')
     municipality_name = safe_get(props, 'municipality_aname', 'municipality_name', 'municipalityname')
     zoning_id = safe_get(props, 'zoning_id', 'zoningid')
     total_area = safe_get(props, 'shape_area', 'total_area', 'totalarea')
@@ -258,6 +299,7 @@ def enrich_single_parcel(parcel_data, region_id, province_ids, regions_dict, pro
     details = None
     enrichment_status = 'TILE_ONLY'
     
+    # Only try API if we have a CLEAN parcel number
     if parcel_no and subdivision_no and str(subdivision_no).isdigit():
         prov_list = [province_id] if province_id else province_ids
         for prov_id in prov_list:
@@ -298,7 +340,7 @@ def enrich_single_parcel(parcel_data, region_id, province_ids, regions_dict, pro
         'province_id': province_id or '',
         'province_name': province_info.get('name', '') if province_info else '',
         'parcel_objectid': parcel_obj_id or '',
-        'parcel_no': parcel_no or '',
+        'parcel_no': parcel_no or '', # This is now the cleaned version
         'subdivision_no': subdivision_no or '',
         'neighborhood_id': neighborhood_id,
         'neighborhood_name': neighborhood_name,
@@ -342,7 +384,7 @@ def append_to_csv(data):
 
 ################################################################################
 def main():
-    logger.section("NON-TRANSACTIONAL PARCEL SCRAPER (OPTIMIZED)")
+    logger.section("NON-TRANSACTIONAL PARCEL SCRAPER (OPTIMIZED + CLEANED)")
     init_csv_files()
     regions_dict, provinces_dict = fetch_region_metadata()
     if not regions_dict: return
@@ -360,30 +402,21 @@ def main():
         bounds = fetch_region_boundary(region_id, regions_dict)
         if not bounds: continue
         
-        # 1. Generate Tiles
         tiles = list(mercantile.tiles(*bounds, ZOOM_LEVEL))
         logger.info(f"Tiles to Scan: {len(tiles)}")
         
-        # ----------------------------------------------------------------------
-        # OPTIMIZATION: Sort tiles CENTER-OUT
-        # This ensures we hit the city center (populated data) first
-        # instead of scanning empty desert corners for hours.
-        # ----------------------------------------------------------------------
+        # Sort CENTER-OUT to find data faster
         min_x, min_y, max_x, max_y = bounds
         center_x = (min_x + max_x) / 2
         center_y = (min_y + max_y) / 2
-        # Convert lat/lon center to approx tile coordinates for sorting
         center_tile = mercantile.tile(center_x, center_y, ZOOM_LEVEL)
         
         logger.info("Sorting tiles to scan city center first...")
-        # Sort by distance to center
         tiles.sort(key=lambda t: (t.x - center_tile.x)**2 + (t.y - center_tile.y)**2)
-        # ----------------------------------------------------------------------
         
         province_ids = [p['id'] for p in regions_dict[region_id].get('provinces', [])]
         tile_url_template = f"https://tiles.suhail.ai/maps/{map_name}/{{z}}/{{x}}/{{y}}.vector.pbf"
         
-        # OPTIMIZATION: Increased chunk size to reduce ThreadPool startup overhead
         chunk_size = 200
         seen_ids = set()
         
@@ -391,12 +424,12 @@ def main():
             chunk = tiles[i:i + chunk_size]
             logger.progress_bar(i, len(tiles), stats.to_dict())
             
-            # 1. Fetch Tiles
+            # 1. Fetch
             raw_parcels = process_tile_batch(chunk, tile_url_template)
             stats.tiles_processed += len(chunk)
             if raw_parcels: stats.tiles_with_data += 1
             
-            # 2. Filter Duplicates
+            # 2. Dedup
             unique_parcels = []
             for p in raw_parcels:
                 pid = p['properties'].get('parcel_objectid') or p['properties'].get('parcel_id')
@@ -407,7 +440,7 @@ def main():
             if not unique_parcels: continue
             stats.parcels_found += len(unique_parcels)
 
-            # 3. Enrich Parcels
+            # 3. Enrich & Clean
             enriched_results = []
             with ThreadPoolExecutor(max_workers=MAX_WORKERS_ENRICH) as executor:
                 futures = {
