@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Optional, Set, Tuple
 import time
 from collections import deque
+import threading
 #############################################################################################
 
 ###### Configurations ######
@@ -22,19 +23,28 @@ PARCEL_URL = "https://api2.suhail.ai/api/parcel/search"
 PRICE_METRICS_URL = "https://api2.suhail.ai/api/parcel/metrics/priceOfMeter"
 
 # Settings
-REGION_IDS = range(14, 17)
+REGION_IDS = range(2, 17)
 METRICS_LIMIT = 600
 PAGE_SIZE = 1000
-OUTPUT_FILE = "merged_neighborhood_transactions.csv"
-HISTORY_FILE = "parcel_price_history.csv"
+OUTPUT_FILE = "transactional_parcels.csv"
+HISTORY_FILE = "transaction_price_history.csv"
 TEST = False  # Set to True to test with small sample of data
 
 # Performance settings
-MAX_WORKERS = 6
+# OPTIMIZATION: Increased workers and split them by task type
+MAX_NEIGHBORHOOD_WORKERS = 10  # Process 10 neighborhoods in parallel
+MAX_DETAIL_WORKERS = 4         # Inside each neighborhood, use 4 threads for details
 BATCH_SIZE = 25
 METRICS_BATCH_SIZE = 20
-REQUEST_TIMEOUT = 15
+REQUEST_TIMEOUT = 20           # Increased slightly for stability
 CACHE_SIZE_LIMIT = 10000
+
+#############################################################################################
+# Locks for Thread Safety
+csv_lock = threading.Lock()
+history_csv_lock = threading.Lock()
+seen_lock = threading.Lock()
+print_lock = threading.Lock()
 
 #############################################################################################
 def create_session():
@@ -42,10 +52,10 @@ def create_session():
     session = requests.Session()
     
     adapter = HTTPAdapter(
-        pool_connections=20,
-        pool_maxsize=20,
+        pool_connections=60,
+        pool_maxsize=60,
         max_retries=Retry(
-            total=3,
+            total=4,
             backoff_factor=0.5,
             status_forcelist=[500, 502, 503, 504, 429],
             raise_on_status=False
@@ -59,45 +69,51 @@ def create_session():
 session = create_session()
 
 #############################################################################################
-# Caching & State
+# Caching
 class LimitedCache:
-    """Simple LRU-like cache with size limit"""
+    """Thread-safe LRU-like cache with size limit"""
     def __init__(self, max_size=1000):
         self.cache = {}
         self.access_order = deque()
         self.max_size = max_size
+        self.lock = threading.Lock() # OPTIMIZATION: Added lock
     
     def get(self, key, default=None):
-        return self.cache.get(key, default)
+        with self.lock:
+            return self.cache.get(key, default)
     
     def set(self, key, value):
-        if key not in self.cache and len(self.cache) >= self.max_size:
-            if self.access_order:
-                old_key = self.access_order.popleft()
-                self.cache.pop(old_key, None)
-        self.cache[key] = value
-        if key in self.access_order:
-            self.access_order.remove(key)
-        self.access_order.append(key)
+        with self.lock:
+            if key not in self.cache and len(self.cache) >= self.max_size:
+                if self.access_order:
+                    old_key = self.access_order.popleft()
+                    self.cache.pop(old_key, None)
+            self.cache[key] = value
+            if key in self.access_order:
+                self.access_order.remove(key)
+            self.access_order.append(key)
     
     def __contains__(self, key):
-        return key in self.cache
+        with self.lock:
+            return key in self.cache
 
 transaction_details_cache = LimitedCache(max_size=CACHE_SIZE_LIMIT)
 parcel_geometry_cache = LimitedCache(max_size=CACHE_SIZE_LIMIT)
 seen_transactions: Set[Tuple] = set()
 
 #############################################################################################
-# Logging Helpers
+# Loggings
 def log_progress(msg):
     """Print clean progress message overwriting current line"""
-    sys.stdout.write(f"\r{msg.ljust(100)}")
-    sys.stdout.flush()
+    with print_lock:
+        sys.stdout.write(f"\r{msg.ljust(100)}")
+        sys.stdout.flush()
 
 def log_info(msg):
     """Print permanent info message"""
-    sys.stdout.write(f"\n{msg}")
-    sys.stdout.flush()
+    with print_lock:
+        sys.stdout.write(f"\n{msg}")
+        sys.stdout.flush()
 
 #############################################################################################
 def is_valid_subdivision(subdivision_no):
@@ -105,10 +121,10 @@ def is_valid_subdivision(subdivision_no):
 
 #############################################################################################
 def needs_details_fetch(tx):
-    # If transaction already has key fields, skip details fetch
     has_type = tx.get("type") is not None
     has_metrics_type = tx.get("metricsType") is not None
-    if has_type and has_metrics_type:
+    has_total_area = tx.get("totalArea") is not None
+    if has_type and has_metrics_type and has_total_area:
         return False
     return True
 
@@ -182,7 +198,6 @@ def fetch_price_metrics_batch(parcel_ids: List[int]) -> List[dict]:
     if not parcel_ids:
         return []
     
-    # Convert list of IDs to comma-separated string
     ids_str = ",".join(map(str, parcel_ids))
     
     try:
@@ -197,7 +212,6 @@ def fetch_price_metrics_batch(parcel_ids: List[int]) -> List[dict]:
         resp.raise_for_status()
         return resp.json().get("data", [])
     except Exception as e:
-        # Silently fail for metrics to not stop the scraper
         return []
 
 #############################################################################################
@@ -215,24 +229,21 @@ def batch_fetch_details(region_id: int, tx_list: List[dict]) -> Dict[str, dict]:
     if not to_fetch:
         return results
     
-    log_progress(f"   Fetching details for {len(to_fetch)} items...")
-    
-    for i in range(0, len(to_fetch), BATCH_SIZE):
-        batch = to_fetch[i:i + BATCH_SIZE]
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            future_to_tx = {
-                executor.submit(fetch_transaction_details, region_id, tx_num): tx_num 
-                for tx_num in batch
-            }
-            for future in as_completed(future_to_tx):
-                tx_number = future_to_tx[future]
-                try:
-                    details = future.result()
-                    transaction_details_cache.set(tx_number, details)
-                    results[tx_number] = details
-                except Exception:
-                    transaction_details_cache.set(tx_number, {})
-                    results[tx_number] = {}
+    # OPTIMIZATION: Reduced internal max workers to prevent thread explosion (since this runs inside another thread)
+    with ThreadPoolExecutor(max_workers=MAX_DETAIL_WORKERS) as executor:
+        future_to_tx = {
+            executor.submit(fetch_transaction_details, region_id, tx_num): tx_num 
+            for tx_num in to_fetch
+        }
+        for future in as_completed(future_to_tx):
+            tx_number = future_to_tx[future]
+            try:
+                details = future.result()
+                transaction_details_cache.set(tx_number, details)
+                results[tx_number] = details
+            except Exception:
+                transaction_details_cache.set(tx_number, {})
+                results[tx_number] = {}
     return results
 
 #############################################################################################
@@ -249,31 +260,25 @@ def batch_fetch_geometries(requests_list: List[Tuple]) -> Dict[Tuple, Optional[d
     if not to_fetch:
         return results
     
-    log_progress(f"   Fetching geometry for {len(to_fetch)} parcels...")
-    
-    for i in range(0, len(to_fetch), BATCH_SIZE):
-        batch = to_fetch[i:i + BATCH_SIZE]
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            future_to_req = {
-                executor.submit(fetch_parcel_geometry, *req): req 
-                for req in batch
-            }
-            for future in as_completed(future_to_req):
-                req = future_to_req[future]
-                try:
-                    results[req] = future.result()
-                    parcel_geometry_cache.set(req, results[req])
-                except Exception:
-                    results[req] = None
-                    parcel_geometry_cache.set(req, None)
+    with ThreadPoolExecutor(max_workers=MAX_DETAIL_WORKERS) as executor:
+        future_to_req = {
+            executor.submit(fetch_parcel_geometry, *req): req 
+            for req in to_fetch
+        }
+        for future in as_completed(future_to_req):
+            req = future_to_req[future]
+            try:
+                results[req] = future.result()
+                parcel_geometry_cache.set(req, results[req])
+            except Exception:
+                results[req] = None
+                parcel_geometry_cache.set(req, None)
     return results
 
 #############################################################################################
 def batch_process_metrics(transactions: List[dict]):
     """Process price metrics for a list of transactions"""
-    # Extract IDs (using 'parcelObjectId' field from transaction object)
-    # We only care about transactions that have an ID
-    id_map = {} # map parcelObjId -> transactionNumber (for reference)
+    id_map = {} 
     ids_to_fetch = []
     
     for tx in transactions:
@@ -286,74 +291,80 @@ def batch_process_metrics(transactions: List[dict]):
     if not ids_to_fetch:
         return
 
-    log_progress(f"   Fetching price history for {len(ids_to_fetch)} parcels...")
-    
     all_metrics_rows = []
     
-    # Process in batches
-    for i in range(0, len(ids_to_fetch), METRICS_BATCH_SIZE):
-        batch = ids_to_fetch[i:i + METRICS_BATCH_SIZE]
-        metrics_data = fetch_price_metrics_batch(batch)
+    # fetch batches in parallel
+    batches = [ids_to_fetch[i:i + METRICS_BATCH_SIZE] for i in range(0, len(ids_to_fetch), METRICS_BATCH_SIZE)]
+    
+    with ThreadPoolExecutor(max_workers=MAX_DETAIL_WORKERS) as executor:
+        futures = [executor.submit(fetch_price_metrics_batch, batch) for batch in batches]
         
-        for item in metrics_data:
-            parcel_obj_id = item.get("parcelObjId")
-            neighborhood_id = item.get("neighborhoodId")
+        for future in as_completed(futures):
+            metrics_data = future.result()
             
-            # 1. Parcel Metrics (Specific to this land)
-            for pm in item.get("parcelMetrics", []):
-                all_metrics_rows.append({
-                    "parcelObjId": parcel_obj_id,
-                    "transactionNumber": id_map.get(parcel_obj_id, ""),
-                    "neighborhoodId": neighborhood_id,
-                    "type": "Parcel Specific",
-                    "month": pm.get("month"),
-                    "year": pm.get("year"),
-                    "metricsType": pm.get("metricsType"),
-                    "averagePriceOfMeter": pm.get("avaragePriceOfMeter")
-                })
+            for item in metrics_data:
+                parcel_obj_id = item.get("parcelObjId")
+                neighborhood_id = item.get("neighborhoodId")
                 
-            # 2. Neighborhood Metrics (General area averages)
-            for nm in item.get("neighborhoodMetrics", []):
-                all_metrics_rows.append({
-                    "parcelObjId": parcel_obj_id,
-                    "transactionNumber": id_map.get(parcel_obj_id, ""),
-                    "neighborhoodId": nm.get("neighborhoodId"),
-                    "type": "Neighborhood Average",
-                    "month": nm.get("month"),
-                    "year": nm.get("year"),
-                    "metricsType": nm.get("metricsType"),
-                    "averagePriceOfMeter": nm.get("avaragePriceOfMeter")
-                })
+                # 1. Parcel Metrics
+                for pm in item.get("parcelMetrics", []):
+                    all_metrics_rows.append({
+                        "parcelObjId": parcel_obj_id,
+                        "transactionNumber": id_map.get(parcel_obj_id, ""),
+                        "neighborhoodId": neighborhood_id,
+                        "type": "Parcel Specific",
+                        "month": pm.get("month"),
+                        "year": pm.get("year"),
+                        "metricsType": pm.get("metricsType"),
+                        "averagePriceOfMeter": pm.get("avaragePriceOfMeter")
+                    })
+                    
+                # 2. Neighborhood Metrics
+                for nm in item.get("neighborhoodMetrics", []):
+                    all_metrics_rows.append({
+                        "parcelObjId": parcel_obj_id,
+                        "transactionNumber": id_map.get(parcel_obj_id, ""),
+                        "neighborhoodId": nm.get("neighborhoodId"),
+                        "type": "Neighborhood Average",
+                        "month": nm.get("month"),
+                        "year": nm.get("year"),
+                        "metricsType": nm.get("metricsType"),
+                        "averagePriceOfMeter": nm.get("avaragePriceOfMeter")
+                    })
 
     append_history_to_csv(all_metrics_rows)
 
 #############################################################################################
 def append_to_csv(new_rows):
     if not new_rows: return
-    try:
-        with open(OUTPUT_FILE, 'r', encoding="utf-8-sig"): file_exists = True
-    except FileNotFoundError: file_exists = False
-    
-    with open(OUTPUT_FILE, "a", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=new_rows[0].keys())
-        if not file_exists: writer.writeheader()
-        writer.writerows(new_rows)
+    # OPTIMIZATION: Thread-safe writing
+    with csv_lock:
+        try:
+            with open(OUTPUT_FILE, 'r', encoding="utf-8-sig"): file_exists = True
+        except FileNotFoundError: file_exists = False
+        
+        with open(OUTPUT_FILE, "a", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(f, fieldnames=new_rows[0].keys())
+            if not file_exists: writer.writeheader()
+            writer.writerows(new_rows)
 
 #############################################################################################
 def append_history_to_csv(new_rows):
     """Append price history metrics to separate CSV"""
     if not new_rows: return
     
-    try:
-        with open(HISTORY_FILE, 'r', encoding="utf-8-sig"): file_exists = True
-    except FileNotFoundError: file_exists = False
-    
-    fieldnames = ["parcelObjId", "transactionNumber", "neighborhoodId", "type", "month", "year", "metricsType", "averagePriceOfMeter"]
-    
-    with open(HISTORY_FILE, "a", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        if not file_exists: writer.writeheader()
-        writer.writerows(new_rows)
+    # OPTIMIZATION: Thread-safe writing
+    with history_csv_lock:
+        try:
+            with open(HISTORY_FILE, 'r', encoding="utf-8-sig"): file_exists = True
+        except FileNotFoundError: file_exists = False
+        
+        fieldnames = ["parcelObjId", "transactionNumber", "neighborhoodId", "type", "month", "year", "metricsType", "averagePriceOfMeter"]
+        
+        with open(HISTORY_FILE, "a", newline="", encoding="utf-8-sig") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            if not file_exists: writer.writeheader()
+            writer.writerows(new_rows)
 
 #############################################################################################
 def build_row(region_id, province_id, province_name, neighborhood_id, neighborhood_name, tx, details, geometry=None, region_dict=None, province_dict=None):
@@ -395,7 +406,7 @@ def build_row(region_id, province_id, province_name, neighborhood_id, neighborho
         "propertyType": details.get("propertyType") if details else "",
         "centroidX": centroid_x or "",
         "centroidY": centroid_y or "",
-        "parcelObjId": tx.get("parcelObjectId", ""), # Added this to link with history file
+        "parcelObjId": tx.get("parcelObjectId", ""), 
         "polygonData": json.dumps(details.get("polygonData"), ensure_ascii=False) if details and details.get("polygonData") else "",
         "geometry": json.dumps((details.get("geometry") if details else None) or geometry, ensure_ascii=False) if (details and details.get("geometry")) or geometry else ""
     }
@@ -412,6 +423,102 @@ def fetch_regions():
         for p in r.get("provinces", []):
             p_dict[p["id"]] = p
     return r_dict, p_dict
+
+#############################################################################################
+def process_neighborhood(item, region_id, region_dict, province_dict):
+    """Refactored to run as a single worker task"""
+    neighborhood_id = item["neighborhoodId"]
+    neighborhood_name = item["neighborhoodName"]
+    # log_progress(f"   Starting Neighborhood: {neighborhood_name} ({neighborhood_id})")
+
+    # Fetch Transactions
+    all_transactions = []
+    page = 0
+    while True:
+        try:
+            tx_resp = session.get(
+                TRANSACTIONS_URL,
+                params={"regionId": region_id, "neighbourhoodId": neighborhood_id, "page": page, "pageSize": PAGE_SIZE},
+                timeout=30
+            )
+            tx_resp.raise_for_status()
+            txs = tx_resp.json().get("data", [])
+            if not txs: break
+            all_transactions.extend(txs)
+            page += 1
+            if TEST and page >= 1: break
+        except Exception:
+            break
+    
+    if not all_transactions: 
+        return 0
+
+    # Filter Duplicates (Thread Safe)
+    new_transactions = []
+    with seen_lock:
+        for tx in all_transactions:
+            key = (region_id, neighborhood_id, tx.get("transactionNumber"))
+            if key not in seen_transactions:
+                seen_transactions.add(key)
+                new_transactions.append(tx)
+    
+    if not new_transactions: 
+        return 0
+
+    # 1. Fetch Details
+    tx_needing_details = [tx for tx in new_transactions if needs_details_fetch(tx)]
+    details_map = batch_fetch_details(region_id, tx_needing_details) if tx_needing_details else {}
+    
+    # 2. Prepare Details Map for all
+    for tx in new_transactions:
+        if tx.get("transactionNumber") not in details_map:
+            details_map[tx.get("transactionNumber")] = {
+                "type": tx.get("type"), "metricsType": tx.get("metricsType"),
+                "totalArea": tx.get("totalArea"), "transactionSource": tx.get("transactionSource"),
+                "sellingType": tx.get("sellingType"), "landUseGroup": tx.get("landUseGroup"),
+                "propertyType": tx.get("propertyType"), "centroidX": tx.get("centroidX"),
+                "centroidY": tx.get("centroidY"), "geometry": tx.get("geometry"),
+                "polygonData": tx.get("polygonData"), "provinceId": tx.get("provinceId")
+            }
+
+    # 3. Fetch Geometries
+    geo_reqs = []
+    for tx in new_transactions:
+        details = details_map.get(tx.get("transactionNumber"), {})
+        cx, _ = extract_coordinates(tx, details)
+        if needs_geometry_fetch(tx, details, cx):
+            prov_id = details.get("provinceId") or item.get("provinceId")
+            if tx.get("parcelNo") and tx.get("subdivisionNo") and prov_id:
+                geo_reqs.append(((region_id, prov_id, tx.get("subdivisionNo"), tx.get("parcelNo")), tx.get("transactionNumber")))
+    
+    geo_map = {}
+    if geo_reqs:
+        unique_reqs = list(set([r for r, _ in geo_reqs]))
+        geo_results = batch_fetch_geometries(unique_reqs)
+        for req, tnum in geo_reqs:
+            geo_map[tnum] = geo_results.get(req)
+
+    # 4. Fetch Price History Metrics
+    batch_process_metrics(new_transactions)
+
+    # 5. Save Rows
+    rows_to_save = []
+    for tx in new_transactions:
+        tnum = tx.get("transactionNumber")
+        details = details_map.get(tnum, {})
+        geom = geo_map.get(tnum)
+        prov_id = details.get("provinceId") or item.get("provinceId")
+        
+        rows_to_save.append(build_row(
+            region_id, prov_id, item.get("provinceName"), neighborhood_id, 
+            neighborhood_name, tx, details, geom, region_dict, province_dict
+        ))
+    
+    append_to_csv(rows_to_save)
+    
+    # Log completion for this neighborhood
+    log_progress(f"   Processed {neighborhood_name}: {len(rows_to_save)} items")
+    return len(rows_to_save)
 
 #############################################################################################
 def process_region(region_id, region_dict, province_dict):
@@ -433,93 +540,23 @@ def process_region(region_id, region_dict, province_dict):
 
         if TEST: items = items[:3]
 
-        for idx, item in enumerate(items, 1):
-            neighborhood_id = item["neighborhoodId"]
-            neighborhood_name = item["neighborhoodName"]
-            log_progress(f"   Processing Neighborhood {idx}/{len(items)}: {neighborhood_name} (ID: {neighborhood_id})")
+        log_info(f"   Fetched {len(items)} neighborhoods")
 
-            # Fetch Transactions
-            all_transactions = []
-            page = 0
-            while True:
+        # parallel Neighborhood Processing
+        with ThreadPoolExecutor(max_workers=MAX_NEIGHBORHOOD_WORKERS) as executor:
+            # Submit all neighborhood tasks
+            futures = [
+                executor.submit(process_neighborhood, item, region_id, region_dict, province_dict)
+                for item in items
+            ]
+            
+            # Gather results
+            for future in as_completed(futures):
                 try:
-                    tx_resp = session.get(
-                        TRANSACTIONS_URL,
-                        params={"regionId": region_id, "neighbourhoodId": neighborhood_id, "page": page, "pageSize": PAGE_SIZE},
-                        timeout=30
-                    )
-                    tx_resp.raise_for_status()
-                    txs = tx_resp.json().get("data", [])
-                    if not txs: break
-                    all_transactions.extend(txs)
-                    page += 1
-                    if TEST and page >= 1: break
-                except Exception:
-                    break
-            
-            if not all_transactions: continue
-
-            # Filter Duplicates
-            new_transactions = []
-            for tx in all_transactions:
-                key = (region_id, neighborhood_id, tx.get("transactionNumber"))
-                if key not in seen_transactions:
-                    seen_transactions.add(key)
-                    new_transactions.append(tx)
-            
-            if not new_transactions: continue
-
-            # 1. Fetch Details
-            tx_needing_details = [tx for tx in new_transactions if needs_details_fetch(tx)]
-            details_map = batch_fetch_details(region_id, tx_needing_details) if tx_needing_details else {}
-            
-            # 2. Prepare Details Map for all
-            for tx in new_transactions:
-                if tx.get("transactionNumber") not in details_map:
-                    details_map[tx.get("transactionNumber")] = {
-                        "type": tx.get("type"), "metricsType": tx.get("metricsType"),
-                        "totalArea": tx.get("totalArea"), "transactionSource": tx.get("transactionSource"),
-                        "sellingType": tx.get("sellingType"), "landUseGroup": tx.get("landUseGroup"),
-                        "propertyType": tx.get("propertyType"), "centroidX": tx.get("centroidX"),
-                        "centroidY": tx.get("centroidY"), "geometry": tx.get("geometry"),
-                        "polygonData": tx.get("polygonData"), "provinceId": tx.get("provinceId")
-                    }
-
-            # 3. Fetch Geometries
-            geo_reqs = []
-            for tx in new_transactions:
-                details = details_map.get(tx.get("transactionNumber"), {})
-                cx, _ = extract_coordinates(tx, details)
-                if needs_geometry_fetch(tx, details, cx):
-                    prov_id = details.get("provinceId") or item.get("provinceId")
-                    if tx.get("parcelNo") and tx.get("subdivisionNo") and prov_id:
-                        geo_reqs.append(((region_id, prov_id, tx.get("subdivisionNo"), tx.get("parcelNo")), tx.get("transactionNumber")))
-            
-            geo_map = {}
-            if geo_reqs:
-                unique_reqs = list(set([r for r, _ in geo_reqs]))
-                geo_results = batch_fetch_geometries(unique_reqs)
-                for req, tnum in geo_reqs:
-                    geo_map[tnum] = geo_results.get(req)
-
-            # 4. Fetch Price History Metrics (NEW STEP)
-            batch_process_metrics(new_transactions)
-
-            # 5. Build & Save Rows
-            rows_to_save = []
-            for tx in new_transactions:
-                tnum = tx.get("transactionNumber")
-                details = details_map.get(tnum, {})
-                geom = geo_map.get(tnum)
-                prov_id = details.get("provinceId") or item.get("provinceId")
-                
-                rows_to_save.append(build_row(
-                    region_id, prov_id, item.get("provinceName"), neighborhood_id, 
-                    neighborhood_name, tx, details, geom, region_dict, province_dict
-                ))
-            
-            append_to_csv(rows_to_save)
-            region_rows += len(rows_to_save)
+                    region_rows += future.result()
+                except Exception as e:
+                    # Log error but continue
+                    pass
 
         offset += METRICS_LIMIT
         if TEST: break
@@ -530,7 +567,7 @@ def process_region(region_id, region_dict, province_dict):
 #############################################################################################
 if __name__ == "__main__":
     print(f"{'='*60}")
-    print(f"SUHAIL.AI SCRAPER - STARTED")
+    print(f"SUHAIL.AI SCRAPER - OPTIMIZED")
     print(f"Main Data: {OUTPUT_FILE}")
     print(f"Price History: {HISTORY_FILE}")
     print(f"{'='*60}")
