@@ -520,6 +520,17 @@ def scrape_product_details(url, session, today_folder, category_path):
     
     data['Images'] = ','.join(images_to_download) if images_to_download else ''
     data['Meta: _wp_page_template'] = 'default'
+
+    # Create custom image URLs with new domain
+    if images_to_download:
+        custom_image_urls = []
+        for img_url in images_to_download:
+            img_name = os.path.basename(img_url.split('?')[0])
+            custom_url = f"https://www.dubaicomputershop.com/pro-images/{img_name}"
+            custom_image_urls.append(custom_url)
+        data['Custom Images'] = ','.join(custom_image_urls)
+    else:
+        data['Custom Images'] = ''
     
     # Extract short description
     short_desc = soup.find('div', class_='woocommerce-product-details__short-description')
@@ -688,7 +699,7 @@ def main():
     # Define CSV fieldnames
     base_fieldnames = [
         'ID', 'Type', 'SKU', 'Name', 'Published', 'Is featured?', 
-        'Visibility in catalog', 'Categories', 'Images', 
+        'Visibility in catalog', 'Categories', 'Images', 'Custom Images',
         'Meta: _wp_page_template', 'product-description', 
         'features', 'specification', 'price', 'special price',
         'Availability', 'Brand', 'Generation(s)', 'Graphics size',
