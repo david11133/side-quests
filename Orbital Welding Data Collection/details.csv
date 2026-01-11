@@ -1,0 +1,410 @@
+Header + Intro,Body Content,Specification
+"Why product data collection supports purchasing decisions: Comprehensive specifications enable accurate product comparison and selection, warranty information guides cost-of-ownership calculations, technical details support system compatibility verification, key features highlight performance capabilities for specific applications, and complete documentation facilitates informed purchasing and procurement processes.","M107 power supply top assembly containing critical control interface, cooling systems, and electrical components. Precision aluminum housing with stainless steel internal components ensures durability. Integrated cooling system manages thermal dissipation during sustained operations. Multiple DIN connectors provide comprehensive electrical interface. IP54 protection ensures reliable operation in manufacturing environments.","- Assembly type: Top housing component for M107 controller
+ - Material: Aluminum with stainless steel internal components
+ - Dimensions: Approximately 12"" x 8"" x 6"" (L x W x H)
+ - Weight: 5-7 kg assembled
+ - Cooling system: Integrated fan or water-cooling ports
+ - Electrical connections: Multiple DIN connectors
+ - Display interface: Mounting brackets for control panel
+ - Heat dissipation: Optimized thermal paths
+ - Environmental rating: IP54 dust and splash protection
+ - Mounting: Standard mechanical fastener interface"
+"Dual-Wire Orbital Welding Excellence: High-Volume Production with M15-317 Assembly - The dual-wire feed configuration enables faster weld deposition rates and improved weld geometry, making it ideal for high-volume production environments that demand maximum throughput without compromising weld quality.","The M15-317 WELD HEAD TOP ASSY TORCH-C 2WF represents the advanced tier of orbital welding technology, featuring integrated dual-wire feed capability. This specialized assembly is engineered for high-volume production welding where dual filler material streams improve weld deposition rate and reduce total weld time. The two independent servo-controlled wire feeders operate simultaneously, each with individual speed adjustment, providing unprecedented flexibility in weld procedure development. The water-cooled design supports sustained 300A operation even during extended dual-wire welding sessions. This configuration is particularly valuable in semiconductor, pharmaceutical, and aerospace applications where high-volume production demands premium reliability and consistency.","- Weld Head Model: M15-317 (Advanced Configuration)
+ - Torch Configuration: C-Type (Dual-Wire Feed)
+ - Arc Current: Up to 300A DC continuous
+ - Wire Feed Motors: Dual independent servo-controlled motors
+ - Wire Spool Capacity: 2 x 2 lbs (1 kg) spools or 2 x 4 inch Ã˜ spools standard
+ - Wire Size Range: 0.020"" to 0.045"" (0.51 mm to 1.14 mm)
+ - Wire Feed Speed Range: 5-200 IPM (each motor independently controlled)
+ - Torch Oscillation: 1 inch maximum stroke
+ - Water Cooling: Yes, with integral cooling passages
+ - Weight: Approximately 22 lbs (10 kg) with dual wire feeder
+ - Compatible Power Supplies: M317, M415, M217, M227
+ - Operating Temperature: -5Â°C to 50Â°C"
+"Thin-Wall Welding Excellence: Low-Current Optimization for M217 LC - Specialized low-current performance ensures precise arc control on thin-wall tubing, reducing heat-affected zone and minimizing weld distortion in critical semiconductor, pharmaceutical, and aerospace applications.","The M217 POWER SUPPLY TOP ASSY LC represents the evolution of orbital welding technology, specifically optimized for low-current applications on thin-wall tubing and pipes. The 12-inch color touch-screen provides an intuitive user interface with graphical weld monitoring and schedule navigation. Enhanced low-current performance ensures precise arc control below 20A, critical for semiconductor, pharmaceutical, and aerospace applications requiring minimal heat input. The extensive weld schedule memory accommodates up to 1000 procedures with 99 levels each, providing unprecedented flexibility for complex welding requirements. Weld Data Recording captures comprehensive welding parameters for quality assurance and regulatory compliance.","- Model Designation: M217 LC (Low Current variant)
+ - Weld Current: 5-150A, 100% duty cycle at specified input
+ - Input Power: 100-240 VAC, 50/60 Hz, single phase
+ - Low-Current Capability: Optimized performance below 20A
+ - Current Regulation: Â±0.5% accuracy at low currents
+ - Pulse Rate: 0.05-50 PPS programmable
+ - Memory Capacity: 1000+ weld schedules with 99 levels per schedule
+ - Display: 12-inch color touch-screen with tilt capability
+ - Weld Modes: Pulsed, step, no-pulsed, S3, pulsed S3
+ - Arc Start: High-frequency with optional advanced start modes
+ - Dimensions: 11"" H x 22.27"" W x 18.75"" D
+ - Weight: 66 lbs (30 kg)
+ - I/O Devices: 2 USB ports, 1 Gigabit Ethernet (optional)
+ - WDR Capability: Standard with data export to CSV format
+ - Optional Accessories: Water cooler, remote pendant, extension cables"
+"Thin-Wall Welding Excellence: Low-Current Optimization for M217 LC - Specialized low-current performance ensures precise arc control on thin-wall tubing, reducing heat-affected zone and minimizing weld distortion in critical semiconductor, pharmaceutical, and aerospace applications.","The M217 POWER SUPPLY TOP ASSY LC represents the evolution of orbital welding technology, specifically optimized for low-current applications on thin-wall tubing and pipes. The 12-inch color touch-screen provides an intuitive user interface with graphical weld monitoring and schedule navigation. Enhanced low-current performance ensures precise arc control below 20A, critical for semiconductor, pharmaceutical, and aerospace applications requiring minimal heat input. The extensive weld schedule memory accommodates up to 1000 procedures with 99 levels each, providing unprecedented flexibility for complex welding requirements. Weld Data Recording captures comprehensive welding parameters for quality assurance and regulatory compliance.","- Model Designation: M217 LC (Low Current variant)
+ - Weld Current: 5-150A, 100% duty cycle at specified input
+ - Input Power: 100-240 VAC, 50/60 Hz, single phase
+ - Low-Current Capability: Optimized performance below 20A
+ - Current Regulation: Â±0.5% accuracy at low currents
+ - Pulse Rate: 0.05-50 PPS programmable
+ - Memory Capacity: 1000+ weld schedules with 99 levels per schedule
+ - Display: 12-inch color touch-screen with tilt capability
+ - Weld Modes: Pulsed, step, no-pulsed, S3, pulsed S3
+ - Arc Start: High-frequency with optional advanced start modes
+ - Dimensions: 11"" H x 22.27"" W x 18.75"" D
+ - Weight: 66 lbs (30 kg)
+ - I/O Devices: 2 USB ports, 1 Gigabit Ethernet (optional)
+ - WDR Capability: Standard with data export to CSV format
+ - Optional Accessories: Water cooler, remote pendant, extension cables"
+"Portable Excellence for Orbital Welding: M217P WDR Advanced Capability in Compact Form - The M217P delivers advanced orbital welding technology in a portable package, enabling field installation, maintenance welding, and remote applications without sacrificing functionality.","The M217P POWER SUPPLY TOP ASSY WDR represents the pinnacle of portable orbital welding technology, combining the advanced features of the M217 in a compact, lightweight package designed for field applications and high-mobility scenarios. The 10-inch touchscreen display provides intuitive operator control with real-time weld monitoring and graphical schedule navigation. The integrated Weld Data Recording system captures comprehensive welding parameters for quality assurance and regulatory documentation. At only 66 lbs with a convenient one-hand carry handle, the M217P enables operators to transport advanced orbital welding capability to remote worksites. The system maintains full compatibility with all Arc Machines fusion weld heads produced since 1976, ensuring integration with existing equipment infrastructure.","- Model: M217P WDR (Portable Fusion variant)
+ - Weld Current: 5-150A, 100% duty cycle at 110V/30A or 220V/20A
+ - Input Power: 100-240 VAC, 50/60 Hz, single phase, 20A service
+ - Current Regulation: Â±1% constant current DC
+ - Pulse Rate: 0.05-50 PPS programmable
+ - Memory Capacity: 1000+ weld schedules with 99 levels per schedule
+ - Display: 10-inch color touch-screen with tilt capability
+ - Weld Modes: Pulsed, step, no-pulsed, S3, pulsed S3
+ - Dimensions: 18.30"" H x 18.87"" W x 14.0"" D
+ - Weight: 66 lbs (30 kg) - 9% lighter than M205
+ - I/O Devices: 2 USB ports, 1 Gigabit Ethernet
+ - WDR Capability: Standard with CSV export capability
+ - Water Cooler: Optional (sold separately)
+ - Portability: One-hand carry handle for field mobility
+ - Certifications: UL, CE, Class I equipment"
+"Portable Excellence for Orbital Welding: M217P WDR Advanced Capability in Compact Form - The M217P delivers advanced orbital welding technology in a portable package, enabling field installation, maintenance welding, and remote applications without sacrificing functionality.","The M217P POWER SUPPLY TOP ASSY WDR represents the pinnacle of portable orbital welding technology, combining the advanced features of the M217 in a compact, lightweight package designed for field applications and high-mobility scenarios. The 10-inch touchscreen display provides intuitive operator control with real-time weld monitoring and graphical schedule navigation. The integrated Weld Data Recording system captures comprehensive welding parameters for quality assurance and regulatory documentation. At only 66 lbs with a convenient one-hand carry handle, the M217P enables operators to transport advanced orbital welding capability to remote worksites. The system maintains full compatibility with all Arc Machines fusion weld heads produced since 1976, ensuring integration with existing equipment infrastructure.","- Model: M217P WDR (Portable Fusion variant)
+ - Weld Current: 5-150A, 100% duty cycle at 110V/30A or 220V/20A
+ - Input Power: 100-240 VAC, 50/60 Hz, single phase, 20A service
+ - Current Regulation: Â±1% constant current DC
+ - Pulse Rate: 0.05-50 PPS programmable
+ - Memory Capacity: 1000+ weld schedules with 99 levels per schedule
+ - Display: 10-inch color touch-screen with tilt capability
+ - Weld Modes: Pulsed, step, no-pulsed, S3, pulsed S3
+ - Dimensions: 18.30"" H x 18.87"" W x 14.0"" D
+ - Weight: 66 lbs (30 kg) - 9% lighter than M205
+ - I/O Devices: 2 USB ports, 1 Gigabit Ethernet
+ - WDR Capability: Standard with CSV export capability
+ - Water Cooler: Optional (sold separately)
+ - Portability: One-hand carry handle for field mobility
+ - Certifications: UL, CE, Class I equipment"
+Advanced Cooling Technology: Modern orbital welding demands sophisticated thermal management with integrated digital monitoring to maintain optimal performance and prevent downtime from thermal-related failures. The M2Y7-CW Advanced Water Cooling Unit delivers this integrated solution.,"The M2Y7-CW Water Cooling Unit represents advanced thermal management technology for orbital welding applications. Designed specifically for integration with Model 217 power supplies, this unit features stackable design that saves valuable floor and bench space. With independent operation capability, the M2Y7-CW can function stand-alone when needed, providing system flexibility. The unit includes comprehensive monitoring for coolant flow, level, and temperature, with automatic fault detection that communicates directly to the power supply. Service and Ethernet cable extensions allow the weld head to operate at distances up to 100 feet from the cooling unit, enabling flexible shop layouts.","- Cooling Capacity: 600 BTU/hr
+ - Reservoir Capacity: 2.5 gallons (9.5 L)
+ - Max Coolant Flow Rate: 0.8 gpm (6.8 lpm)
+ - Pump Pressure: 60 psig or 4.08 bar
+ - Maximum Vertical Lift: 30 ft (14.2 M)
+ - Maximum Hose Length: 100 ft (47.2 M)
+ - Power Input: 110-230 VAC, 1 phase, 50/60 Hz
+ - Operating Temperature: Digital display with monitoring"
+"Next-Generation Fixed Configuration: Stable, consistent welding operations for dedicated applications require streamlined power supply configuration without complex switching parameters. The Model 317 fixed configuration delivers this specialized capability.","The Model 317 Power Supply represents the next generation of orbital welding technology from Arc Machines, featuring a fixed configuration optimized for stable, consistent welding operations. With up to 350 amperes and 100% duty cycle capability, the Model 317 accommodates demanding high-production welding environments. The fixed configuration provides streamlined operation without complex switching parameters, making it ideal for dedicated applications. Compatible with all AMI fusion weld heads, the Model 317 features advanced control and interface technology combining 40 years of orbital welding expertise with modern computer control systems. The power supply supports single or multipass welding schedule programming with complete data analytics capabilities.","- Input Power: 208-480 VAC, 50/60 Hz, 1.3 phase
+ - Weld Current: Up to 350 A
+ - Duty Cycle: 100%
+ - Dimensions: Height 20.5"", Width 29.5"", Depth 17.75""
+ - Features: Fixed configuration for stable welding
+ - Memory: 1000+ weld schedules
+ - Control: Windows-based computer control
+ - Compatible: All AMI fusion weld heads"
+"Next-Generation Fixed Configuration: Stable, consistent welding operations for dedicated applications require streamlined power supply configuration without complex switching parameters. The Model 317 fixed configuration delivers this specialized capability.","The Model 317 Power Supply represents the next generation of orbital welding technology from Arc Machines, featuring a fixed configuration optimized for stable, consistent welding operations. With up to 350 amperes and 100% duty cycle capability, the Model 317 accommodates demanding high-production welding environments. The fixed configuration provides streamlined operation without complex switching parameters, making it ideal for dedicated applications. Compatible with all AMI fusion weld heads, the Model 317 features advanced control and interface technology combining 40 years of orbital welding expertise with modern computer control systems. The power supply supports single or multipass welding schedule programming with complete data analytics capabilities.","- Input Power: 208-480 VAC, 50/60 Hz, 1.3 phase
+ - Weld Current: Up to 350 A
+ - Duty Cycle: 100%
+ - Dimensions: Height 20.5"", Width 29.5"", Depth 17.75""
+ - Features: Fixed configuration for stable welding
+ - Memory: 1000+ weld schedules
+ - Control: Windows-based computer control
+ - Compatible: All AMI fusion weld heads"
+Next-Generation Switching Configuration: Advanced production environments often require flexible system configuration with programmable multi-parameter control. The Model 317 switching configuration provides this enhanced capability.,"The Model 317 Power Supply Switching Configuration provides flexible orbital welding capability with advanced programmable controls. This variant features the same 350-ampere capacity and 100% duty cycle as the fixed version but includes switching functionality for applications requiring multiple welding parameters or equipment configurations. The advanced programmable features enable users to modify weld schedules on-the-fly, adjust pulsing parameters, and synchronize manipulator operations. Compatible with all AMI fusion weld heads, the switching configuration supports vision system integration and advanced orbital analytics for maximum production efficiency.","- Input Power: 208-480 VAC, 50/60 Hz, 1.3 phase
+ - Weld Current: Up to 350 A
+ - Duty Cycle: 100%
+ - Dimensions: Height 20.5"", Width 29.5"", Depth 17.75""
+ - Features: Switching configuration for flexibility
+ - Memory: 1000+ weld schedules
+ - Control: Advanced programmable systems
+ - Compatible: All AMI fusion weld heads"
+Next-Generation Switching Configuration: Advanced production environments often require flexible system configuration with programmable multi-parameter control. The Model 317 switching configuration provides this enhanced capability.,"The Model 317 Power Supply Switching Configuration provides flexible orbital welding capability with advanced programmable controls. This variant features the same 350-ampere capacity and 100% duty cycle as the fixed version but includes switching functionality for applications requiring multiple welding parameters or equipment configurations. The advanced programmable features enable users to modify weld schedules on-the-fly, adjust pulsing parameters, and synchronize manipulator operations. Compatible with all AMI fusion weld heads, the switching configuration supports vision system integration and advanced orbital analytics for maximum production efficiency.","- Input Power: 208-480 VAC, 50/60 Hz, 1.3 phase
+ - Weld Current: Up to 350 A
+ - Duty Cycle: 100%
+ - Dimensions: Height 20.5"", Width 29.5"", Depth 17.75""
+ - Features: Switching configuration for flexibility
+ - Memory: 1000+ weld schedules
+ - Control: Advanced programmable systems
+ - Compatible: All AMI fusion weld heads"
+Integrated Thermal Management: Efficient space utilization in modern production facilities demands compact integrated systems where cooling units stack directly on power supplies. The M317CW cooling unit achieves this integration.,"The M317CW Advanced Water Cooling Unit represents state-of-the-art thermal management designed specifically for Model 317 power supply integration. With 600 BTU/hr cooling capacity, this unit maintains optimal coolant temperatures during extended high-duty cycle welding operations. The stackable design allows the Model 317 power supply to mount directly on top, creating a compact integrated system. Digital interface with independent operation capability provides system flexibility, while Ethernet connectivity enables real-time coolant monitoring and fault reporting to the power supply. The cooling unit includes comprehensive sensing for flow, level, and temperature, with automatic shutdown protection if coolant flow becomes insufficient.","- Cooling Capacity: 600 BTU/hr
+ - Reservoir Capacity: 2.5 gallons (9.5 L)
+ - Max Coolant Flow Rate: 0.8 gpm (6.8 lpm)
+ - Pump Pressure: 60 psig
+ - Maximum Hose Length: 100 ft
+ - Power Input: 110-230 VAC, 1 phase, 50/60 Hz
+ - Interface: Digital with independent operation
+ - Sensing: Flow, level, and temperature monitoring"
+Advanced Orbital Welding Automation: The most demanding production environments require maximum automation capability with complete control integration and data acquisition. The Model 415 delivers this advanced capability.,"The Model 415 Power Supply represents the most advanced orbital welding automation system available from Arc Machines. This state-of-the-art computer-controlled GTAW power source provides 5-400 amperes with 100% duty cycle capability for demanding production environments. The integrated system includes automatic water cooling, multi-servo motor control, and comprehensive weld data acquisition. The top assembly contains all power generation, control electronics, and servo drive circuits necessary for complete orbital welding automation. Compatible with all AMI orbital and fixed automation weld heads, the Model 415 accommodates applications ranging from precision tube welding to heavy-duty pipe fabrication.","- Type: Integrated GTAW power source top section
+ - Current Output: 5-400 A, 100% duty cycle
+ - Control: Computer-controlled solid state circuits
+ - Features: Pulsed current capability
+ - Motor Servos: 4 standard closed-loop servos
+ - Memory: 1000+ weld programs
+ - Dimensions: Part of 415 base assembly
+ - Weight: Approximately 100-120 lbs"
+Advanced Orbital Welding Automation: The most demanding production environments require maximum automation capability with complete control integration and data acquisition. The Model 415 delivers this advanced capability.,"The Model 415 Power Supply represents the most advanced orbital welding automation system available from Arc Machines. This state-of-the-art computer-controlled GTAW power source provides 5-400 amperes with 100% duty cycle capability for demanding production environments. The integrated system includes automatic water cooling, multi-servo motor control, and comprehensive weld data acquisition. The top assembly contains all power generation, control electronics, and servo drive circuits necessary for complete orbital welding automation. Compatible with all AMI orbital and fixed automation weld heads, the Model 415 accommodates applications ranging from precision tube welding to heavy-duty pipe fabrication.","- Type: Integrated GTAW power source top section
+ - Current Output: 5-400 A, 100% duty cycle
+ - Control: Computer-controlled solid state circuits
+ - Features: Pulsed current capability
+ - Motor Servos: 4 standard closed-loop servos
+ - Memory: 1000+ weld programs
+ - Dimensions: Part of 415 base assembly
+ - Weight: Approximately 100-120 lbs"
+"Precision Bench-Top Welding Systems: Small component production in semiconductor, aerospace, and biopharmaceutical industries demands precision welding equipment with high duty cycle capability. The Model 4-500 provides this specialized capability.","The Model 4-500 Weld Head represents an advanced fully-integrated orbital weld head system designed for bench-top production welding of small components. The precision gear-drive system with ball bearings ensures reliable, repeatable rotation from 1.00 to 20.00 RPM. Water-cooled base unit and tooling facilitate high duty cycle operation, allowing extended production runs without thermal limitations. The ceramic heat shields protect the housing from excessive heat while enabling maximum temperature operation. Torque-limited clutch protects the drive-train from overload damage, ensuring long-term reliability. Compatible with all AMI power supplies and featuring various tooling options, the Model 4-500 serves semiconductor, aerospace, biopharmaceutical, and dairy industries requiring high-integrity welded assemblies.","- Tube Size Range: 0.093"" - 0.500"" (2.4 - 12.7 mm)
+ - Maximum Weld Current: 75 A
+ - Rotation Speed: 1.00 - 20.00 RPM
+ - Tungsten Size: 0.040"" (1 mm)
+ - Tooling Plate: 12"" x 12"" (305 x 305 mm)
+ - Cable Length: 20 feet (6.1 m)
+ - Material: Stainless steel gear-drive
+ - Cooling: Water-cooled base unit"
+Premium Large-Diameter Solution: Large diameter applications requiring advanced features and superior control precision benefit from the Model 79A-6625's enhanced capabilities. This represents premium large-diameter welding technology.,"The Model 79A-6625 Advanced Weld Head represents the premium large-diameter model in the advanced Model 79A series, optimized for precision welding of pipe from 2.00 to 6.625 inches OD. The enhanced design accommodates wall thicknesses up to 0.75 inches for heavy-duty large-diameter applications. The advanced integral clamping system features improved automation for faster setup and adjustment. Superior servo motor control enables precise arc voltage management, synchronized wire feeding, and advanced oscillation patterns beyond standard Model 79 capabilities. Rotation speed from 0.05 to 2.5 RPM provides flexibility for diverse materials and joint designs. Enhanced lead/lag adjustment capability (+/-12 degrees) enables superior torch positioning for complex joint geometries. The 200-ampere water-cooled torch delivers 100% duty cycle with advanced arc control. The Model 79A-6625 represents the ultimate in advanced economical large-diameter precision orbital welding.","- Tube/Pipe OD Range: 2.00"" - 6.625"" (50 - 170 mm)
+ - Wall Thickness: Up to 0.75"" (19 mm)
+ - Rotation Speed: 0.05 - 2.5 RPM
+ - Torch: 200A water-cooled continuous duty
+ - Lead/lag Adjustment: +/- 12Â°
+ - Cross-seam: +/- 0.375"" (9.53 mm)
+ - Enhanced Electronics: Advanced servo control
+ - Weight (less cables): 24 lbs (10.9 kg)"
+Premium Large-Diameter Solution: Large diameter applications requiring advanced features and superior control precision benefit from the Model 79A-6625's enhanced capabilities. This represents premium large-diameter welding technology.,"The Model 79A-6625 Advanced Weld Head represents the premium large-diameter model in the advanced Model 79A series, optimized for precision welding of pipe from 2.00 to 6.625 inches OD. The enhanced design accommodates wall thicknesses up to 0.75 inches for heavy-duty large-diameter applications. The advanced integral clamping system features improved automation for faster setup and adjustment. Superior servo motor control enables precise arc voltage management, synchronized wire feeding, and advanced oscillation patterns beyond standard Model 79 capabilities. Rotation speed from 0.05 to 2.5 RPM provides flexibility for diverse materials and joint designs. Enhanced lead/lag adjustment capability (+/-12 degrees) enables superior torch positioning for complex joint geometries. The 200-ampere water-cooled torch delivers 100% duty cycle with advanced arc control. The Model 79A-6625 represents the ultimate in advanced economical large-diameter precision orbital welding.","- Tube/Pipe OD Range: 2.00"" - 6.625"" (50 - 170 mm)
+ - Wall Thickness: Up to 0.75"" (19 mm)
+ - Rotation Speed: 0.05 - 2.5 RPM
+ - Torch: 200A water-cooled continuous duty
+ - Lead/lag Adjustment: +/- 12Â°
+ - Cross-seam: +/- 0.375"" (9.53 mm)
+ - Enhanced Electronics: Advanced servo control
+ - Weight (less cables): 24 lbs (10.9 kg)"
+"Advanced Pipe Welding Automation: The M81C series incorporates cutting-edge servo control technology to automate critical welding parameters including arc voltage, torch oscillation, wire feed, and rotation speed, enabling consistent, defect-free welds on complex pipe geometries while minimizing operator error and maximizing production efficiency in demanding industrial environments.","The M81C Tilt Weld Head Top Assembly represents the pinnacle of orbital pipe welding technology, featuring advanced programmable arc voltage control and motorized torch tilt functionality. This system is specifically engineered for complex pipe geometries including flanges, sockets, and branch connections that require precise torch positioning. The servo-controlled mechanisms enable synchronized operations of rotation, arc voltage, wire feed, and torch oscillation, all working in concert to produce consistently high-quality welds. The 200-ampere water-cooled torch maintains optimal performance during extended welding sequences, while the rapid mount and dismount capability (approximately 30 seconds) significantly improves production efficiency. This weld head is particularly valued in applications where joint accessibility is limited and precision control is paramount.","- Pipe OD Range: 1.9"" - 5.563"" (48 - 141 mm)
+- Torch Oscillation Stroke: 0.31"" (7.87 mm)
+- Wire Feed Speed: 1.0 - 100 IPM (25 - 2540 mm/min.)
+- Travel Speeds: 0.1 - 10 IPM (2.5 - 250 mm/min.)
+- AVC Stroke: 0.750"" (2.4 or 3.2 mm Ø)
+- Tungsten Size: 3/32"" or 1/8"" (2.4 or 3.2 mm Ø)
+- Torch: Water-cooled, 200 A DC, 100% Duty Cycle
+- Tilt Range: +/-15° in/out, 0.25"" (6.35 mm) manual
+- Weight: 6 lbs (2.7 kg) less cables"
+"Advanced Pipe Welding Automation: The M81C series incorporates cutting-edge servo control technology to automate critical welding parameters including arc voltage, torch oscillation, wire feed, and rotation speed, enabling consistent, defect-free welds on complex pipe geometries while minimizing operator error and maximizing production efficiency in demanding industrial environments.","The M81C Tilt Weld Head Top Assembly represents the pinnacle of orbital pipe welding technology, featuring advanced programmable arc voltage control and motorized torch tilt functionality. This system is specifically engineered for complex pipe geometries including flanges, sockets, and branch connections that require precise torch positioning. The servo-controlled mechanisms enable synchronized operations of rotation, arc voltage, wire feed, and torch oscillation, all working in concert to produce consistently high-quality welds. The 200-ampere water-cooled torch maintains optimal performance during extended welding sequences, while the rapid mount and dismount capability (approximately 30 seconds) significantly improves production efficiency. This weld head is particularly valued in applications where joint accessibility is limited and precision control is paramount.","- Pipe OD Range: 1.9"" - 5.563"" (48 - 141 mm)
+- Torch Oscillation Stroke: 0.31"" (7.87 mm)
+- Wire Feed Speed: 1.0 - 100 IPM (25 - 2540 mm/min.)
+- Travel Speeds: 0.1 - 10 IPM (2.5 - 250 mm/min.)
+- AVC Stroke: 0.750"" (2.4 or 3.2 mm Ø)
+- Tungsten Size: 3/32"" or 1/8"" (2.4 or 3.2 mm Ø)
+- Torch: Water-cooled, 200 A DC, 100% Duty Cycle
+- Tilt Range: +/-15° in/out, 0.25"" (6.35 mm) manual
+- Weight: 6 lbs (2.7 kg) less cables"
+"Compact Orbital Pipe Welding: The M81C single-entry configuration provides Arc Machines' complete automation suite within a streamlined, space-efficient package, optimizing weld quality while reducing equipment complexity and setup time, making it the preferred choice for sequential pipe welding operations in space-restricted applications.","The M81C Weld Head Top Assembly with Single Entry Torch configuration provides a streamlined approach to compact pipe welding in space-restricted environments. Featuring the full suite of Arc Machines automation capabilities including AVC, torch oscillation, and synchronized wire feed, this assembly delivers professional-grade orbital welding without the complexity of multi-torch systems. The single-entry design simplifies setup and reduces torch interference, making it ideal for sequential pipe welding operations. The water-cooled torch rated for 200 amperes ensures sustained performance during high-duty-cycle applications, while the compact assembly fits through restrictive access points. This configuration has proven invaluable in shipbuilding, chemical processing plants, and nuclear power facilities.","- Pipe OD Range: 1.9"" - 5.563"" (48 - 141 mm)
+- Torch Type: Single entry water-cooled 200A DC
+- Wire Feed Speed: 1.0 - 100 IPM (25 - 2540 mm/min.)
+- Travel Speeds: 0.1 - 10 IPM (2.5 - 250 mm/min.)
+- Torch Oscillation: 0.31"" (7.87 mm) stroke
+- AVC Stroke: 0.750"" (2.4 or 3.2 mm Ø)
+- Servo-controlled rotation up to 10 RPM
+- Weight: 6.5 lbs (2.95 kg) less cables"
+Not Found,Not Found,Not Found
+Not Found,Not Found,Not Found
+"Intermediate-Diameter Precision Welding: The M8-4000 extends orbital welding capability to medium-diameter tubes while maintaining the narrow-profile design that makes the M8 series ideal for confined-space applications, ensuring consistent high-quality welds across diverse industrial applications from semiconductor manufacturing to food processing.","The M8-4000 Weld Head Top Assembly extends the capability of the M8 series to handle pipes from 0.50"" through 4.094"" OD while maintaining the same precision and reliability that defines the Arc Machines product line. The dual-sided clamping design provides exceptional concentricity control even with significant diameter variation, ensuring consistent high-quality welds throughout the tube diameter range. The narrow width profile continues to make this head suitable for limited-clearance applications, while the robust construction handles the increased mechanical loads associated with larger diameter tubes. Water-cooling integration enables sustained high-duty-cycle operation, and the comprehensive range of inserts accommodates metric and imperial tube sizes for maximum application flexibility.","- Tube/Pipe OD Range: 0.50"" - 4.094"" (12.7 - 104 mm)
+- Wall Thicknesses: 0.025"" - 0.160"" (0.635 - 4 mm)
+- Clamping Type: Two-sided precision-machined mechanism
+- Width Dimension: 1.75"" (44.45 mm) compact design
+- Concentric Positioning: Automatic diameter variance compensation
+- Water Cooling: Yes - compatible with cooled systems
+- Collet Accommodations: Multiple sizes available
+- Weight: 4.2 lbs (1.9 kg)"
+"Intermediate-Diameter Precision Welding: The M8-4000 extends orbital welding capability to medium-diameter tubes while maintaining the narrow-profile design that makes the M8 series ideal for confined-space applications, ensuring consistent high-quality welds across diverse industrial applications from semiconductor manufacturing to food processing.","The M8-4000 Weld Head Top Assembly extends the capability of the M8 series to handle pipes from 0.50"" through 4.094"" OD while maintaining the same precision and reliability that defines the Arc Machines product line. The dual-sided clamping design provides exceptional concentricity control even with significant diameter variation, ensuring consistent high-quality welds throughout the tube diameter range. The narrow width profile continues to make this head suitable for limited-clearance applications, while the robust construction handles the increased mechanical loads associated with larger diameter tubes. Water-cooling integration enables sustained high-duty-cycle operation, and the comprehensive range of inserts accommodates metric and imperial tube sizes for maximum application flexibility.","- Tube/Pipe OD Range: 0.50"" - 4.094"" (12.7 - 104 mm)
+- Wall Thicknesses: 0.025"" - 0.160"" (0.635 - 4 mm)
+- Clamping Type: Two-sided precision-machined mechanism
+- Width Dimension: 1.75"" (44.45 mm) compact design
+- Concentric Positioning: Automatic diameter variance compensation
+- Water Cooling: Yes - compatible with cooled systems
+- Collet Accommodations: Multiple sizes available
+- Weight: 4.2 lbs (1.9 kg)"
+"Large-Diameter Industrial Tube Welding: The M8-6625 represents the maximum capability of the M8 series, engineered to handle substantial tube diameters while maintaining the precision-based dual-sided clamping and narrow-profile design that defines the M8 family's commitment to confined-space orbital welding excellence.","The M8-6625 Weld Head Top Assembly represents the largest model in the narrow-profile M8 series, accommodating tubes from 2"" through 6.625"" OD while maintaining the compact design philosophy. The precision-engineered dual-sided clamping mechanism ensures perfect alignment of large-diameter components, critical for producing defect-free orbital welds on substantial pipe sections. The water-cooling capability is particularly valuable for this larger model, enabling extended duty cycles in high-production manufacturing environments. The robust construction accommodates the mechanical stresses associated with large-diameter pipe welding, while the extensive selection of precision-machined collets ensures optimal performance across a wide range of tube materials including stainless steel, carbon steel, and exotic alloys.","- Tube/Pipe OD Range: 2.00"" - 6.625"" (51 - 159 mm)
+- Wall Thicknesses: 0.025"" - 0.160"" (0.635 - 4 mm)
+- Clamping System: Two-sided precision-machined
+- Width Profile: 1.75"" (44.45 mm) narrow design
+- Diameter Compensation: Positive force concentric alignment
+- Water Cooling: Yes - for increased duty cycles
+- Collet Availability: Metric and imperial sizes in stock
+- Weight: 5.1 lbs (2.3 kg)"
+"Large-Diameter Industrial Tube Welding: The M8-6625 represents the maximum capability of the M8 series, engineered to handle substantial tube diameters while maintaining the precision-based dual-sided clamping and narrow-profile design that defines the M8 family's commitment to confined-space orbital welding excellence.","The M8-6625 Weld Head Top Assembly represents the largest model in the narrow-profile M8 series, accommodating tubes from 2"" through 6.625"" OD while maintaining the compact design philosophy. The precision-engineered dual-sided clamping mechanism ensures perfect alignment of large-diameter components, critical for producing defect-free orbital welds on substantial pipe sections. The water-cooling capability is particularly valuable for this larger model, enabling extended duty cycles in high-production manufacturing environments. The robust construction accommodates the mechanical stresses associated with large-diameter pipe welding, while the extensive selection of precision-machined collets ensures optimal performance across a wide range of tube materials including stainless steel, carbon steel, and exotic alloys.","- Tube/Pipe OD Range: 2.00"" - 6.625"" (51 - 159 mm)
+- Wall Thicknesses: 0.025"" - 0.160"" (0.635 - 4 mm)
+- Clamping System: Two-sided precision-machined
+- Width Profile: 1.75"" (44.45 mm) narrow design
+- Diameter Compensation: Positive force concentric alignment
+- Water Cooling: Yes - for increased duty cycles
+- Collet Availability: Metric and imperial sizes in stock
+- Weight: 5.1 lbs (2.3 kg)"
+"Versatile Mid-Range Fusion Welding: The M9-1500 provides exceptional flexibility for intermediate-diameter tubes and fittings, combining the precision concentricity control of Arc Machines' dual-sided clamping technology with the convenience of a flip-up viewing window that enables real-time fit-up verification and quality monitoring.","The M9-1500 Weld Head Top Assembly is an intermediate-sized fusion weld head engineered for tubes and fittings ranging from 1/4"" through 1.5"" OD, offering exceptional precision and reliability in demanding applications. The dual-sided clamping mechanism provides superior concentricity control without requiring preliminary tack welding, streamlining production workflows. The integrated flip-up viewing window enables operators to verify component fit-up before welding initiation, reducing defect rates and rework costs. The water-cooling system allows extended duty cycles for high-production applications, while compatibility with all Arc Machines power supplies ensures seamless integration into existing welding systems. This weld head has become the industry standard for pharmaceutical, semiconductor, and high-purity gas distribution applications.","- Tube/Pipe OD Range: 0.250"" - 2.500"" (6.3 - 38.1 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided mechanism for concentric alignment
+- Viewing Window: Flip-up design for fit-up verification
+- Water Cooling: Plumbed for extended duty cycles
+- Insert Sizes: Easily replaced, size-specific clamps
+- Process: GTAW (TIG) fusion welding
+- Weight: 3.8 lbs (1.7 kg)"
+"Versatile Mid-Range Fusion Welding: The M9-1500 provides exceptional flexibility for intermediate-diameter tubes and fittings, combining the precision concentricity control of Arc Machines' dual-sided clamping technology with the convenience of a flip-up viewing window that enables real-time fit-up verification and quality monitoring.","The M9-1500 Weld Head Top Assembly is an intermediate-sized fusion weld head engineered for tubes and fittings ranging from 1/4"" through 1.5"" OD, offering exceptional precision and reliability in demanding applications. The dual-sided clamping mechanism provides superior concentricity control without requiring preliminary tack welding, streamlining production workflows. The integrated flip-up viewing window enables operators to verify component fit-up before welding initiation, reducing defect rates and rework costs. The water-cooling system allows extended duty cycles for high-production applications, while compatibility with all Arc Machines power supplies ensures seamless integration into existing welding systems. This weld head has become the industry standard for pharmaceutical, semiconductor, and high-purity gas distribution applications.","- Tube/Pipe OD Range: 0.250"" - 2.500"" (6.3 - 38.1 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided mechanism for concentric alignment
+- Viewing Window: Flip-up design for fit-up verification
+- Water Cooling: Plumbed for extended duty cycles
+- Insert Sizes: Easily replaced, size-specific clamps
+- Process: GTAW (TIG) fusion welding
+- Weight: 3.8 lbs (1.7 kg)"
+"Ultra-Precision Miniature Welding: The M9-250 represents Arc Machines' specialized solution for welding miniature components with outer diameters up to 1/4"", featuring unique design elements that ensure perfect alignment on delicate tubing while maintaining the precision required for aerospace, medical, and instrumentation applications.","The M9-250 Weld Head Top Assembly is a precision micro welding system specifically engineered for ultra-miniature applications requiring fusion welding of components up to 1/4"" (6.35 mm) OD, including mini-fittings, needle valves, and miniature tube assemblies. The unique hardened clamp plate design with integrated visual sight window enables operators to achieve perfect concentricity on extremely small diameter components, even in applications with severely restricted radial clearance. The specialized latch mechanism provides a firm, consistent grip without deforming delicate miniature tubing, while maintaining the precise alignment essential for high-quality orbital welds. This weld head has become the standard for aerospace, medical device, and precision instrumentation applications.","- Tube/Pipe OD Range: 0.093"" - 0.250"" (2.3 - 6.35 mm)
+- Wall Thicknesses: 0.01"" - 0.05"" (0.25 - 1.27 mm)
+- Clamping: Two sets of hardened clamp plates
+- Viewing Window: Visual sight window included
+- Latch Design: Unique mechanism for firm grip
+- Radial Clearance: Extremely tight limitations accommodated
+- Process: GTAW (TIG) fusion butt welding
+- Weight: 1.2 lbs (0.54 kg)"
+"Standard Diameter Versatility: The M9-2500 combines precision, reliability, and flexibility across the standard 3/4"" through 2.5"" OD range, incorporating dual-sided clamping with flip-up viewing window for complete operational control and real-time quality monitoring in demanding production environments.","The M9-2500 Weld Head Top Assembly combines precision and versatility for standard mid-range tube and pipe applications spanning 3/4"" through 2.5"" OD. The dual-sided clamping system provides consistent concentricity control across the entire diameter range, while the flip-up viewing window enables real-time fit-up verification and quality monitoring. The water-cooling integration allows operators to extend duty cycles in demanding production environments while maintaining optimal weld quality. The extensive range of available size-specific clamps ensures smooth operation on both metric and imperial tube sizes, making this weld head exceptionally flexible for diverse manufacturing applications across semiconductor, pharmaceutical, and industrial gas industries.","- Tube/Pipe OD Range: 0.750"" - 2.500"" (19 - 63.5 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided mechanism
+- Viewing Window: Flip-up design for component verification
+- Water Cooling: Plumbed capability
+- Collet Types: Various sizes for diameter accommodation
+- Process: GTAW (TIG) fusion welding
+- Weight: 4.0 lbs (1.8 kg)"
+"Standard Diameter Versatility: The M9-2500 combines precision, reliability, and flexibility across the standard 3/4"" through 2.5"" OD range, incorporating dual-sided clamping with flip-up viewing window for complete operational control and real-time quality monitoring in demanding production environments.","The M9-2500 Weld Head Top Assembly combines precision and versatility for standard mid-range tube and pipe applications spanning 3/4"" through 2.5"" OD. The dual-sided clamping system provides consistent concentricity control across the entire diameter range, while the flip-up viewing window enables real-time fit-up verification and quality monitoring. The water-cooling integration allows operators to extend duty cycles in demanding production environments while maintaining optimal weld quality. The extensive range of available size-specific clamps ensures smooth operation on both metric and imperial tube sizes, making this weld head exceptionally flexible for diverse manufacturing applications across semiconductor, pharmaceutical, and industrial gas industries.","- Tube/Pipe OD Range: 0.750"" - 2.500"" (19 - 63.5 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided mechanism
+- Viewing Window: Flip-up design for component verification
+- Water Cooling: Plumbed capability
+- Collet Types: Various sizes for diameter accommodation
+- Process: GTAW (TIG) fusion welding
+- Weight: 4.0 lbs (1.8 kg)"
+"Large-Diameter Precision Welding: The M9-3500 delivers robust performance for tubes spanning 1"" through 3.5"" OD, incorporating Arc Machines' proven dual-sided clamping technology with extensive collet options for optimal performance across diverse tube materials and industrial applications.","The M9-3500 Weld Head Top Assembly is engineered for larger-diameter tube applications spanning 1"" through 3.5"" OD, offering robust performance in industrial welding environments. The dual-sided clamping mechanism accommodates significant diameter variations while maintaining perfect component concentricity throughout the welding process. The flip-up viewing window provides operators with continuous visual access to the weld joint, enabling real-time quality monitoring and adjustment. The water-cooling system extends operational duty cycles in high-production settings, while the broad range of available collets ensures compatible operation with metric and imperial tube specifications and diverse material compositions.","- Tube/Pipe OD Range: 1.00"" - 3.500"" (25.4 - 88.9 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided concentricity mechanism
+- Viewing Window: Flip-up design
+- Water Cooling: Plumbed for increased duty cycles
+- Insert/Collets: Wide variety available
+- Process: GTAW (TIG) fusion welding
+- Weight: 4.5 lbs (2.0 kg)"
+"Large-Diameter Precision Welding: The M9-3500 delivers robust performance for tubes spanning 1"" through 3.5"" OD, incorporating Arc Machines' proven dual-sided clamping technology with extensive collet options for optimal performance across diverse tube materials and industrial applications.","The M9-3500 Weld Head Top Assembly is engineered for larger-diameter tube applications spanning 1"" through 3.5"" OD, offering robust performance in industrial welding environments. The dual-sided clamping mechanism accommodates significant diameter variations while maintaining perfect component concentricity throughout the welding process. The flip-up viewing window provides operators with continuous visual access to the weld joint, enabling real-time quality monitoring and adjustment. The water-cooling system extends operational duty cycles in high-production settings, while the broad range of available collets ensures compatible operation with metric and imperial tube specifications and diverse material compositions.","- Tube/Pipe OD Range: 1.00"" - 3.500"" (25.4 - 88.9 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided concentricity mechanism
+- Viewing Window: Flip-up design
+- Water Cooling: Plumbed for increased duty cycles
+- Insert/Collets: Wide variety available
+- Process: GTAW (TIG) fusion welding
+- Weight: 4.5 lbs (2.0 kg)"
+"Extra-Large Diameter Industrial Welding: The M9-4500 extends orbital welding capability to substantial pipe sizes while maintaining the precision, reliability, and water-cooled performance that enable sustained high-production operation in demanding petrochemical, power generation, and nuclear facilities.","The M9-4500 Weld Head Top Assembly represents the larger end of the closed fusion weld head spectrum, designed for substantial tubes and pipes ranging from 1.5"" through 4.5"" OD in demanding industrial applications. The precision-engineered dual-sided clamping system manages the mechanical requirements of large-diameter pipe welding while delivering consistent concentricity and weld quality. The water-cooling capability proves essential for sustained high-production operation with large-diameter components, enabling extended duty cycles and consistent thermal management. The robust construction and broad range of available collets make this weld head the preferred choice for heavy-wall pipe applications in petrochemical, power generation, and nuclear facilities.","- Tube/Pipe OD Range: 1.500"" - 4.500"" (38.1 - 114.3 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided mechanism
+- Viewing Window: Flip-up design for fit-up verification
+- Water Cooling: Capability for high-production use
+- Collet Accommodation: Multiple size options
+- Process: GTAW (TIG) fusion welding
+- Weight: 5.3 lbs (2.4 kg)"
+"Extra-Large Diameter Industrial Welding: The M9-4500 extends orbital welding capability to substantial pipe sizes while maintaining the precision, reliability, and water-cooled performance that enable sustained high-production operation in demanding petrochemical, power generation, and nuclear facilities.","The M9-4500 Weld Head Top Assembly represents the larger end of the closed fusion weld head spectrum, designed for substantial tubes and pipes ranging from 1.5"" through 4.5"" OD in demanding industrial applications. The precision-engineered dual-sided clamping system manages the mechanical requirements of large-diameter pipe welding while delivering consistent concentricity and weld quality. The water-cooling capability proves essential for sustained high-production operation with large-diameter components, enabling extended duty cycles and consistent thermal management. The robust construction and broad range of available collets make this weld head the preferred choice for heavy-wall pipe applications in petrochemical, power generation, and nuclear facilities.","- Tube/Pipe OD Range: 1.500"" - 4.500"" (38.1 - 114.3 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided mechanism
+- Viewing Window: Flip-up design for fit-up verification
+- Water Cooling: Capability for high-production use
+- Collet Accommodation: Multiple size options
+- Process: GTAW (TIG) fusion welding
+- Weight: 5.3 lbs (2.4 kg)"
+"Miniature Precision Welding: The M9-500 provides compact air-cooled performance for delicate miniature tubes as small as 3/32"" OD, featuring unique design elements that enable welding in severely confined spaces while maintaining the precision required for aerospace and medical device applications.","The M9-500 Weld Head Top Assembly is a compact air-cooled fusion weld head specifically engineered for miniature tube applications ranging from 3/32"" through 1/2"" OD with exceptionally tight radial clearance requirements. The unique design accommodates stick-out distances as short as 0.25"" (6.35 mm), enabling welding in extremely confined geometries typical of aerospace and medical device applications. The dual-sided clamping mechanism ensures perfect alignment of delicate miniature tubing, while the various TCA cassette options enable rapid changeover between different component sizes. The air-cooled design provides cost-effective operation for standard-duty applications while maintaining exceptional precision.","- Tube/Pipe OD Range: 0.093"" - 0.500"" (2.3 - 12.2 mm)
+- Wall Thicknesses: 0.01"" - 0.05"" (0.25 - 1.27 mm)
+- Clamping: Two-sided precision mechanism
+- Stick-out Length: Minimum 0.25"" (6.35 mm) capability
+- Cooling: Air-cooled design
+- Collet Options: TCA cassettes for various sizes
+- Process: GTAW (TIG) fusion welding
+- Weight: 2.5 lbs (1.1 kg)"
+"High-Performance Miniature Welding: The M9-500C water-cooled variant extends the M9-500's capabilities to high-duty-cycle applications, incorporating a Quick Release Kit for rapid changeover and 360-degree visibility that significantly improves production efficiency in high-volume miniature assembly manufacturing.","The M9-500C Weld Head Top Assembly is the water-cooled variant of the M9-500, engineered for high-duty-cycle miniature tube welding applications requiring maximum thermal performance. The integrated water-cooling system enables extended welding sequences on miniature components without thermal degradation, critical for high-production environments. The Quick Release Kit provides 360-degree visibility of the weld joint and enables remote clamp assembly loading, streamlining setup procedures and improving workflow efficiency. This weld head has become the standard for high-volume production of precision miniature assemblies in aerospace, medical, and semiconductor industries.","- Tube/Pipe OD Range: 0.093"" - 0.500"" (2.3 - 12.2 mm)
+- Wall Thicknesses: 0.01"" - 0.05"" (0.25 - 1.27 mm)
+- Clamping: Two-sided mechanism with quick release
+- Quick Release Kit: Yes - remote clamp loading
+- Water Cooling: Yes - for high duty cycle
+- Visibility: 360-degree joint view capability
+- Process: GTAW (TIG) fusion welding
+- Weight: 2.7 lbs (1.22 kg)"
+"Automated Tube-to-Tubesheet Welding: The M96 represents Arc Machines' specialized solution for high-speed, high-production tube-to-tubesheet welding in heat exchanger manufacturing, featuring pneumatic mandrel operation, enclosed purge chamber, and servo-controlled rotation for consistent autogenous welds.","The M96 Weld Head Top Assembly represents Arc Machines' solution for automated tube-to-tubesheet welding in high-speed, high-production heat exchanger manufacturing environments. The servo-controlled rotation combined with synchronized pulsed-current welding enables consistent autogenous welds on tubes ranging from 0.375"" to 2"" inner diameter mounted in tubesheets. The pneumatic one-button mandrel operation enables rapid mounting and dismounting, critical for high-production efficiency. The completely enclosed purge chamber provides superior inert gas coverage for materials prone to oxidation such as titanium and high-nickel alloys. The water-cooled design enables sustained operation during continuous production runs.","- Tube/Pipe ID Range: 0.375"" - 2.0"" (9.525 - 50.8 mm)
+- Tube/Pipe OD Range: Up to 2.0"" (50.8 mm)
+- Weld Current: Maximum 150 A DC
+- Tungsten Size: 1/16"" or 3/32"" (1.6 or 2.4 mm Ø)
+- Travel/Rotation Speed: 0.1 - 9.9 RPM
+- Mandrel: Pneumatic one-button operation
+- Purge Chamber: Transparent or opaque options
+- Weight: 7 lbs (3.17 kg)"
+"Automated Tube-to-Tubesheet Welding: The M96 represents Arc Machines' specialized solution for high-speed, high-production tube-to-tubesheet welding in heat exchanger manufacturing, featuring pneumatic mandrel operation, enclosed purge chamber, and servo-controlled rotation for consistent autogenous welds.","The M96 Weld Head Top Assembly represents Arc Machines' solution for automated tube-to-tubesheet welding in high-speed, high-production heat exchanger manufacturing environments. The servo-controlled rotation combined with synchronized pulsed-current welding enables consistent autogenous welds on tubes ranging from 0.375"" to 2"" inner diameter mounted in tubesheets. The pneumatic one-button mandrel operation enables rapid mounting and dismounting, critical for high-production efficiency. The completely enclosed purge chamber provides superior inert gas coverage for materials prone to oxidation such as titanium and high-nickel alloys. The water-cooled design enables sustained operation during continuous production runs.","- Tube/Pipe ID Range: 0.375"" - 2.0"" (9.525 - 50.8 mm)
+- Tube/Pipe OD Range: Up to 2.0"" (50.8 mm)
+- Weld Current: Maximum 150 A DC
+- Tungsten Size: 1/16"" or 3/32"" (1.6 or 2.4 mm Ø)
+- Travel/Rotation Speed: 0.1 - 9.9 RPM
+- Mandrel: Pneumatic one-button operation
+- Purge Chamber: Transparent or opaque options
+- Weight: 7 lbs (3.17 kg)"
+"Extreme Space-Constraint Welding: The M9-750 provides specialized ultra-low-profile performance for applications requiring access to exceptionally confined spaces while welding miniature tubes from 3/32"" through 3/4"" OD with exceptional precision and concentricity.","The M9-750 Weld Head Top Assembly is a specialized ultra-low-profile fusion weld head designed specifically for applications requiring access to exceptionally confined spaces while welding miniature tubes from 3/32"" through 3/4"" OD. The innovative low-profile design maintains all essential orbital welding capabilities while reducing height to approximately 1.5"" above the weld joint, enabling operation in applications with severe vertical space constraints. The dual-sided clamping mechanism ensures perfect concentricity on miniature components, while the flip-up viewing window provides full visibility for fit-up verification. This specialized weld head has proven invaluable in aerospace assembly, precision instrumentation, and space-restricted manufacturing environments.","- Tube/Pipe OD Range: 0.093"" - 0.750"" (2.3 - 19 mm)
+- Wall Thicknesses: 0.01"" - 0.05"" (0.25 - 1.27 mm)
+- Clamping: Two-sided ultra-low profile
+- Profile Height: 1.5"" (38.1 mm) minimal
+- Viewing Window: Flip-up design
+- Water Cooling: Optional plumbing available
+- Process: GTAW (TIG) fusion welding
+- Weight: 2.2 lbs (1.0 kg)"
+"Extreme Space-Constraint Welding: The M9-750 provides specialized ultra-low-profile performance for applications requiring access to exceptionally confined spaces while welding miniature tubes from 3/32"" through 3/4"" OD with exceptional precision and concentricity.","The M9-750 Weld Head Top Assembly is a specialized ultra-low-profile fusion weld head designed specifically for applications requiring access to exceptionally confined spaces while welding miniature tubes from 3/32"" through 3/4"" OD. The innovative low-profile design maintains all essential orbital welding capabilities while reducing height to approximately 1.5"" above the weld joint, enabling operation in applications with severe vertical space constraints. The dual-sided clamping mechanism ensures perfect concentricity on miniature components, while the flip-up viewing window provides full visibility for fit-up verification. This specialized weld head has proven invaluable in aerospace assembly, precision instrumentation, and space-restricted manufacturing environments.","- Tube/Pipe OD Range: 0.093"" - 0.750"" (2.3 - 19 mm)
+- Wall Thicknesses: 0.01"" - 0.05"" (0.25 - 1.27 mm)
+- Clamping: Two-sided ultra-low profile
+- Profile Height: 1.5"" (38.1 mm) minimal
+- Viewing Window: Flip-up design
+- Water Cooling: Optional plumbing available
+- Process: GTAW (TIG) fusion welding
+- Weight: 2.2 lbs (1.0 kg)"
+"Maximum-Diameter Industrial Welding: The M9-7500 represents the pinnacle of orbital weld head diameter capability, engineered for substantial tubes up to 7.5"" OD with precision dual-sided clamping and water-cooled performance for sustained high-production operation in demanding industrial environments.","The M9-7500 Weld Head Top Assembly represents the ultimate in large-diameter fusion welding capability, engineered for substantial tubes and pipes ranging from 2.875"" through 7.5"" OD in demanding industrial applications. The precision dual-sided clamping system manages the mechanical demands of large-diameter welding while delivering exceptional concentricity and weld quality. The water-cooling system enables extended duty cycles essential for sustained high-production operation with large-diameter components. The comprehensive range of available collets accommodates both metric and imperial specifications across diverse material compositions including stainless steel, duplex alloys, and exotic high-temperature materials.","- Tube/Pipe OD Range: 2.875"" - 7.500"" (73 - 190.5 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided large diameter mechanism
+- Viewing Window: Flip-up design for verification
+- Water Cooling: Plumbed for extended duty cycles
+- Collet Sizes: Wide variety accommodated
+- Process: GTAW (TIG) fusion welding
+- Weight: 6.8 lbs (3.08 kg)"
+"Maximum-Diameter Industrial Welding: The M9-7500 represents the pinnacle of orbital weld head diameter capability, engineered for substantial tubes up to 7.5"" OD with precision dual-sided clamping and water-cooled performance for sustained high-production operation in demanding industrial environments.","The M9-7500 Weld Head Top Assembly represents the ultimate in large-diameter fusion welding capability, engineered for substantial tubes and pipes ranging from 2.875"" through 7.5"" OD in demanding industrial applications. The precision dual-sided clamping system manages the mechanical demands of large-diameter welding while delivering exceptional concentricity and weld quality. The water-cooling system enables extended duty cycles essential for sustained high-production operation with large-diameter components. The comprehensive range of available collets accommodates both metric and imperial specifications across diverse material compositions including stainless steel, duplex alloys, and exotic high-temperature materials.","- Tube/Pipe OD Range: 2.875"" - 7.500"" (73 - 190.5 mm)
+- Wall Thicknesses: 0.01"" - 0.16"" (0.25 - 4 mm)
+- Clamping: Two-sided large diameter mechanism
+- Viewing Window: Flip-up design for verification
+- Water Cooling: Plumbed for extended duty cycles
+- Collet Sizes: Wide variety accommodated
+- Process: GTAW (TIG) fusion welding
+- Weight: 6.8 lbs (3.08 kg)"
+"Solving Short Stick-Out Challenges: The M9E-2500 enables precision welding of components with minimal straight length, critical for high-purity and aerospace applications where component design constrains traditional clamping approaches.","The M9E-2500 WELD HEAD TOP ASSY is the mid-size member of the Model 9E series, engineered for applications where components don't provide sufficient stick-out for traditional double-sided clamping. The single-sided clamp design with offset electrode positioning provides exceptional flexibility for welding short-length tubing, pipe fittings, and ferrule assemblies. The water-cooled cable design ensures reliable performance during continuous production, while the offset electrode geometry optimizes weld pool visibility and access to difficult-to-reach joints. This configuration is particularly valuable in semiconductor manufacturing, high-purity piping, and aerospace tube assembly applications.","- Process: GTAW (TIG) Fusion Welding
+- Tube Size Range: 1.0"" - 2.5"" (25.4 mm - 63.5 mm) OD
+- Wall Thickness: 0.01"" - 0.16"" (0.25 mm - 4 mm)
+- Clamp Type: Single-sided with offset electrode
+- Drive Motor: 28V DC integral motor
+- Max Current: 200A (pulsed)
+- Max Rotation Speed: 9.9 RPM
+- Electrode Diameter: 1/16"" or 3/32"" (1.6 mm or 2.4 mm)
+- Cable Length: 25 ft (7.6 m) standard
+- Weight: Approximately 7-8 lbs (3.2-3.6 kg)"
+"Solving Short Stick-Out Challenges: The M9E-2500 enables precision welding of components with minimal straight length, critical for high-purity and aerospace applications where component design constrains traditional clamping approaches.","The M9E-2500 WELD HEAD TOP ASSY is the mid-size member of the Model 9E series, engineered for applications where components don't provide sufficient stick-out for traditional double-sided clamping. The single-sided clamp design with offset electrode positioning provides exceptional flexibility for welding short-length tubing, pipe fittings, and ferrule assemblies. The water-cooled cable design ensures reliable performance during continuous production, while the offset electrode geometry optimizes weld pool visibility and access to difficult-to-reach joints. This configuration is particularly valuable in semiconductor manufacturing, high-purity piping, and aerospace tube assembly applications.","- Process: GTAW (TIG) Fusion Welding
+- Tube Size Range: 1.0"" - 2.5"" (25.4 mm - 63.5 mm) OD
+- Wall Thickness: 0.01"" - 0.16"" (0.25 mm - 4 mm)
+- Clamp Type: Single-sided with offset electrode
+- Drive Motor: 28V DC integral motor
+- Max Current: 200A (pulsed)
+- Max Rotation Speed: 9.9 RPM
+- Electrode Diameter: 1/16"" or 3/32"" (1.6 mm or 2.4 mm)
+- Cable Length: 25 ft (7.6 m) standard
+- Weight: Approximately 7-8 lbs (3.2-3.6 kg)"
+"Why use AXXAIR CC122? This orbital saw offers clean, burr-free cuts with scalability for bevelling and welding, perfect for industrial tube processing.","The CC122 provides high-precision cutting without deformation, ideal for stainless steel tubes. Its evolutive design allows transformation into bevelling or welding machines.","- Diameter: Ã¸5 - Ã¸119mm
+- Basic jaws: 1"" to 4.5"" (24 to 121 mm)
+- Additional jaws: .25"" to 4.25"" (5 to 108 mm)
+- Weight: 44 kg (97 lbs)
+- Cutting Precision: Perpendicular cuts < 0.25 mm
+- Motor: Dual-output with 2 blade positions
+- Vibration Level: < 2.5 m/sÂ²"
+"Why use AXXAIR CC122? This orbital saw offers clean, burr-free cuts with scalability for bevelling and welding, perfect for industrial tube processing.","The CC122 provides high-precision cutting without deformation, ideal for stainless steel tubes. Its evolutive design allows transformation into bevelling or welding machines.","- Diameter: Ã¸5 - Ã¸119mm
+- Basic jaws: 1"" to 4.5"" (24 to 121 mm)
+- Additional jaws: .25"" to 4.25"" (5 to 108 mm)
+- Weight: 44 kg (97 lbs)
+- Cutting Precision: Perpendicular cuts < 0.25 mm
+- Motor: Dual-output with 2 blade positions
+- Vibration Level: < 2.5 m/sÂ²"
+Dedicated Cooling Solutions for SAXX Orbital Welding Power Supplies: Maintain optimal performance and reliability with AXXAIR's engineered cooling unit for SAXX series equipment.,"The COOLING UNIT FOR SAXX-200/201 (SCOOL-700) provides dedicated thermal management specifically designed for AXXAIR's SAXX series power supplies. With 700W cooling capacity and intelligent monitoring features, this unit maintains optimal operating temperatures while alerting operators to low coolant conditions. The detachable design allows for convenient transport and installation in various welding environments.","- Model: SCOOL-700
+ - Cooling Capacity: 700W
+ - Weight: 8 kg (17.6 lbs)
+ - Dimensions: 468 mm x 249 mm x 146 mm (18.4"" x 9.7"" x 5.7"")
+ - Detachable design for portability
+ - Flow alarm function
+ - Coolant level monitoring
+ - Compatible with SAXX-200, SAXX-201, and related models
+ - Refrigeration-type cooling system"

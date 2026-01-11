@@ -1,0 +1,250 @@
+Prompt:
+
+I was doing a gig on Upwork that requires collecting data for some kind of orbital welding business. However, the client just asked for some updates. he told me:
+
+"So the website people sent us different headers they want us to use for the Excel file. We need to take the data we have scraped and fill in the new sheet with the updates headers. There are far less headers in the new one and we need to try and break up some of that data. Let me know if you have any questions, I attached an Excel sheet with updates headers, as well as the sheet to pull from which has some items you scraped for. You don't need to transfer any photos into the new one. I also send you the email with the requirements we were sent. If you notice some headers have a limit on the amount of data something can have. Let me know if this makes sense!
+
+
+
+Below is the email they sent with the sections and some instructions on character limit for certain cells. The "Website Product Template" has all of these headers completed already
+
+
+
+Product Info
+Product Name
+Categories (Multi-Select)
+Manufacturer
+Order
+Active?
+
+
+
+Landing Page
+Landing Page Image (500x380px)
+Intro Text (Character Limit 250 characters)
+Abstract Text (360 characters)
+Check Mark Features or Highlights Section
+Check Mark Features
+Feature Name 1
+Feature Text
+Feature Name 2
+Feature Text
+Feature Name 3
+Feature Text
+Feature Name 3
+Feature Text
+Detail Page
+Detail Text
+Optional Button Text & Link
+
+
+
+Images (Please provide a direct link to an image or images)
+Tabs Section
+Show: Y/N
+
+
+
+Tab Name
+Text
+Has Related Resource? Y/N
+
+
+
+Full Width Features Table Text:
+Header
+Text:
+Left Column
+Right Column
+
+
+
+Services Section
+Show: Y/N
+Header
+Text
+Service Name
+Text
+Icon Image (93x86)
+
+
+
+FAQs Section
+Show: Y/N
+Header
+Text
+
+
+
+FAQ Name
+Image
+Text
+
+
+
+Contact Form Section
+Show: Y/N
+Header
+Text"
+
+also he attached a new empty template file with those header names:
+
+Name	Product Name	Part Number	Manufacturer	Categories	Item Number	Order	Active	Check Mark Features	Feature Name 1	Feature Text	Feature Name 2	Feature Text	Feature Name 3	Feature Text	Feature Name 4	Feature Text	Detail Text	Optional Button Text & Link	Show: Y/N	Tab Name	Text	Has Related Resource? Y/N	Full Width Features Table Text	Header	Text:	Left Column	Right Column	Show: Y/N (Services Section)	Header	Text	Service Name	Text	Show: Y/N (FAQ's Section)	Header	Text	FAQ Name	Text	Show: Y/N (Contact Form Section)	Header	Text	POR Approved	Status	CREATION	Website Products
+
+And he also attached the old data with a bit modifications from his side. it has these columns:
+
+Item Number	KEY	Product Name	PartNumber	Manufacterer	Intro Paragraph	Key Features	Main Product Image	Gallery Images	Available for Rent?	Available for Pre-Owned Sale?	Specifications	Brochures or Literature	Warranty Information	Section Header	Body Content	Left Header	Right Header	Header + Intro	Supporting Blocks	Questions/Answers	Header.1	Intro Paragraph2	Button Text	Rental ID	Available to Rent
+
+and the data is like that for example this is one row:
+
+4455	M107	M107 POWER SUPPLY TOP ASSY	1357168-02	ARC MACHINES INC.	The M107 Power Supply Top Assembly is the upper section of a power supply unit, providing key electrical connections and housing for components like control electronics.	"- Top assembly component for Arc machines M107 orbital welding power supply 
+- Contains control interface, cooling systems, and electrical components 
+- engineered for reliable performance in continuous duty applications 
+- Facilitates easy access for maintenance and component replacement 
+- Essential spare part for M107 system repair and refurbishment"	https://www.westermans.com/assets/products/11726/files/9000/thumb/2024-02-13%2015.37.53-600-600-c.jpg	https://www.westermans.com/ami-orbital-welding-power-source-model-107a--with-or-without-cooling-hirebuy-suits-the-ami-standard.aspx	No	Yes	"- Assembly type: Top housing component for M107 controller
+- Material: Aluminum with stainless steel internal components
+- Dimensions: Approximately 12"" x 8"" x 6"" (L x W x H)
+- Weight: 5-7 kg assembled
+- Cooling system: Integrated fan or water-cooling ports
+- Electrical connections: Multiple DIN connectors
+- Display interface: Mounting brackets for control panel
+- Heat dissipation: Optimized thermal paths
+- Environmental rating: IP54 dust and splash protection
+- Mounting: Standard mechanical fastener interface"	https://www.westermans.com/ami-orbital-welding-power-source-model-107a--with-or-without-cooling-hirebuy-suits-the-ami-standard.aspx	24-month warranty for Arc Machines M107 top assembly component; covers electronics and cooling system defects; excludes customer-damaged components	Replacement Top Assembly for Arc Machines M107 Power Supply	M107 power supply top assembly containing critical control interface, cooling systems, and electrical components. Precision aluminum housing with stainless steel internal components ensures durability. Integrated cooling system manages thermal dissipation during sustained operations. Multiple DIN connectors provide comprehensive electrical interface. IP54 protection ensures reliable operation in manufacturing environments.	"- M107 replacement 
+- control interface 
+- cooling system 
+- Multiple connectors 
+- IP54 rating"	"- 12""x8""x6"" dims
+- 5-7kg weight
+- Aluminum/SS
+- IP54 rated
+- DIN connectors"	Why product data collection supports purchasing decisions: Comprehensive specifications enable accurate product comparison and selection, warranty information guides cost-of-ownership calculations, technical details support system compatibility verification, key features highlight performance capabilities for specific applications, and complete documentation facilitates informed purchasing and procurement processes.	"Block 1: Critical Component Replacement - Restore Full System Functionality: Quality replacement assembly restores complete system operation.
+
+Block 2: Thermal Management - Integrated Cooling System Components: Advanced cooling design manages thermal dissipation.
+
+Block 3: Electrical Integration - Multiple DIN Connector Interface: Comprehensive electrical interface ensures complete connectivity.
+
+Block 4: Environmental Durability - IP54 Protection Rating: Robust design ensures reliable operation in manufacturing environments."	"Q1: When would I need an M107 top assembly replacement?
+A1: Replacement is necessary if the original component fails electrically or the cooling system degrades.
+
+Q2: Is professional installation required?
+A2: While technician installation is recommended, skilled operators can install with standard tools.
+
+Q3: How long does replacement typically take?
+A3: Installation typically requires 2-4 hours including system testing.
+
+Q4: What is the cost of replacement assembly?
+A4: M107 top assemblies typically cost $2,000-3,500.
+
+Q5: Does replacement extend system warranty?
+A5: Replacement components typically carry the same warranty as original equipment."	Get M107 Power Supply Top Assembly Replacement	Restore full system functionality with replacement top assembly components for Arc Machines M107 power supplies. Quality replacement parts ensure extended equipment service life and reliable operation. Available for purchase from Arc Machines authorized suppliers and orbital welding equipment distributors. Contact us for compatibility verification and installation support.	Order M107 Top Assembly		No
+
+Now I want you to tell me if there is something unclear. also explain to me what data exactly to be transfomed from the old one to the new one with details and how to move them. and if there are any new things that will require much more work tell me about it
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+I have a sheet that contains an attribute called "Feature". each product has some bullet points of features. for example:
+- Top assembly component for Arc machines M107 orbital welding power supply 
+- Contains control interface, cooling systems, and electrical components 
+- Engineered for reliable performance in continuous duty applications 
+- Facilitates easy access for maintenance and component replacement 
+- Essential spare part for M107 system repair and refurbishment
+
+Now I will move that to another sheet that has those sections:
+Feature Name 1	Feature Text	Feature Name 2	Feature Text	Feature Name 3	Feature Text	Feature Name 4	Feature Text
+
+I need to convert those feature bullet points to those format in the new sheet. I know there are more than 4 bullet points sometimes but you can handle this through refining it or if some products have less than four, you can just leave the empty sections and write "Not Found". 
+
+I will send to you 10 product features each time. You have to create a table with 9 columns, Product name  Feature Name 1	Feature Text	Feature Name 2	Feature Text	Feature Name 3	Feature Text	Feature Name 4	Feature Text
+
+and the 10 rows.
+
+Lets start with those 10 items:
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+I have an old sheet that contains columns called: "Header+ Intro", "Body Content", "Specification". You required combine the following product details into a concise, customer-friendly product description suitable for a website Detail Page. Keep it factual, clear, and professional. Remove redundancies and turn bulleted specifications into readable sentences. 
+
+Header + Intro: ...
+Body Content: ...
+Specifications: ...
+
+I will send to you around 50 products, may more or less at the one time and you have to write them in a table with two columns, product name and the new column that combines all those you can name it "Detail Text"
+
+
+You have to a table with two columns, prod name and the detail text that contains the combined data from the three columns. Also if there are any repeated rows you have to repeat them too with the same content, and if there is something defined as not found you have to put it as "Not Found" too.
+
+I will send to you 5 products at a time. 
+Lets start with those 5:
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FAQ
+
+I have a list of product names in a sheet and each product has a list of question and answers. for example product ""C" BORE TOOL BIT (2.1"-7.2" ID)" has a cell beside it that has it like that:
+
+""- Q1: What is the maximum pipe ID that this tool can accommodate?
+A1: The C Bore Tool Bit is designed for pipes with inner diameters ranging from 2.1 inches to 7.2 inches, with a 4:1 lead out ratio.
+
+- Q2: What is the cutting depth of this counterbore tool?
+A2: The tool provides a 1/2 inch (12.7 mm) counterbore depth, suitable for most orbital welding applications.
+
+- Q3: Which Tri Tool machines are compatible with this tool bit?
+A3: This tool is compatible with Tri Tool BEVELMASTER Model 208B and 212B machines that accept form tool modules.
+
+- Q4: What materials can this tool cut?
+A4: The C Bore Tool Bit is specifically rated for carbon steel pipe and similar materials used in orbital welding applications.
+
+- Q5: How durable is the Durabit material?
+A5: Durabit material provides extended tool life compared to standard high-speed steel, reducing replacement frequency and improving cost-effectiveness.""
+
+
+all this written in a one cell. sometimes, it's separated with - and sometimes not. whatever, I want you to rewrite it in a table with three columns, prod name, FAQ name, text
+
+the FAQ name should contain a list of questions all in one cell like:
+
+""- Q1: What is the maximum pipe ID that this tool can accommodate?
+
+- Q2: What is the cutting depth of this counterbore tool?
+
+- Q3: Which Tri Tool machines are compatible with this tool bit?
+
+- Q4: What materials can this tool cut?
+
+- Q5: How durable is the Durabit material?""
+
+and the text should have the answers in list in one cell like:
+
+""- A1: The C Bore Tool Bit is designed for pipes with inner diameters ranging from 2.1 inches to 7.2 inches, with a 4:1 lead out ratio.
+
+- A2: The tool provides a 1/2 inch (12.7 mm) counterbore depth, suitable for most orbital welding applications.
+
+- A3: This tool is compatible with Tri Tool BEVELMASTER Model 208B and 212B machines that accept form tool modules.
+
+- A4: The C Bore Tool Bit is specifically rated for carbon steel pipe and similar materials used in orbital welding applications.
+
+- A5: Durabit material provides extended tool life compared to standard high-speed steel, reducing replacement frequency and improving cost-effectiveness.""
+
+I will send to you a list of five item questions and answers at a time and you can write the prod name as prod1, prod2, etc. 
+
+You will find some repeated items. I want you to keep it repeated too and also if you find something defined as "Not Found", put it as "Not Found" too.
+
+So lets start with those 5 items. you should give me a table of 3 columns and 5 rows.
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Features
+
+I have a sheet that contains list of products and some features of it in a specific style and template. it has those columns:
+Check Mark Features	Feature Name 1	Feature Text	Feature Name 2	Feature Text	Feature Name 3	Feature Text	Feature Name 4	Feature Text
+and the data are like that:
+High-performance top assembly for M107 orbital welders with easy maintenance and reliable operation.	Top Assembly Component	Top assembly component for Arc machines M107 orbital welding power supply	Control & Electrical Systems	Contains control interface, cooling systems, and electrical components	Reliability	Engineered for reliable performance in continuous duty applications	Maintenance Access	Facilitates easy access for maintenance and component replacement
+
+I will send to you a product name or even sometimes a list of products and you required to search and write data like that for it. if you can't find info online just try to guess the info.
+each product will have one row.
+
+lets start with only one product:
+
