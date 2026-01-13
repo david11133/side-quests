@@ -1,148 +1,44 @@
-Prompt:
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Check mark features
 
-I was doing a gig on Upwork that requires collecting data for some kind of orbital welding business. However, the client just asked for some updates. he told me:
+I have a sheet that has a list of products and each one has features. the feature column for each item is a bullet point for example:
+""- Next-generation orbital welding power source
+ - Fixed configuration variant for stable applications
+ - Compatible with all AMI fusion weld heads
+ - 100% duty cycle capability
+ - Advanced control and interface technology""
 
-"So the website people sent us different headers they want us to use for the Excel file. We need to take the data we have scraped and fill in the new sheet with the updates headers. There are far less headers in the new one and we need to try and break up some of that data. Let me know if you have any questions, I attached an Excel sheet with updates headers, as well as the sheet to pull from which has some items you scraped for. You don't need to transfer any photos into the new one. I also send you the email with the requirements we were sent. If you notice some headers have a limit on the amount of data something can have. Let me know if this makes sense!
+I want to move that to another sheet in another column called check mark features. but it need a little refinement to make it in a one sentence. here are some examples:
+"Fixed configuration orbital welding power source with full-duty cycle and advanced control tech."
+"Stainless steel concentric clamping system for DC115-BM, securing 0.5–4.5" OD tubes with fine depth control."
+"SAXX-210 orbital welding power supply with integrated and detachable water cooling, 200A DC TIG output with oscillation option, advanced cooling monitoring, and compatibility with major weld head brands."
 
+I will send to you a list of features for each product. you have to create a table with two columns, prod name (you can name them just prod1, prod2, etc.) and the other column is the check mark features. 
 
+Also if you find products as "Not Found", please define them as "Not Found" too. and there are some duplicated items, I want you to keep them duplicated and write them too in the table.
 
-Below is the email they sent with the sections and some instructions on character limit for certain cells. The "Website Product Template" has all of these headers completed already
+Lets start with those 10 products:
 
-
-
-Product Info
-Product Name
-Categories (Multi-Select)
-Manufacturer
-Order
-Active?
-
-
-
-Landing Page
-Landing Page Image (500x380px)
-Intro Text (Character Limit 250 characters)
-Abstract Text (360 characters)
-Check Mark Features or Highlights Section
-Check Mark Features
-Feature Name 1
-Feature Text
-Feature Name 2
-Feature Text
-Feature Name 3
-Feature Text
-Feature Name 3
-Feature Text
-Detail Page
-Detail Text
-Optional Button Text & Link
-
-
-
-Images (Please provide a direct link to an image or images)
-Tabs Section
-Show: Y/N
-
-
-
-Tab Name
-Text
-Has Related Resource? Y/N
-
-
-
-Full Width Features Table Text:
-Header
-Text:
-Left Column
-Right Column
-
-
-
-Services Section
-Show: Y/N
-Header
-Text
-Service Name
-Text
-Icon Image (93x86)
-
-
-
-FAQs Section
-Show: Y/N
-Header
-Text
-
-
-
-FAQ Name
-Image
-Text
-
-
-
-Contact Form Section
-Show: Y/N
-Header
-Text"
-
-also he attached a new empty template file with those header names:
-
-Name	Product Name	Part Number	Manufacturer	Categories	Item Number	Order	Active	Check Mark Features	Feature Name 1	Feature Text	Feature Name 2	Feature Text	Feature Name 3	Feature Text	Feature Name 4	Feature Text	Detail Text	Optional Button Text & Link	Show: Y/N	Tab Name	Text	Has Related Resource? Y/N	Full Width Features Table Text	Header	Text:	Left Column	Right Column	Show: Y/N (Services Section)	Header	Text	Service Name	Text	Show: Y/N (FAQ's Section)	Header	Text	FAQ Name	Text	Show: Y/N (Contact Form Section)	Header	Text	POR Approved	Status	CREATION	Website Products
-
-And he also attached the old data with a bit modifications from his side. it has these columns:
-
-Item Number	KEY	Product Name	PartNumber	Manufacterer	Intro Paragraph	Key Features	Main Product Image	Gallery Images	Available for Rent?	Available for Pre-Owned Sale?	Specifications	Brochures or Literature	Warranty Information	Section Header	Body Content	Left Header	Right Header	Header + Intro	Supporting Blocks	Questions/Answers	Header.1	Intro Paragraph2	Button Text	Rental ID	Available to Rent
-
-and the data is like that for example this is one row:
-
-4455	M107	M107 POWER SUPPLY TOP ASSY	1357168-02	ARC MACHINES INC.	The M107 Power Supply Top Assembly is the upper section of a power supply unit, providing key electrical connections and housing for components like control electronics.	"- Top assembly component for Arc machines M107 orbital welding power supply 
-- Contains control interface, cooling systems, and electrical components 
-- engineered for reliable performance in continuous duty applications 
-- Facilitates easy access for maintenance and component replacement 
-- Essential spare part for M107 system repair and refurbishment"	https://www.westermans.com/assets/products/11726/files/9000/thumb/2024-02-13%2015.37.53-600-600-c.jpg	https://www.westermans.com/ami-orbital-welding-power-source-model-107a--with-or-without-cooling-hirebuy-suits-the-ami-standard.aspx	No	Yes	"- Assembly type: Top housing component for M107 controller
-- Material: Aluminum with stainless steel internal components
-- Dimensions: Approximately 12"" x 8"" x 6"" (L x W x H)
-- Weight: 5-7 kg assembled
-- Cooling system: Integrated fan or water-cooling ports
-- Electrical connections: Multiple DIN connectors
-- Display interface: Mounting brackets for control panel
-- Heat dissipation: Optimized thermal paths
-- Environmental rating: IP54 dust and splash protection
-- Mounting: Standard mechanical fastener interface"	https://www.westermans.com/ami-orbital-welding-power-source-model-107a--with-or-without-cooling-hirebuy-suits-the-ami-standard.aspx	24-month warranty for Arc Machines M107 top assembly component; covers electronics and cooling system defects; excludes customer-damaged components	Replacement Top Assembly for Arc Machines M107 Power Supply	M107 power supply top assembly containing critical control interface, cooling systems, and electrical components. Precision aluminum housing with stainless steel internal components ensures durability. Integrated cooling system manages thermal dissipation during sustained operations. Multiple DIN connectors provide comprehensive electrical interface. IP54 protection ensures reliable operation in manufacturing environments.	"- M107 replacement 
-- control interface 
-- cooling system 
-- Multiple connectors 
-- IP54 rating"	"- 12""x8""x6"" dims
-- 5-7kg weight
-- Aluminum/SS
-- IP54 rated
-- DIN connectors"	Why product data collection supports purchasing decisions: Comprehensive specifications enable accurate product comparison and selection, warranty information guides cost-of-ownership calculations, technical details support system compatibility verification, key features highlight performance capabilities for specific applications, and complete documentation facilitates informed purchasing and procurement processes.	"Block 1: Critical Component Replacement - Restore Full System Functionality: Quality replacement assembly restores complete system operation.
-
-Block 2: Thermal Management - Integrated Cooling System Components: Advanced cooling design manages thermal dissipation.
-
-Block 3: Electrical Integration - Multiple DIN Connector Interface: Comprehensive electrical interface ensures complete connectivity.
-
-Block 4: Environmental Durability - IP54 Protection Rating: Robust design ensures reliable operation in manufacturing environments."	"Q1: When would I need an M107 top assembly replacement?
-A1: Replacement is necessary if the original component fails electrically or the cooling system degrades.
-
-Q2: Is professional installation required?
-A2: While technician installation is recommended, skilled operators can install with standard tools.
-
-Q3: How long does replacement typically take?
-A3: Installation typically requires 2-4 hours including system testing.
-
-Q4: What is the cost of replacement assembly?
-A4: M107 top assemblies typically cost $2,000-3,500.
-
-Q5: Does replacement extend system warranty?
-A5: Replacement components typically carry the same warranty as original equipment."	Get M107 Power Supply Top Assembly Replacement	Restore full system functionality with replacement top assembly components for Arc Machines M107 power supplies. Quality replacement parts ensure extended equipment service life and reliable operation. Available for purchase from Arc Machines authorized suppliers and orbital welding equipment distributors. Contact us for compatibility verification and installation support.	Order M107 Top Assembly		No
-
-Now I want you to tell me if there is something unclear. also explain to me what data exactly to be transfomed from the old one to the new one with details and how to move them. and if there are any new things that will require much more work tell me about it
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Check mark features (Not Found Ones)
+
+I have a list of products that I want you to make a search and get check mark features. here are some examples of how it should be:
+
+"Fixed configuration orbital welding power source with full-duty cycle and advanced control tech."
+"Stainless steel concentric clamping system for DC115-BM, securing 0.5–4.5" OD tubes with fine depth control."
+"SAXX-210 orbital welding power supply with integrated and detachable water cooling, 200A DC TIG output with oscillation option, advanced cooling monitoring, and compatibility with major weld head brands."
+
+You have to generate a table of 2 columns, prod name, check mark features. Note that you may find duplicated items, I want you to keep them as they are duplicated in the table and don't remove them. 
+
+Lets start with those 10 items:
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Feature names text
 
 I have a sheet that contains an attribute called "Feature". each product has some bullet points of features. for example:
 - Top assembly component for Arc machines M107 orbital welding power supply 
@@ -160,9 +56,53 @@ I will send to you 10 product features each time. You have to create a table wit
 
 and the 10 rows.
 
+Here are some examples of how data should be like:
+
+Welding Range	0.236″ to 3.031″ tube OD 	Clamping System	Tool‑free quick change clamping shells for secure alignment 	Cooling	Integrated water cooling for continuous duty 	Compact Design	Extremely narrow head design for confined space use 	The Orbiweld 76S is an enclosed orbital welding head from Orbitalum designed for fusion welding of tubes from ~0.236″ to 3.031″ (6–77 mm) OD. It features a narrow profile and integrated liquid cooling, making it suitable for high‑purity, tight‑space applications such as pharmaceutical, food‑processing, semiconductor, and chemical plant piping. 
+Operating Range	0.236″–1.50″ OD per standard tool holder 	Prep Quality	Produces burr‑free, square tube ends for weld prep 	Clamping System	Quick clamping shells and tool change system 	Speed Control	Built‑in electronic speed regulation for quality finishing 	The Orbitalum RPG 1.5 Tube Squaring Machine is a tube end preparation tool that produces burr‑free, square tube ends for optimal orbital welding results. It has a quick clamping system, micrometer feed for precise results, and speed regulation, and handles thin‑walled stainless steel tubes typically from ~0.118″ up to ~1.5″ (with optional tool holders). 
+Design	Compact and lightweight design for EVO 200 WP/LITE controllers	Voltage	Autorange voltage (110-240V) for global compatibility	Cooling Capacity	1000W cooling capacity (1 l/min flow rate)	Fan Control	Temperature-regulated fan control for energy efficiency	The EVO Cool Water Cooling Unit provides essential thermal management for continuous, high-duty-cycle orbital welding with EVO 200 WP and LITE controllers. Autorange voltage capability (110–240V AC) ensures global compatibility. Temperature-regulated fan control optimizes cooling efficiency, while the integrated flowmeter monitors fluid flow in real time. Cooling capacity is 1000W at 1 l/min, with maximum tank capacity of 4 liters, flow rate of 4 l/min, and maximum outlet pressure of 3.5 bar. Weight is 10.5 kg (without coolant), dimensions 500 x 340 x 190 mm. Package includes 4-liter blueCool 10i-5 coolant, connection cables, and fasteners.
+
 Lets start with those 10 items:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Header, text, left col, right col
+
+
+I want to send to you some items names and you required to generate table with those columns:
+Prod Name  Header	Text:	Left Column	Right Column
+
+You have to search the internet for right data and if you  can't find a specific item, please try to guess it from previous or similar items on the internet.
+
+here is an example:
+| Prod Name                                | Header                                                                                                            | Text                                                                                                                                                                                          | Left Column                                                                                                                                                                 | Right Column                                                                                                                                              |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| M100 POWER SUPPLY, 115 V                 | Next-Generation Fixed Configuration Power Supply with Precision DC Control for Orbital Welding                    | Industrial-Grade Power Delivery: The M100 delivers precise DC output for orbital welding, combining compact design with reliable performance for small- to medium-diameter tube applications. | - 115 V AC input<br>- DC output 2–100 A<br>- Microprocessor control<br>- Step and pulse welding modes<br>- Data recording capability                                        | - ~19 kg weight<br>- 229 × 394 × 493 mm<br>- Aluminum housing<br>- CE/UL certified<br>- Compatible with Series 4/8 weld heads                             |
+| M200 POWER SUPPLY, 115 V                 | Next-Generation Switching Configuration Power Supply with Touchscreen Control for Multi-Procedure Orbital Welding | Versatile Power Control: The M200 offers broad DC output, touchscreen interface, and multi-procedure support for advanced orbital welding in both shop and field environments.                | - 115 V AC input<br>- DC output 2–200 A<br>- Touch screen interface<br>- Low-EMI arc start<br>- Weld data storage                                                           | - ~22.5 kg weight<br>- 12.1″ industrial touch screen<br>- Aluminum/SS housing<br>- CE/RoHS certified<br>- Multiple language interface                     |
+| MOTOR MODULE FOR SERIES 4 & 8 WELD HEADS | Advanced Motor Module with Integrated Speed and Torque Control for Series 4 & 8 Orbital Weld Heads                | Precision Tube Rotation: This motor module provides smooth speed and torque control, enabling accurate weld head positioning for consistent, high-quality orbital welds.                      | - Brushless DC motor<br>- Series 4 & 8 compatibility<br>- Integrated speed control<br>- Safety overload protection<br>- Compact module design                               | - ~5 kg weight<br>- Aluminum housing<br>- Standard electrical connectors<br>- Easy retrofit with existing heads<br>- Field-serviceable components         |
+| 204B PNEUMATIC BEVELLER (.610"–4.500")   | Premium Portable Pneumatic Bevelling System for Pipe Prep (.610"–4.500")                                          | Portable Pipe Prep: The 204B Pneumatic Beveller offers fast beveling, facing, and counterboring for small to mid-size pipes, combining durability with field-ready portability.               | - Bevelling, facing, counterboring<br>- Pipe range .610–4.500" (15.5–114.3 mm)<br>- Pneumatic motor (~55 cfm @ 90 psi)<br>- Inline feed<br>- Robust gears                   | - ~8.2 kg weight<br>- Compact inline design<br>- Mandrel and jaw blocks included<br>- Case for transport<br>- Field-serviceable                           |
+| 204B-DC CORDLESS 18VDC (.610"–4.500")    | Advanced Cordless Bevelling System with 18VDC Power for Portable Pipe Prep                                        | Cordless Pipe Prep: The 204B-DC delivers all the functionality of the pneumatic model with 18V battery power, enabling truly portable beveling, facing, and counterboring operations.         | - Battery powered 18 VDC<br>- Bevelling, facing, counterboring<br>- Pipe range .610–4.500"<br>- Same tooling as pneumatic 204B<br>- Lightweight design                      | - ~8.2 kg weight<br>- Includes battery and charger<br>- Portable carry case<br>- Easy on-site use<br>- Minimal setup required                             |
+| 208B BEVELMASTER AM (2.000"–8.625")      | Heavy-Duty Pipe Bevelling System with Multi-Drive Options for Large Diameter Pipes                                | Industrial-Grade Pipe Prep: The 208B BevelMASTER handles large diameter pipes with precision, offering air, electric, or hydraulic drive options for versatile field and shop applications.   | - Bevelling, facing, counterboring<br>- Pipe range 2.000–8.625" (50.8–219 mm)<br>- Air/electric/hydraulic drive options<br>- Adjustable torque<br>- Heavy-duty construction | - ~25–34 kg weight depending on drive<br>- Multiple accessory support<br>- Transport case optional<br>- Durable alloy construction<br>- Field serviceable |
+
+
+
+those were just three rows as an example.
+
+now I want you to start with those items:
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Detail Text
 
 I have an old sheet that contains columns called: "Header+ Intro", "Body Content", "Specification". You required combine the following product details into a concise, customer-friendly product description suitable for a website Detail Page. Keep it factual, clear, and professional. Remove redundancies and turn bulleted specifications into readable sentences. 
 
@@ -236,7 +176,7 @@ So lets start with those 5 items. you should give me a table of 3 columns and 5 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-Features
+Feature names and text
 
 I have a sheet that contains list of products and some features of it in a specific style and template. it has those columns:
 Check Mark Features	Feature Name 1	Feature Text	Feature Name 2	Feature Text	Feature Name 3	Feature Text	Feature Name 4	Feature Text
