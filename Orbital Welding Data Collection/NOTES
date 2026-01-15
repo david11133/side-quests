@@ -20,6 +20,10 @@ Also if you find products as "Not Found", please define them as "Not Found" too.
 Lets start with those 10 products:
 
 
+------------------------------------------
+Great now I have more products but those ones don't have any data available. I just have the names. so, you will have to search the internet and generate a similar table for them. you might find duplicated products,  want you to keep them as they are duplicated also if you can't find a specific product on the internet, try to get it from similar products on the internet or even guess it. NOTE that I don't want you to write things in the data like "Generated", "Guessed", etc. just write the data, no more, or less
+------------------------------------------
+
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -63,6 +67,16 @@ Operating Range	0.236″–1.50″ OD per standard tool holder 	Prep Quality	Pro
 Design	Compact and lightweight design for EVO 200 WP/LITE controllers	Voltage	Autorange voltage (110-240V) for global compatibility	Cooling Capacity	1000W cooling capacity (1 l/min flow rate)	Fan Control	Temperature-regulated fan control for energy efficiency	The EVO Cool Water Cooling Unit provides essential thermal management for continuous, high-duty-cycle orbital welding with EVO 200 WP and LITE controllers. Autorange voltage capability (110–240V AC) ensures global compatibility. Temperature-regulated fan control optimizes cooling efficiency, while the integrated flowmeter monitors fluid flow in real time. Cooling capacity is 1000W at 1 l/min, with maximum tank capacity of 4 liters, flow rate of 4 l/min, and maximum outlet pressure of 3.5 bar. Weight is 10.5 kg (without coolant), dimensions 500 x 340 x 190 mm. Package includes 4-liter blueCool 10i-5 coolant, connection cables, and fasteners.
 
 Lets start with those 10 items:
+
+
+
+-------------------------------------------------
+
+Now I have more products but with now feature data. so, I will give you product names and you required to search the internet for them and generate a similar table for them.
+and if you can't find some specific products, please try to get it from similar products or even guess them. and also note that I don't want you to write things in the data like "Guessed", "generated", etc. just write the data.
+lets start with those 5 items:
+
+-------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -117,6 +131,15 @@ You have to a table with two columns, prod name and the detail text that contain
 
 I will send to you 5 products at a time. 
 Lets start with those 5:
+
+
+--------------------------------------------
+
+Now I have more products but without data available in the sheet, so I will send to you just the product names and you have to search the internet and generate a similar table. If you can't find a specific product please try to fill it with data related to it even if it's from items very similar to it or even guessing it, but NOTE that I don't want you to write things in the data like "Guessed", "Generated", etc. and also don't write anything in the data that is not useful like "standard description", etc. just write the data cause I will import it in a website so I want it to be ready.
+lets start with those 5 products:
+
+
+--------------------------------------------
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
