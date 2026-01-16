@@ -109,11 +109,80 @@ now I want you to start with those items:
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+Width feature table (Header)
+
+I have some item names that I want to get some data about. I want to add column called "Header". This will have data like that:
+
+Advanced Low-Current GTAW Power Supply with Touch-Screen Control for Precision Thin-Wall Welding
+Next-Generation Switching Configuration Power Supply
+Premium Large-Diameter Welding Head Solution
+Precision Closed Fusion Weld Head for Medium Diameter Tubes
+Essential Thermal Management for SAXX Series Orbital Welding Power Supplies
+
+those were five examples of how it should be. now I will send to you some item names and you have to search the internet and generate a similar data and put it in a table with two columns item name, header. you may find some duplicated items, you have to keep them duplicated don't remove those ones. also note that you may search and not finding anything about specific product so just try to generate it from similar items on the internet or whatever, but don't leave it null or empty. also don't write things in the data like "generated", "guessed from similar product", etc. just write the thing.
+
+lets start with those items:
 
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+Width feature table (Text)
+
+I have some item names that I want to collect data from the internet about. I want to add column called "Text". This is a detailed description that will have data like:
+
+Dual-Wire Orbital Welding Excellence: High-Volume Production with M15-317 Assembly - The dual-wire feed configuration enables faster weld deposition rates and improved weld geometry, making it ideal for high-volume production environments that demand maximum throughput without compromising weld quality.
+Thin-Wall Welding Excellence: Low-Current Optimization for M217 LC - Specialized low-current performance ensures precise arc control on thin-wall tubing, reducing heat-affected zone and minimizing weld distortion in critical semiconductor, pharmaceutical, and aerospace applications.
+Next-Generation Switching Configuration: Advanced production environments often require flexible system configuration with programmable multi-parameter control. The Model 317 switching configuration provides this enhanced capability.
+Large-Diameter Process Piping Excellence: The DiamondBack weldhead is specifically engineered for the unique demands of 2" to 6" diameter pipe welding. Its robust construction and advanced motor control deliver the consistency required for critical aerospace, pharmaceutical, and sanitary processing applications.
+Extended-range water-cooled performance: The OSK 38 CW enables continuous high-production orbital welding across diverse pipe sizes.
+
+those were five examples of how it should be. now I will send to you some item names and you have to search the internet and generate a similar data and put it in a table with two columns item name, Text. you may find some duplicated items, you have to keep them duplicated don't remove those ones. also note that you may search and not finding anything about specific product so just try to generate it from similar items on the internet or whatever, but don't leave it null or empty. also don't write things in the data like "generated", "guessed from similar product", etc. just write the thing.
+
+lets start with those items:
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Left and Right column
+
+I have some item names that I want to collect data from the internet about. I want to add two columns called "Left Column" and "Right Column". They will have data like:
+
+Left Column:
+"- Portable 150A output at only 66 lbs
+ - 10-inch touchscreen display
+ - 1000+ weld schedule capacity
+ - Weld Data Recording standard"
+"- Servo-controlled AVC for consistent arc length
+- Motorized torch tilt for complex joint geometries
+- Quick 30-second mount/dismount capability
+- Water-cooled for extended duty cycles
+- Synchronized wire feed control"
+"- Orbital saw designed for pipe/tube OD 0.25″ 
+- 4.5″ (6.3 – 114 mm) capacity
+- FS15 low‑speed cutting motor (≈ 1200 W)
+- Orbital cutting action for perpendicular, burr‑free cuts
+- Suitable for stainless steel, carbon steel, aluminum and more"
+
+Right Column:
+"- One-hand carry handle for field mobility
+ - 100% duty cycle at specified input
+ - Optional water cooling available
+ - Compatible with all AMI fusion weld heads"
+"- Streamlined compact design
+- Full automation capability
+- Single entry simplicity
+- Extended performance rating
+- Professional-grade results"
+"- Available corded (120V/230V) or cordless
+ - Adjustable cutting depth 0-5mm
+ - Continuous operation rated
+ - Burr-free tube end preparation
+ - Compatible with multiple material types"
+
+those were three examples for each column (left and right). now I will send to you some item names and you have to search the internet and generate a similar data and put it in a table with three columns item name, left column, right column. you may find some duplicated items, you have to keep them duplicated don't remove those ones. also note that you may search and not finding anything about specific product so just try to generate it from similar items on the internet or whatever, but don't leave it null or empty. also don't write things in the data like "generated", "guessed from similar product", etc. just write the thing.
+
+lets start with those items:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Detail Text
@@ -140,6 +209,43 @@ lets start with those 5 products:
 
 
 --------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FAQ (Header)
+
+I have some item names that I want to get some data about. I want to add column called "Header". This will have data like that:
+
+Get Your M2Y7-CW Cooling Unit Now
+Select Model 317 Switching Configuration
+Activate Model 415 Advanced Power Supply
+Order Your OSK 170 GW ENCLOSED WELD HEAD
+Contact Us About OSW 115 Weld Head
+Request Your OSW 170 Weld Head Quote
+Deploy MODEL 300 for Portable Tube Squaring
+Implement MODEL 301SP-B Cordless Squaring
+Auto‑Darkening Lift‑Up Welding Helmet with Flip‑Up Visor
+Next‑Gen Auto‑Darkening Welding Helmet with Premium Optics
+
+those were ten examples of how it should be. now I will send to you some item names and you have to search the internet and generate a similar data and put it in a table with two columns item name, header. you may find some duplicated items, you have to keep them duplicated don't remove those ones. also note that you may search and not finding anything about specific product so just try to generate it from similar items on the internet or whatever, but don't leave it null or empty. also don't write things in the data like "generated", "guessed from similar product", etc. just write the thing.
+
+lets start with those items:
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FAQ (Text)
+
+I have some item names that I want to collect data from the internet about. I want to add column called "Text". This is a detailed description that will have data like:
+
+Accelerate your high-volume orbital welding production with the M15-317 WELD HEAD TOP ASSY TORCH-C 2WF. Dual-wire feed technology delivers faster deposition rates and enhanced arc stability for demanding production environments. Our specialists can help you evaluate whether dual-wire welding is right for your application.
+Maximize thermal efficiency with the advanced M2Y7-CW Water Cooling Unit, designed for seamless integration with Model 217 power supplies. Purchase or lease options available from authorized distributors. Reach out to discuss cooling solutions optimized for your specific welding applications and facility layout.
+Launch your precision bench-top welding operations with the Model 4-500 integrated weld head, engineered for semiconductor and aerospace applications. Available for purchase and rental from Arc Machines distributors. Discuss your small-component welding requirements for customized system recommendations and competitive pricing.
+Invest in professional-grade orbital cutting with Metabo motor technology. Perfect for production facilities and demanding cutting applications. Available from industrial orbital cutting equipment distributors. Contact us for technical specifications, motor performance data, and volume pricing.
+Expand your orbital welding capabilities with the SATFX-76, designed for intermediate-diameter tubes up to 3 inches. Available for purchase or rental from authorized AXXAIR distributors and orbital welding equipment suppliers globally. Contact us for competitive pricing, system integration support, and comprehensive technical consultation for your specific manufacturing requirements.
+
+those were five examples of how it should be. now I will send to you some item names and you have to search the internet and generate a similar data and put it in a table with two columns item name, Text. you may find some duplicated items, you have to keep them duplicated don't remove those ones. also note that you may search and not finding anything about specific product so just try to generate it from similar items on the internet or whatever, but don't leave it null or empty. also don't write things in the data like "generated", "guessed from similar product", etc. just write the thing.
+
+lets start with those items:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
