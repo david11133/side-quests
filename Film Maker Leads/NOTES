@@ -3,4 +3,48 @@ Wed, Jan, 28, 2026
 Completed tasks:
 - Defined lead scoring system in a sheet with Category, Criteria, Points. Each criteria has a specific amount of points, and the total is 100
 - Created a data collection spreadsheet that has columns: | Name | Company | Role | Location | Platform | Profile URL | Phone | Email | Instagram | Recent Work | Gear Mentioned | Activity Score | Role Score | Location Score | Gear Score | Budget Score | TOTAL SCORE | Status | Notes |
-- 
+- Prompt for Perplexity to do a deep search:
+"
+I am required to do the job of the lead generation. I am working for company called "Big Story". Big Story is a film equipment rental company in Dubai that rents high-end gear (RED Komodo cameras, lighting, audio, etc.). They need a system to: Find potential customers (filmmakers, production houses, etc.), Filter and score these leads, Deliver qualified leads to their sales team.
+I have created a scoring system to score the gathered data and find best of them. here it is:
+LEAD SCORING FRAMEWORK
+
+Location (Max 25 points)
+- UAE-based: +25
+- GCC region: +15
+- International but works in UAE: +10
+
+Role/Type (Max 30 points)
+- Production house/company: +30
+- Freelance DP/DOP: +25
+- Content creator (high-end): +20
+- Videographer/editor: +15
+- Film student: +10
+
+Activity Level (Max 20 points)
+- Posted work in last 30 days: +20
+- Posted in last 3 months: +15
+- Posted in last 6 months: +10
+- Inactive: +5
+
+Equipment Mentions (Max 15 points)
+- Mentions RED/high-end cameras: +15
+- Mentions professional lighting/grip: +10
+- Mentions mid-range gear: +5
+
+Budget Indicators (Max 10 points)
+- Works with brands/agencies: +10
+- Commercial projects visible: +8
+- Personal projects only: +3
+
+TOTAL: 100 points
+- 70+: Hot Lead (Priority)
+- 50-69: Warm Lead (Follow up)
+- Below 50: Cold Lead (Nurture)
+
+
+Now I want to do a deep search for those. I think we can use sources like LinkedIn, Instagram, Google Maps, Industry Directories, or whatever you can find those data.
+I believe we can get data like: | Name | Company | Role | Location | Platform | Profile URL | Phone | Email | Instagram | Recent Work | Gear Mentioned | Activity Score | Role Score | Location Score | Gear Score | Budget Score | TOTAL SCORE |
+You have to search with all possible keywords in English and Arabic. do whatever required to get data like that. 
+Can you search and get like 10-20 rows? If you could, please do it and give me the data in a csv file or whatever.
+"
